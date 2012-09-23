@@ -1,0 +1,6 @@
+require 'oauth2/client/grant/base'
+require 'oauth2/client/grant/implicit'
+require 'oauth2/client/grant/authorization_code'
+require 'oauth2/client/grant/refresh_token'
+require 'oauth2/client/grant/client_credentials'
+require 'oauth2/client/grant/password'
