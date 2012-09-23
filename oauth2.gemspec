@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
-  s.name         = 'oauth2'
-  s.version      = '0.1.4'
-  s.date         = '2012-07-17'
-  s.summary      = "OAuth v2 Ruby Library"
-  s.description  = "OAuth Server/Client Framework"
+  s.name         = 'oauth2-client'
+  s.version      = '0.1.0'
+  s.date         = '2012-09-22'
+  s.summary      = "OAuth2 Ruby Client Library"
+  s.description  = "OAuth Client Framework"
   s.authors      = ["Kevin Mutyaba"]
   s.email        = 'tiabasnk@gmail.com'
-  s.homepage     = 'http://chalk.herokuapp.com'
+  s.homepage     = ''
 
   s.files        = `git ls-files`.split("\n")
 

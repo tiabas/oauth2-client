@@ -1,4 +1,4 @@
-class OAuth2ClientTest < MiniTest::Unit::TestCase
+class ClientTest < MiniTest::Unit::TestCase
 
   def setup
     @client_id = 's6BhdRkqt3'

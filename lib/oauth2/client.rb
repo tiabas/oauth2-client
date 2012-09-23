@@ -1,5 +1,0 @@
-require 'oauth2/client/client'
-require 'oauth2/client/grant'
-require 'oauth2/client/connection'
-require 'oauth2/client/google_client'
-require 'oauth2/client/yammer_client'
