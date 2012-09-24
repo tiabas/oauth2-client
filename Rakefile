@@ -1,4 +1,5 @@
 $LOAD_PATH << File.dirname(__FILE__) + '/lib'
+$LOAD_PATH << File.dirname(__FILE__) + '/examples'
 
 require 'oauth2'
 require 'rake/testtask'
