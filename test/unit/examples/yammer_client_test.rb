@@ -11,7 +11,7 @@ class YammerClientTest < MiniTest::Unit::TestCase
           :token_path     => '/oauth2/access_token',
           :authorize_path => '/dialog/oauth/'
         }
-    @yammer_client  = OAuth2::Client::GoogleClient.new(@client_id, @client_secret, @scheme, @host, opts)
+    @yammer_client  = OAuth2::Client::Google.new(@client_id, @client_secret, @scheme, @host, opts)
   end
 
   def test_webserver_authorization_url
@@ -21,8 +21,6 @@ class YammerClientTest < MiniTest::Unit::TestCase
       }
     uri = @yammer_client.authorization_url(params)
     parsed_uri = Addressable::URI.parse(uri)
-    puts uri
-    # make request to yammer, shoukd return 200
   end
 
   def test_client_authorization_url
@@ -32,7 +30,5 @@ class YammerClientTest < MiniTest::Unit::TestCase
       }
     uri = @yammer_client.authorization_url(params)
     parsed_uri = Addressable::URI.parse(uri)
-    puts uri
-    # make request to yammer, shoukd return 200
   end
 end

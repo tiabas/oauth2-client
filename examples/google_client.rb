@@ -1,6 +1,6 @@
 module OAuth2
   module Client
-    class GoogleClient < OAuth2::Client::Client
+    class Google < OAuth2::Client::Client
 
       def normalize_scope(scope, sep=' ')
         unless (scope.is_a?(String) || scope.is_a?(Array))

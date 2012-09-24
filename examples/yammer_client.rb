@@ -1,6 +1,6 @@
 module OAuth2
   module Client
-    class YammerClient < OAuth2::Client::Client
+    class Yammer < OAuth2::Client::Client
 
       def normalize_scope(scope, sep=' ')
         unless (scope.is_a?(String) || scope.is_a?(Array))
@@ -10,9 +10,7 @@ module OAuth2
         scope.join(sep)
       end
 
-      def authorization_url(params)
-        raise "Response type required" unless params[:response_type]
-        response_type = params[:response_type]
+      def authorization_url(response_type, params)
         params[:scope] = normalize_scope(params[:scope]) if params[:scope]
         grant = implicit(response_type, params)
         grant.authorization_url
