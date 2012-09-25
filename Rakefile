@@ -1,9 +1,10 @@
-$LOAD_PATH << File.dirname(__FILE__) + '/lib'
-$LOAD_PATH << File.dirname(__FILE__) + '/examples'
+$:.unshift File.expand_path('../lib', __FILE__)
+$:.unshift File.expand_path('../examples', __FILE__)
 
 require 'rake/testtask'
 
 Rake::TestTask.new do |t|
+  t.libs << 'examples'
   t.libs << 'test'
   t.verbose = true
 end

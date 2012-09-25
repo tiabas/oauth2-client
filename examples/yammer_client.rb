@@ -7,9 +7,10 @@ class YammerClient < OAuth2::Client::Client
     scope.join(sep)
   end
 
-  def authorization_url(response_type, params)
+  def authorization_url(params)
+    raise "Response Type expected but was nil" unless params[:response_type]
+    response_type = params.delete(:response_type)
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    grant = implicit(response_type, params)
-    grant.authorization_url
+    implicit(response_type, params).authorization_url
   end
 end

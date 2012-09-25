@@ -1,5 +1,3 @@
-require 'addressable/uri'
-
 class GoogleClientTest < MiniTest::Unit::TestCase
 
   def setup
