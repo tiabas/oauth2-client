@@ -1,2 +1,2 @@
-require 'oauth2/clients/google_client'
-require 'oauth2/clients/yammer_client'
+require 'clients/google_client'
+require 'clients/yammer_client'

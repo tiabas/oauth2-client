@@ -1,7 +1,6 @@
 module OAuth2
   module Client
     class Google < OAuth2::Client::Client
-
       def normalize_scope(scope, sep=' ')
         unless (scope.is_a?(String) || scope.is_a?(Array))
           raise "Expected scope of type String or Array but was #{scope.class.name}"
@@ -29,5 +28,6 @@ module OAuth2
         params[:method] = 'post'
         implicit(response_type, params).authorization_url
       end
+    end
   end
 end
