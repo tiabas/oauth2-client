@@ -23,14 +23,15 @@ module OAuth2
         Zlib::GzipFile::Error,
       ]
       
-      attr_accessor :scheme, :host, :port, :max_redirects, :ssl
+      attr_accessor :config, :scheme, :host, :port, :max_redirects, :ssl
       
-      def initialize(scheme, host, opts={})
-        @scheme = scheme
-        @host = host
-        @port = opts[:port]
-        @max_redirects = opts[:max_redirects] || 5
-        @ssl = opts[:ssl] || {}
+      def initialize(config)
+        @config        = config
+        @scheme        = config.scheme
+        @host          = config.host
+        @port          = config.port
+        @max_redirects = config.max_redirects || 5
+        @ssl           = config.ssl || {}
       end
       
       def scheme=(scheme)

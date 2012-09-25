@@ -7,24 +7,25 @@ module OAuth2
       @@authorize_path = "/oauth/authorize"
       @@token_path     = "/oauth/token"
 
-      attr_accessor :client_id, :client_secret, :host, :authorize_path,
+      attr_accessor :config, :client_id, :client_secret, :host, :authorize_path,
                     :token_path, :scheme, :raise_errors, :http_client
 
-      def initialize(client_id, client_secret, scheme, host, opts={})
-        @client_id = client_id
-        @client_secret = client_secret
-        @scheme = scheme
-        @host = host
-        @port = opts[:port]
-        @authorize_path = opts[:authorize_path] || @@authorize_path
-        @token_path = opts[:token_path] || @@token_path
-        @raise_errors = opts[:raise_errors] || true
-        @http_client = opts[:http_client] || OAuth2::Client::Connection
+      def initialize(config)
+        @config       ||= Config.new(:filename => 'oauth_client.yml')
+        @client_id      = config.client_id
+        @client_secret  = config.client_secret
+        @scheme         = config.scheme
+        @host           = config.host
+        @port           = config.port
+        @authorize_path = config.authorize_path || @@authorize_path
+        @token_path     = config.token_path]    || @@token_path
+        @raise_errors   = config.raise_errors]  || true
+        @http_client    = config.http_client    || OAuth2::Client::Connection
       end
 
       def http_connection
         unless @connection
-          @connection = @http_connection.new(@scheme, @host, @port)
+          @connection = @http_connection.new(config)
         end
         @connection
       end
