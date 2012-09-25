@@ -1,4 +1,5 @@
 require 'addressable/uri'
+
 class GoogleClientTest < MiniTest::Unit::TestCase
 
   def setup
@@ -13,7 +14,7 @@ class GoogleClientTest < MiniTest::Unit::TestCase
           :token_path     => '/o/oauth2/token',
           :authorize_path => '/o/oauth2/auth'
         }
-    @google_client  = OAuth2::Client::Google.new(@client_id, @client_secret, @scheme, @host, opts)
+    @google_client = GoogleClient.new(@client_id, @client_secret, @scheme, @host, opts)
   end
 
   def test_webserver_authorization_url

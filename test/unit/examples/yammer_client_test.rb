@@ -1,4 +1,3 @@
-require 'addressable/uri'
 class YammerClientTest < MiniTest::Unit::TestCase
 
   def setup
@@ -11,7 +10,7 @@ class YammerClientTest < MiniTest::Unit::TestCase
           :token_path     => '/oauth2/access_token',
           :authorize_path => '/dialog/oauth/'
         }
-    @yammer_client  = OAuth2::Client::Google.new(@client_id, @client_secret, @scheme, @host, opts)
+    @yammer_client  = YammerClient.new(@client_id, @client_secret, @scheme, @host, opts)
   end
 
   def test_webserver_authorization_url

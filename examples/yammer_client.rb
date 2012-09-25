@@ -1,5 +1,4 @@
-class YammerOAuthClient < OAuth2::Client::Client
-
+class YammerClient < OAuth2::Client::Client
   def normalize_scope(scope, sep=' ')
     unless (scope.is_a?(String) || scope.is_a?(Array))
       raise "Expected scope of type String or Array but was #{scope.class.name}"
