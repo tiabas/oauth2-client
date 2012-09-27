@@ -8,6 +8,12 @@ module OAuth2
           super(http_client, opts)
         end
 
+        # Retrieve an access token given the specified client.
+        #
+        # @param username
+        # @param password
+        # @param [Hash] params additional params
+        # @param [Hash] opts options
         def get_token(username, password, params={}, opts={})
           params.merge!({
             :grant_type => @grant_type,

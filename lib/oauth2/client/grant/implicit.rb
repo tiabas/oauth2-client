@@ -10,18 +10,18 @@ module OAuth2
           super(http_client, opts)
         end
 
-        def token_params
-          {
-            :response_type => @response_type,
-            :client_id  => @client_id 
-          }
-        end
-
+        # Generate a token path using the given parameters .
+        #
+        # @param [Hash] query parameters
         def token_path(params)
           query_string = to_query(params.merge(token_params))
           "#{@token_path}?#{query_string}"
         end
 
+        # Retrieve an access token given the specified client.
+        #
+        # @param [Hash] params additional params
+        # @param [Hash] opts options
         def get_token(params={}, opts={})
           params.merge!({
             :response_type => @response_type,
@@ -31,6 +31,15 @@ module OAuth2
           path    = opts[:path]    || @authorize_path
           method  = opts[:method]  || 'get'
           @http_client.send_request(path, params, method, headers)
+        end
+
+      private
+
+        def token_params
+          {
+            :response_type => @response_type,
+            :client_id  => @client_id
+          }
         end
       end
     end

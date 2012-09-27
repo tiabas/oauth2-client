@@ -8,6 +8,11 @@ module OAuth2
           super(http_client, opts)
         end
 
+        # Retrieve an access token for a given refresh token
+        #
+        # @param [String] refresh_token     refresh token
+        # @param [Hash]   params additional params
+        # @param [Hash]   opts options
         def get_token(refresh_token, params={}, opts={})
           params.merge!({
             :grant_type    => @grant_type,

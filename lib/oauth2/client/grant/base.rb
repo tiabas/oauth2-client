@@ -16,6 +16,9 @@ module OAuth2
 
       private
 
+        # Convert a hash to a URI query string
+        #
+        # @params [Hash] params URI parameters
         def to_query(params)
           unless params.is_a?(Hash)
             raise "Expected Hash but got #{params.class.name}"
