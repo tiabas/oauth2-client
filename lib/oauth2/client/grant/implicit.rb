@@ -1,26 +1,36 @@
 module OAuth2
   module Client
     module Grant
+      # Implicit Grant
+      # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.2
       class Implicit < Base
 
-        def initialize(client, response_type, opts={})
-          super(client, opts)
-          self[:response_type] = response_type
-          self.delete(:client_secret) if self[:client_secret] # DO NOT send client_secret for implicit grant
+        def initialize(http_client, opts)
+          @response_type = 'token'
+          super(http_client, opts)
         end
 
-        def authorization_path
-          "#{@client.authorize_path}?#{to_query}"
+        def token_params
+          {
+            :response_type => @response_type,
+            :client_id  => @client_id 
+          }
         end
 
-        def authorization_url
-          to_url(@client.authorize_path)
+        def token_path(params)
+          query_string = to_query(params.merge(token_params))
+          "#{@token_path}?#{query_string}"
         end
 
-        def get_authorization_uri(opts={})
-          opts[:path]   ||= @client.authorize_path
-          opts[:method] ||= 'get'
-          request(opts)
+        def get_token(params={}, opts={})
+          params.merge!({
+            :response_type => @response_type,
+            :client_id     => @client_id
+          })
+          headers = opts[:headers] || {}
+          path    = opts[:path]    || @authorize_path
+          method  = opts[:method]  || 'get'
+          @http_client.send_request(path, params, method, headers)
         end
       end
     end

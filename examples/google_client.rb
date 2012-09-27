@@ -7,16 +7,18 @@ class GoogleClient < OAuth2::Client::Client
     scope.join(sep)
   end
 
-  def authorization_url(params)
-    raise "Response Type expected but was nil" unless params[:response_type]
-    response_type = params.delete(:response_type)
+
+  def client_side_authorization_url(params)
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
     implicit(response_type, params).authorization_url
   end
 
-  def exchange_code_for_token(params)
-    raise "Authorization code expected but was nil" unless params[:code]
-    raise "Redirect URI expected but was nil" unless params[:redirect_uri]
+  def web_server_authorization_url(params)
+    params[:scope] = normalize_scope(params[:scope]) if params[:scope]
+    auth_code(response_type, params).authorization_url
+  end
+
+  def web_server_get_token(params)
     code = params.delete(:code)
     authorization_code(code, :redirect_uri => redirect_uri).get_token
   end

@@ -3,29 +3,23 @@ module OAuth2
     module Grant
       class Password < Base
 
-        def initialize(client, username, password, opts={})
-          super(client, opts)
-          self[:username]   = username
-          self[:password]   = password
-          self[:grant_type] = 'password'
+        def initialize(http_client, opts)
+          @grant_type = 'password'
+          super(http_client, opts)
         end
 
-        def username
-          self[:username]
+        def get_token(username, password, params={}, opts={})
+          params.merge!({
+            :grant_type => @grant_type,
+            :client_id  => @client_id,
+            :username   => username,
+            :password   => password
+          })
+          headers = opts[:headers] || {}
+          path    = opts[:path]    || @token_path
+          method  = opts[:method]  || 'post'
+          @http_client.send_request(path, params, method, headers)
         end
-
-        def password
-          self[:password]
-        end
-
-        def username=(username)
-          self[:username] = username
-        end
-
-        def password=(password)
-          self[:password] = password
-        end
-
       end
     end
   end

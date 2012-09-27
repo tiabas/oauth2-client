@@ -3,57 +3,24 @@ module OAuth2
     module Grant
       class Base < Hash
 
-        attr_accessor :client_id, :client_secret
+        attr_accessor :client_id, :client_secret, :token_path, 
+                      :authorize_path, :http_client
 
-        # class << self
-        #   protected :new
-        # end
+        def initialize(http_client, opts)
+          @http_client    = http_client
+          @client_id      = opts[:client_id]
+          @client_secret  = opts[:client_secret]
+          @token_path     = opts[:token_path]
+          @authorize_path = opts[:authorize_path]
+        end
 
-        def initialize(client, opts={})
-          @client = client
-          self[:client_id] = client.client_id
-          self[:client_secret] = client.client_secret
-          opts.each do |param, value|
-            next if self[param] || value.nil?
-            self[param.to_sym] = value
+      private
+
+        def to_query(params)
+          unless params.is_a?(Hash)
+            raise "Expected Hash but got #{params.class.name}"
           end
-        end
-
-        def grant_type
-          self[:grant_type]
-        end
-
-        def response_type
-          self[:response_type]
-        end
-
-        def request(opts={})
-          path    = opts[:path]
-          headers = opts[:headers] || {}
-          params  = opts[:params]  || {}
-          method  = opts[:method]  || 'post'
-          params.merge!(self)
-          @client.make_request(path, params, method, headers)
-        end
-
-        def get_token(opts={})
-          opts[:path] ||= @client.token_path
-          response = request(opts)
-          yield response if block_given?
-        end
-
-        def to_query
-          Addressable::URI.form_encode(self)
-        end
-
-        def to_url(path)
-          uri = Addressable::URI.new(
-                :scheme => @client.scheme,
-                :host   => @client.host,
-                :path   => path
-                )
-          uri.query_values = self
-          uri.to_s
+          Addressable::URI.form_encode(params)
         end
       end
     end
