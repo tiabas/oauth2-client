@@ -16,7 +16,7 @@ class ConnectionTest < MiniTest::Unit::TestCase
     @config.stubs(:max_redirects).returns(3)
     @config.stubs(:ssl).returns({})
     @http_connection = mock()
-    @user_agent = OAuth2::Client::Connection.new(@config)
+    @user_agent = OAuth2Client::Connection.new(@config)
     @mock_response = build_mock_response(200, {'Content-Type' => 'text/plain'}, 'success') 
   end
 

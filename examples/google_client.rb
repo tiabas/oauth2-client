@@ -1,4 +1,4 @@
-class GoogleClient < OAuth2::Client::Client
+class GoogleClient < OAuth2Client::Client
   def normalize_scope(scope, sep=' ')
     unless (scope.is_a?(String) || scope.is_a?(Array))
       raise "Expected scope of type String or Array but was #{scope.class.name}"

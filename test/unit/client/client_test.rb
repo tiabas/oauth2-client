@@ -19,7 +19,7 @@ class ClientTest < MiniTest::Unit::TestCase
     @config.stubs(:token_path).returns(@token_path)
     @config.stubs(:http_client).returns(mock())
 
-    @client = OAuth2::Client::Client.new(@config)
+    @client = OAuth2Client::Client.new(@config)
     @client.stubs(:http_connection).returns(@http_connection)
   end
 
