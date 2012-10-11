@@ -13,27 +13,28 @@ module OAuth2Client
       # @param password
       # @param [Hash] params additional params
       # @param [Hash] opts options
-      def get_token(username, password, request_params={}, opts={})
+      def get_token(username, password, opts={})
 
         headers = opts[:headers] || {}
         path    = opts[:path]    || @token_path
         method  = opts[:method]  || 'post'
-        params  = request_params.merge!({
-                    :grant_type => @grant_type,
-                    :username   => username,
-                    :password   => password
-                  })
+        params  = opts[:params]  || {}
+        params.merge!({
+          :grant_type => @grant_type,
+          :username   => username,
+          :password   => password
+        })
 
         # set up client credentials based on authentication type
         auth_type = opts.delete(:auth_type) || 'body'
-        case auth_type
+        case auth_type.to_s
         when 'body'
           params.merge!({
             :client_id => @client_id,
             :client_secret => @client_secret
           })
         when 'header'
-          headers['Authorization'] = http_basic_encode(@client, @client_secret)
+          headers['Authorization'] = http_basic_encode(@client_id, @client_secret)
         else
           raise InvalidAuthorizationTypeError.new("Unsupported auth_type, #{auth_type}, expected: header or body")
         end

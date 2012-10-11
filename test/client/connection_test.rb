@@ -1,3 +1,5 @@
+require File.expand_path('../../test_helper', __FILE__)
+
 class ConnectionTest < MiniTest::Unit::TestCase
 
   def build_mock_response(code, headers, body)

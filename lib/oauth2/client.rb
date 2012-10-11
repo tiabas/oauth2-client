@@ -10,7 +10,9 @@ module OAuth2Client
                   :token_path, :scheme, :raise_errors, :http_client
 
     def initialize(config)
-      config        ||= OAuth::Client::Config.new(:filename => 'oauth_client.yml')
+      raise "You must provide a configuration" unless config
+      @config         = config
+      @config         = OAuth2Client::Config.new(:filename => config) if config.is_a?(String)
       @client_id      = config.client_id
       @client_secret  = config.client_secret
       @scheme         = config.scheme
@@ -18,12 +20,12 @@ module OAuth2Client
       @port           = config.port
       @authorize_path = config.authorize_path || @@authorize_path
       @token_path     = config.token_path     || @@token_path
-      @http_client    = config.http_client    || OAuth2::Client::Connection
+      @http_client    = OAuth2Client::Connection
     end
 
     def http_connection
       unless @connection
-        @connection = @http_connection.new(config)
+        @connection = @http_client.new(@config)
       end
       @connection
     end
@@ -42,7 +44,7 @@ module OAuth2Client
     end
 
     def implicit
-      @implicit ||= Grant::Implicit.new(http_connection, grant_params)
+      Grant::Implicit.new(http_connection, grant_params)
     end
 
     def authorization_code

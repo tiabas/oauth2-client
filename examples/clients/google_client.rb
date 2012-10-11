@@ -7,30 +7,30 @@ class GoogleClient < OAuth2Client::Client
     scope.join(sep)
   end
 
-
   def client_side_authorization_url(params)
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    implicit(response_type, params).authorization_url
+    implicit.token_path(params)
   end
 
-  def web_server_authorization_url(params)
+  def webserver_authorization_url(params)
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    auth_code(response_type, params).authorization_url
+    authorization_code.authorization_path(params)
   end
 
-  def web_server_get_token(params)
+  def exchange_auth_code_for_token(params)
     code = params.delete(:code)
-    authorization_code(code, :redirect_uri => redirect_uri).get_token
+    authorization_code.get_token(code, :redirect_uri => redirect_uri)
   end
 
-  def refresh_access_token(refresh_token)
-    refresh_token(refresh_token).get_token
+  def refresh_access_token(params)
+    refresh_token = params.delete(:refresh_token)
+    refresh_token.get_token(refresh_token, params)
   end
 
   def device_code(params)
     params[:scope]  = normalize_scope(params[:scope]) if params[:scope]
-    params[:path]   = params[:path] || '/o/oauth2/device/code'
+    params[:path]   = '/o/oauth2/device/code'
     params[:method] = 'post'
-    implicit(response_type, params).authorization_url
+    implicit.token_path(params)
   end
 end

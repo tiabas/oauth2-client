@@ -1,33 +1,31 @@
-class YammerClientTest < MiniTest::Unit::TestCase
+class YammerClientTest < Test::Unit::TestCase
 
   def setup
-    @scheme         = 'https'
-    @host           = 'yammer.com'
-    @client_id      = 'ETSIMVSxmgZltijWZr0G6w'
-    @client_secret  = '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'
-    opts = {
-          :port           =>  443,
-          :token_path     => '/oauth2/access_token',
-          :authorize_path => '/dialog/oauth/'
-        }
-    @yammer_client  = YammerClient.new(@client_id, @client_secret, @scheme, @host, opts)
+    yam_conf = OAuth2Client::Config.new(:filename => client_config, :service => :yammer, :env => :test)
+    @yammer_client  = YammerClient.new(yam_conf)
   end
 
   def test_webserver_authorization_url
     params = {
-        :redirect_uri=>"http://localhost:3000",
+        :client_id => @yammer_client.client_id,
+        :redirect_uri =>"http://localhost:3000",
         :response_type => 'code'
       }
-    uri = @yammer_client.authorization_url(params)
+    uri = @yammer_client.webserver_authorization_url(params)
     parsed_uri = Addressable::URI.parse(uri)
+    assert_equal '/dialog/oauth/', parsed_uri.path
+    assert_equal params, parsed_uri.query_values.symbolize_keys
   end
 
   def test_client_authorization_url
     params = {
+        :client_id => @yammer_client.client_id,
         :redirect_uri=>"http://localhost:3000",
         :response_type => 'token'
       }
-    uri = @yammer_client.authorization_url(params)
+    uri = @yammer_client.client_side_authorization_url(params)
     parsed_uri = Addressable::URI.parse(uri)
+    assert_equal '/dialog/oauth/', parsed_uri.path
+    assert_equal params, parsed_uri.query_values.symbolize_keys
   end
 end

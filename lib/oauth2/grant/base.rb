@@ -2,6 +2,8 @@ module OAuth2Client
   module Grant
     class Base < Hash
       include OAuth2Client::Helper
+      
+      class InvalidAuthorizationTypeError < StandardError; end
 
       attr_accessor :client_id, :client_secret, :token_path, 
                     :authorize_path, :http_client

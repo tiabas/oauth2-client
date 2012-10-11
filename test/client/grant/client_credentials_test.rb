@@ -1,4 +1,6 @@
-class ClientCredentialsTest < MiniTest::Unit::TestCase
+require File.expand_path('../../../test_helper', __FILE__)
+
+class ClientCredentialsTest < Test::Unit::TestCase
 
   def setup
     @scheme         = 'https'
@@ -24,7 +26,7 @@ class ClientCredentialsTest < MiniTest::Unit::TestCase
       :state => 'state'
     }
     @http_cnxn.expects(:send_request).with(@token_path, params, 'post', {}).returns(true)
-    grant.get_token({:scope => 'abc xyz', :state => 'state'})
+    grant.get_token(:params => {:scope => 'abc xyz', :state => 'state'})
   end
 
   def test_client_credentials_should_send_credentials_in_request_headers
@@ -42,7 +44,7 @@ class ClientCredentialsTest < MiniTest::Unit::TestCase
       'Authorization' => http_basic_encode(@client_id, @client_secret)
     }
     @http_cnxn.expects(:send_request).with(@token_path, params, 'post', headers).returns(true)
-    grant.get_token({:scope => 'abc xyz', :state => 'state'})
+    grant.get_token(:params => {:scope => 'abc xyz', :state => 'state'}, :auth_type => :header)
   end
 
 end

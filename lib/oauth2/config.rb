@@ -4,21 +4,21 @@ module OAuth2Client
     attr_reader :properties, :env 
 
     def initialize(opts)
-      config_filename = opts[:filename]
-      @service = opts[:service]
-      @env = opts[:env] ||= Rails.env
-      @properties = YAML.load_file(File.join('config', config_filename))
-      service = properties[env][service]
-      define_methods_for_client(service.keys)
+      filename = opts[:filename]
+      config = YAML.load_file(filename)
+      @service = opts[:service].to_s
+      @env = (opts[:env] || Rails.env).to_s
+      @properties = config[env][@service]
+      define_methods_for_client(@properties.keys)
     end
 
-    def define_methods_for_environment(keys)
+    def define_methods_for_client(keys)
       keys.each do |key|
-        class_eval <<-EOS
-          def #(name)
-            properties[#{key}]
+        self.class.class_eval do
+           define_method key do
+            @properties[key]
           end
-        EOS
+        end
       end
     end
   end

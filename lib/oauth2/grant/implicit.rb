@@ -9,23 +9,28 @@ module OAuth2Client
         super(http_client, opts)
       end
 
+      def query(params={})
+        params = params.merge(token_params)
+        query_string = to_query(params)
+      end
+
       # Generate a token path using the given parameters .
       #
       # @param [Hash] query parameters
-      def token_path(params)
-        query_string = to_query(params.merge(token_params))
-        "#{@token_path}?#{query_string}"
+      def token_path(params={})
+        "#{@authorize_path}?#{query(params)}"
       end
 
       # Retrieve an access token given the specified client.
       #
       # @param [Hash] params additional params
       # @param [Hash] opts options
-      def get_token(params={}, opts={})
-        params.merge!(token_params)
+      def get_token(opts={})
         headers = opts[:headers] || {}
         path    = opts[:path]    || @authorize_path
         method  = opts[:method]  || 'get'
+        params  = opts[:params]  || {}
+        params.merge!(token_params)
         @http_client.send_request(path, params, method, headers)
       end
 

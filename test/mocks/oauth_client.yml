@@ -1,15 +1,24 @@
-google:
-  scheme: https
-  host: accounts.google.com
-  port: 443
-  token_path: /o/oauth2/token
-  authorize_path: /o/oauth2/auth
-  http_client: OAuth2::Client::Connection
+test:
+  google:
+    client_id: '812741506391.apps.googleusercontent.com'
+    client_secret: 'SplxlOBeZQQYbYS6WxSbIA'
+    scheme: https
+    host: accounts.google.com
+    port: 443
+    token_path: /o/oauth2/token
+    authorize_path: /o/oauth2/auth
+    http_client: #OAuth2Client::Connection
+    max_redirects: 5
+    ssl:
 
-yammer:
-  scheme: https
-  host: yammer.com
-  port: 443
-  token_path: /oauth2/access_token
-  authorize_path: /dialog/oauth/
-  http_client: OAuth2::Client::Connection
+  yammer:
+    client_id: 'ETSIMVSxmgZltijWZr0G6w'
+    client_secret: '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'
+    scheme: https
+    host: yammer.com
+    port: 443
+    token_path: /oauth2/access_token
+    authorize_path: /dialog/oauth/
+    http_client: #OAuth2Client::Connection
+    max_redirects: 5
+    ssl: 

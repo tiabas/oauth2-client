@@ -12,22 +12,28 @@ module OAuth2Client
         super(http_client, opts)
       end
 
+
+      def query(params={})
+        params = params.merge(authorization_params)
+        query_string = to_query(params)
+      end
+
       # Authorization Request
       # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1.1
-      def authorization_path
-        query_string = to_query(params.merge(authorization_params))
-        "#{@authorize_path}?#{to_query}"
+      def authorization_path(params={})
+        "#{@authorize_path}?#{query(params)}"
       end
 
       # Retrieve page at authorization path
       #
       # @param [Hash]   params additional params
       # @param [Hash]   opts options
-      def get_authorization_url(params={}, opts={})
-        params.merge!(authorization_params)
+      def get_authorization_url(opts={})
         headers = opts[:headers] || {}
         path    = opts[:path]    || @authorize_path
         method  = opts[:method]  || 'get'
+        params  = opts[:params]  || {}
+        params.merge!(authorization_params)
         @http_client.send_request(path, params, method, headers)
       end
 
@@ -43,12 +49,13 @@ module OAuth2Client
       # @param [String] code refresh token
       # @param [Hash]   params additional params
       # @param [Hash]   opts options
-      def get_token(code, params={}, opts={})
-        params.merge!(token_params)
-        params[:code] = code
+      def get_token(code, opts={})
         headers = opts[:headers] || {}
         path    = opts[:path]    || @token_path
         method  = opts[:method]  || 'post'
+        params  = opts[:params]  || {}
+        params[:code] = code
+        params.merge!(token_params)
         @http_client.send_request(path, params, method, headers)
       end
 

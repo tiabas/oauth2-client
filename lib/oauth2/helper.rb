@@ -3,19 +3,19 @@ require 'base64'
 
 module OAuth2Client
   module Helper
-     # convenience method to build response URI  
-      def self.build_response_uri(uri, opts={})
-        query= opts[:query]
-        fragment= opts[:fragment]
-        url = Addressable::URI.parse uri
-        temp_query = url.query_values || {}
-        temp_frag = url.fragment || nil
-        url.query_values = temp_query.merge(query) unless query.nil?
-        url.fragment = Addressable::URI.form_encode(fragment) unless fragment.nil?
-        url.to_s
-      end
+    # convenience method to build response URI  
+    def self.build_response_uri(uri, opts={})
+      query= opts[:query]
+      fragment= opts[:fragment]
+      url = Addressable::URI.parse uri
+      temp_query = url.query_values || {}
+      temp_frag = url.fragment || nil
+      url.query_values = temp_query.merge(query) unless query.nil?
+      url.fragment = Addressable::URI.form_encode(fragment) unless fragment.nil?
+      url.to_s
+    end
 
-    # Generate a random key of up to +size+ bytes. The value returned is Base64 encoded with non-word
+    # generates a random key of up to +size+ bytes. The value returned is Base64 encoded with non-word
     # characters removed.
     def generate_urlsafe_key(size=48)
       seed = Time.now.to_i
@@ -33,8 +33,7 @@ module OAuth2Client
       "Basic #{encoded_data}"
     end
 
-    # Convert a hash to a URI query string
-    #
+    # converts a hash to a URI query string
     # @params [Hash] params URI parameters
     def to_query(params)
       unless params.is_a?(Hash)

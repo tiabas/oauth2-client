@@ -1,4 +1,6 @@
-class GrantTest < MiniTest::Unit::TestCase
+require File.expand_path('../../../test_helper', __FILE__)
+
+class GrantTest < Test::Unit::TestCase
 
   def setup
     @scheme         = 'https'
@@ -26,7 +28,7 @@ class GrantTest < MiniTest::Unit::TestCase
       'Authorization' => http_basic_encode(@client_id, @client_secret)
     }
     @http_cnxn.expects(:send_request).with(@token_path, params, 'post', headers).returns(true)
-    grant.get_token('2YotnFZFEjr1zCsicMWpAA', {:scope => 'abc xyz', :state => 'state'})
+    grant.get_token('2YotnFZFEjr1zCsicMWpAA', :params => {:scope => 'abc xyz', :state => 'state'}, :auth_type => :header)
   end
 
   def test_refresh_token_should_send_client_credentials_in_request_body
@@ -44,6 +46,6 @@ class GrantTest < MiniTest::Unit::TestCase
       :state => 'state'
     }
     @http_cnxn.expects(:send_request).with(@token_path, params, 'post', {}).returns(true)
-    grant.get_token('2YotnFZFEjr1zCsicMWpAA', {:scope => 'abc xyz', :state => 'state'})
+    grant.get_token('2YotnFZFEjr1zCsicMWpAA', :params => {:scope => 'abc xyz', :state => 'state'})
   end
 end

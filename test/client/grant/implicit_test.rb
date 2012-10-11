@@ -1,4 +1,6 @@
-class ImplicitTest < MiniTest::Unit::TestCase
+require File.expand_path('../../../test_helper', __FILE__)
+
+class ImplicitTest < Test::Unit::TestCase
 
   def setup
     @scheme         = 'https'
@@ -10,7 +12,7 @@ class ImplicitTest < MiniTest::Unit::TestCase
     @http_cnxn = mock()  
   end
 
-  def test_implicit_grant_request_for_code
+  def test_implicit_grant_request_for_authorization_code
     grant = OAuth2Client::Grant::AuthorizationCode.new(@http_cnxn,
                                 :client_id => @client_id,
                                 :client_secret => @client_secret,
@@ -23,10 +25,10 @@ class ImplicitTest < MiniTest::Unit::TestCase
       :state => 'abc xyz'
     }
     @http_cnxn.expects(:send_request).with(@authorize_path, params, 'get', {}).returns(true)
-    grant.get_authorization_url({:scope => 'xyz', :state => 'abc xyz'})
+    grant.get_authorization_url(:params => {:scope => 'xyz', :state => 'abc xyz'})
   end
 
-  def test_implicit_grant_request_for_token
+  def test_implicit_grant_request_for_access_token
     grant = OAuth2Client::Grant::Implicit.new(@http_cnxn,
                                 :client_id => @client_id,
                                 :client_secret => @client_secret,
@@ -38,8 +40,8 @@ class ImplicitTest < MiniTest::Unit::TestCase
       :scope => 'xyz',
       :state => 'abc xyz'
     }
-    assert_equal '/oauth/token?scope=xyz&state=abc+xyz&response_type=token&client_id=s6BhdRkqt3', grant.token_path({:scope => 'xyz', :state => 'abc xyz'})
+    assert_equal '/oauth/authorize?scope=xyz&state=abc+xyz&response_type=token&client_id=s6BhdRkqt3', grant.token_path({:scope => 'xyz', :state => 'abc xyz'})
     @http_cnxn.expects(:send_request).with(@authorize_path, params, 'get', {}).returns(true)
-    grant.get_token({:scope => 'xyz', :state => 'abc xyz'})
+    grant.get_token(:params => {:scope => 'xyz', :state => 'abc xyz'})
   end
 end
