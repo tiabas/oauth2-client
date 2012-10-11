@@ -7,6 +7,7 @@ test:
     port: 443
     token_path: /o/oauth2/token
     authorize_path: /o/oauth2/auth
+    device_path: /o/oauth2/device/code
     http_client: #OAuth2Client::Connection
     max_redirects: 5
     ssl:
@@ -19,6 +20,7 @@ test:
     port: 443
     token_path: /oauth2/access_token
     authorize_path: /dialog/oauth/
+    device_path:
     http_client: #OAuth2Client::Connection
     max_redirects: 5
-    ssl: 
+    ssl: #

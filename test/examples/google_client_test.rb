@@ -4,7 +4,8 @@ class GoogleClientTest < Test::Unit::TestCase
     config = OAuth2Client::Config.new(:filename => client_config, :service => :google, :env => :test)
     @google_client = GoogleClient.new(config)
   end
-
+  #
+  # https://developers.google.com/accounts/docs/OAuth2WebServer#formingtheurl
   def test_webserver_authorization_url
     params = {
         :client_id => @google_client.client_id,

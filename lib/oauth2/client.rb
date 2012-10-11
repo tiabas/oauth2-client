@@ -20,6 +20,7 @@ module OAuth2Client
       @port           = config.port
       @authorize_path = config.authorize_path || @@authorize_path
       @token_path     = config.token_path     || @@token_path
+      @device         = config.device_path
       @http_client    = OAuth2Client::Connection
     end
 
@@ -39,7 +40,8 @@ module OAuth2Client
         :client_id => @client_id,
         :client_secret => @client_secret,
         :token_path => @token_path,
-        :authorize_path => authorize_path
+        :authorize_path => @authorize_path,
+        :device_path => @device_path
       }
     end
 
@@ -61,6 +63,10 @@ module OAuth2Client
 
     def password
       @password ||= Grant::Password.new(http_connection, grant_params)
+    end
+
+    def device
+      @device ||=  Grant::Device.new(http_connection, grant_params)
     end
   end
 end
