@@ -1,4 +1,6 @@
-class ClientTest < MiniTest::Unit::TestCase
+require File.expand_path('../../test_helper', __FILE__)
+
+class ClientTest < Test::Unit::TestCase
 
   def setup
     @client_id = 's6BhdRkqt3'
@@ -31,7 +33,7 @@ class ClientTest < MiniTest::Unit::TestCase
       :redirect_uri => 'http://client.example.com/oauth/v2/callback'
     }
     @http_connection.expects(:send_request).with('/oauth/authorize', params, 'get', {}).returns(true)
-    auth.get_token(:redirect_uri => 'http://client.example.com/oauth/v2/callback')
+    auth.get_token(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
   end
 
   def test_authorization_code_grant_code_request
@@ -42,13 +44,13 @@ class ClientTest < MiniTest::Unit::TestCase
       :redirect_uri => 'http://client.example.com/oauth/v2/callback'
     }
     @http_connection.expects(:send_request).with('/oauth/authorize', params, 'get', {}).returns(true)
-    auth.get_authorization_url(:redirect_uri => 'http://client.example.com/oauth/v2/callback')
+    auth.get_authorization_url(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
   end
 
   def test_authorization_code_grant
     auth = @client.authorization_code
     params = {
-      :client_id => @client_id ,
+      :client_id => @client_id,
       :code => 'SplxlOBeZQQYbYS6WxSbIA',
       :grant_type => 'authorization_code' 
     }
@@ -59,7 +61,8 @@ class ClientTest < MiniTest::Unit::TestCase
   def test_resource_owner_password_credentials_grant
     auth = @client.password
     params = {
-      :client_id => @client_id ,
+      :client_id => @client_id,
+      :client_secret => @client_secret,
       :username => 'johndoe',
       :password => 'A3ddj3w',
       :grant_type => 'password' 
@@ -71,7 +74,7 @@ class ClientTest < MiniTest::Unit::TestCase
   def test_client_credentials_grant
     auth = @client.client_credentials
     params = {
-      :client_id => @client_id ,
+      :client_id => @client_id,
       :client_secret => @client_secret,
       :grant_type => 'client_credentials' 
     }
@@ -82,7 +85,8 @@ class ClientTest < MiniTest::Unit::TestCase
   def test_refresh_token_grant
     auth = @client.refresh_token
     params = {
-      :client_id => @client_id ,
+      :client_id => @client_id,
+      :client_secret => @client_secret,
       :refresh_token => 'tGzv3JOkF0XG5Qx2TlKWIA',
       :grant_type => 'refresh_token' 
     }

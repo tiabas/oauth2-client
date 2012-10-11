@@ -2,7 +2,6 @@ require "base64"
 
 module OAuth2Client
   module Grant
-    class InvalidAuthorizationTypeError < StandardError; end
     # Client Credentials Grant
     #
     # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.4
@@ -17,34 +16,30 @@ module OAuth2Client
       #
       # @param [Hash] params additional params
       # @param [Hash] opts options
-      def get_token(params={}, opts={})
-        auth_type = opts.delete(:auth_type) || 'body'
+      def get_token(opts={})
+        headers = opts[:headers] || {}
+        path    = opts[:path]    || @token_path
+        method  = opts[:method]  || 'post'
+        params  = opts[:params]  || {}
         params.merge!({
           :grant_type => @grant_type
         })
-        headers = opts[:headers] || {}
 
-        case auth_type
+        # set up client credentials based on authentication type
+        auth_type = opts[:auth_type] || 'body'
+        case auth_type.to_s
         when 'body'
           params.merge!({
             :client_id => @client_id,
             :client_secret => @client_secret
           })
         when 'header'
-          headers['Authorization'] = "Basic #{pack_credentials(@client, @client_secret)}"
+          headers['Authorization'] = http_basic_encode(@client_id, @client_secret)
         else
-          raise InvalidAuthorizationTypeError.new("Unsupported auth_type #{auth_type}, expected: header or body")
+          raise InvalidAuthorizationTypeError.new("Unsupported auth_type, #{auth_type}, expected: header or body")
         end
 
-        path    = opts[:path]    || @token_path
-        method  = opts[:method]  || 'post'
         @http_client.send_request(path, params, method, headers)
-      end
-
-    private
-
-      def pack_credentials(username, password)
-        ["#{username}:#{password}"].pack("m0")
       end
     end
   end

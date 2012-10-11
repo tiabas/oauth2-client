@@ -1,6 +1,9 @@
 module OAuth2Client
   module Grant
     class Base < Hash
+      include OAuth2Client::Helper
+      
+      class InvalidAuthorizationTypeError < StandardError; end
 
       attr_accessor :client_id, :client_secret, :token_path, 
                     :authorize_path, :http_client
@@ -13,17 +16,6 @@ module OAuth2Client
         @authorize_path = opts[:authorize_path]
       end
 
-    private
-
-      # Convert a hash to a URI query string
-      #
-      # @params [Hash] params URI parameters
-      def to_query(params)
-        unless params.is_a?(Hash)
-          raise "Expected Hash but got #{params.class.name}"
-        end
-        Addressable::URI.form_encode(params)
-      end
     end
   end
 end

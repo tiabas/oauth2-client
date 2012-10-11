@@ -9,3 +9,5 @@ gem 'addressable'
 gem 'rake'
 
 gem 'mocha', ">=0.12.1", :require => false
+
+gem "activesupport", "~> 3.2.8"

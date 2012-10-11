@@ -1,4 +1,6 @@
-class GrantTest < MiniTest::Unit::TestCase
+require File.expand_path('../../../test_helper', __FILE__)
+
+class AuthorizationCodeTest < Test::Unit::TestCase
 
   def setup
     @scheme         = 'https'
@@ -17,13 +19,10 @@ class GrantTest < MiniTest::Unit::TestCase
                                 :token_path => @token_path,
                                 :authorize_path => @authorize_path)
     params = {
-      :client_id => @client_id,
-      :code => 'G3Y6jU3a',
-      :grant_type => 'authorization_code',
       :scope => 'abc xyz',
       :state => 'state'
     }
-    assert_equal 'client_id=s6BhdRkqt3&response_type=code&scope=abc+xyz&state=state', grant.to_query
+    assert_equal 'scope=abc+xyz&state=state&response_type=code&client_id=s6BhdRkqt3', grant.query(params)
   end
 
   def test_authorization_code_grant_should_return_authorization_path
@@ -33,13 +32,11 @@ class GrantTest < MiniTest::Unit::TestCase
                                 :token_path => @token_path,
                                 :authorize_path => @authorize_path)
     params = {
-      :client_id => @client_id,
-      :code => 'G3Y6jU3a',
-      :grant_type => 'authorization_code',
+      :response_type => 'code',
       :scope => 'abc xyz',
       :state => 'state'
     }
-    assert_equal '/oauth/authorize?client_id=s6BhdRkqt3&response_type=code&scope=abc+xyz&state=state', grant.authorization_path
+    assert_equal '/oauth/authorize?response_type=code&scope=abc+xyz&state=state&client_id=s6BhdRkqt3', grant.authorization_path(params)
   end
 
   def test_authorization_code_grant_should_send_request_through_http_connection
@@ -56,5 +53,6 @@ class GrantTest < MiniTest::Unit::TestCase
       :state => 'state'
     }
     @http_cnxn.expects(:send_request).with(@token_path, params, 'post', {}).returns(true)
-    grant.get_token('G3Y6jU3a', {:scope => 'abc xyz', :state => 'state'})
+    grant.get_token('G3Y6jU3a', :params => {:scope => 'abc xyz', :state => 'state'})
   end
+end
