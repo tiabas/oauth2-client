@@ -5,7 +5,7 @@ module OAuth2Client
     class Device < Base
 
       def initialize(http_client, opts)
-        @grant_type = 'grant_type=http://oauth.net/grant_type/device/1.0'
+        @grant_type = "http://oauth.net/grant_type/device/1.0"
         super(http_client, opts)
       end
 
