@@ -1,4 +1,4 @@
-class GrantTest < MiniTest::Unit::TestCase
+class ClientCredentialsTest < MiniTest::Unit::TestCase
 
   def setup
     @scheme         = 'https'
@@ -38,7 +38,10 @@ class GrantTest < MiniTest::Unit::TestCase
       :scope => 'abc xyz',
       :state => 'state'
     }
-    @http_cnxn.expects(:send_request).with(@token_path, params, 'post', {}).returns(true)
+    headers = {
+      'Authorization' => http_basic_encode(@client_id, @client_secret)
+    }
+    @http_cnxn.expects(:send_request).with(@token_path, params, 'post', headers).returns(true)
     grant.get_token({:scope => 'abc xyz', :state => 'state'})
   end
 

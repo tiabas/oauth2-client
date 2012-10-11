@@ -17,13 +17,14 @@ module OAuth2Client
       #
       # @param [Hash] params additional params
       # @param [Hash] opts options
-      def get_token(params={}, opts={})
-        auth_type = opts.delete(:auth_type) || 'body'
-        params.merge!({
-          :grant_type => @grant_type
-        })
+      def get_token(request_params={}, opts={})
         headers = opts[:headers] || {}
+        path    = opts[:path]    || @token_path
+        method  = opts[:method]  || 'post'
+        params  = request_params.merge({:grant_type => @grant_type})
 
+        # set up client credentials based on authentication type
+        auth_type = opts.delete(:auth_type) || 'body'
         case auth_type
         when 'body'
           params.merge!({
@@ -31,20 +32,12 @@ module OAuth2Client
             :client_secret => @client_secret
           })
         when 'header'
-          headers['Authorization'] = "Basic #{pack_credentials(@client, @client_secret)}"
+          headers['Authorization'] = http_basic_encode(@client, @client_secret)
         else
-          raise InvalidAuthorizationTypeError.new("Unsupported auth_type #{auth_type}, expected: header or body")
+          raise InvalidAuthorizationTypeError.new("Unsupported auth_type, #{auth_type}, expected: header or body")
         end
 
-        path    = opts[:path]    || @token_path
-        method  = opts[:method]  || 'post'
         @http_client.send_request(path, params, method, headers)
-      end
-
-    private
-
-      def pack_credentials(username, password)
-        ["#{username}:#{password}"].pack("m0")
       end
     end
   end

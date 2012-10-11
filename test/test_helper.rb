@@ -11,3 +11,7 @@ require 'unit/client/client_test'
 # require 'unit/examples/yammer_client_test'
 
 TEST_ROOT = File.dirname(__FILE__)
+
+class MiniTest::Unit::TestCase
+  include OAuth2Client::Helper
+end

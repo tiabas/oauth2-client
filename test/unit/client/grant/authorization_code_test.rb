@@ -1,4 +1,4 @@
-class GrantTest < MiniTest::Unit::TestCase
+class AuthorizationCodeTest < MiniTest::Unit::TestCase
 
   def setup
     @scheme         = 'https'

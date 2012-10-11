@@ -1,13 +1,13 @@
 require 'openssl'
 require 'base64'
 
-module OAuth2
+module OAuth2Client
   module Helper
      # convenience method to build response URI  
       def self.build_response_uri(uri, opts={})
         query= opts[:query]
         fragment= opts[:fragment]
-        url = Addressable::URI.parse redirect_uri
+        url = Addressable::URI.parse uri
         temp_query = url.query_values || {}
         temp_frag = url.fragment || nil
         url.query_values = temp_query.merge(query) unless query.nil?
@@ -28,5 +28,19 @@ module OAuth2
       Time.now.to_i.to_s
     end
 
+    def http_basic_encode(username, password)
+      encoded_data = ["#{username}:#{password}"].pack("m0")
+      "Basic #{encoded_data}"
+    end
+
+    # Convert a hash to a URI query string
+    #
+    # @params [Hash] params URI parameters
+    def to_query(params)
+      unless params.is_a?(Hash)
+        raise "Expected Hash but got #{params.class.name}"
+      end
+      Addressable::URI.form_encode(params)
+    end
   end
 end
