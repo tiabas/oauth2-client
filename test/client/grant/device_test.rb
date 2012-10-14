@@ -9,6 +9,7 @@ class DeviceTest < Test::Unit::TestCase
     @client_secret  = 'SplxlOBeZQQYbYS6WxSbIA'
     @authorize_path = "/oauth/authorize"
     @token_path     = "/oauth/token"
+    @device_path    = "/oauth/device/code"
     @http_cnxn = mock()
   end
 
@@ -26,8 +27,8 @@ class DeviceTest < Test::Unit::TestCase
     assert_equal 'scope=abc+xyz&state=state&client_id=s6BhdRkqt3', grant.query(params)
   end
 
-  def test_device_grant_should_return_authorization_authorization_path
-    grant = OAuth2Client::Grant::AuthorizationCode.new(@http_cnxn,
+  def test_device_grant_should_authorization_path
+    grant = OAuth2Client::Grant::Device.new(@http_cnxn,
                                 :client_id => @client_id,
                                 :client_secret => @client_secret,
                                 :token_path => @token_path,
@@ -37,11 +38,11 @@ class DeviceTest < Test::Unit::TestCase
       :scope => 'abc xyz',
       :state => 'state'
     }
-    assert_equal '/o/oauth2/device/code?scope=abc+xyz&state=state&client_id=s6BhdRkqt3', grant.authorization_path(params)
+    assert_equal '/oauth/device/code?scope=abc+xyz&state=state&client_id=s6BhdRkqt3', grant.authorization_path(params)
   end
 
-  def test_authorization_code_grant_should_send_request_through_http_connection
-    grant = OAuth2Client::Grant::AuthorizationCode.new(@http_cnxn,
+  def test_device_grant_should_send_request_through_http_connection
+    grant = OAuth2Client::Grant::Device.new(@http_cnxn,
                                 :client_id => @client_id,
                                 :client_secret => @client_secret,
                                 :token_path => @token_path,
@@ -52,7 +53,7 @@ class DeviceTest < Test::Unit::TestCase
       :client_id => @client_id,
       :client_secret => @client_secret,
       :code => '4L9fTtLrhY96442SEuf1Rl3KLFg3y',
-      :grant_type => 'grant_type=http://oauth.net/grant_type/device/1.0',
+      :grant_type => 'http://oauth.net/grant_type/device/1.0',
       :scope => 'abc xyz',
       :state => 'state'
     }

@@ -27,7 +27,7 @@ module OAuth2Client
       # Retrieve page at authorization path
       #
       # @param [Hash] opts options
-      def get_authorization_url(opts={})
+      def fetch_authorization_url(opts={})
         headers = opts[:headers] || {}
         path    = opts[:path]    || @authorize_path
         method  = opts[:method]  || 'get'

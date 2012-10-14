@@ -13,10 +13,10 @@ test:
     ssl:
 
   yammer:
-    client_id: 'ETSIMVSxmgZltijWZr0G6w'
-    client_secret: '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'
+    client_id: 'PRbTcg9qjgKsp4jjpm1pw'
+    client_secret: 'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'
     scheme: https
-    host: yammer.com
+    host: www.staging.yammer.com
     port: 443
     token_path: /oauth2/access_token
     authorize_path: /dialog/oauth/

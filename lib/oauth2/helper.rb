@@ -4,14 +4,13 @@ require 'base64'
 module OAuth2Client
   module Helper
     # convenience method to build response URI  
-    def self.build_response_uri(uri, opts={})
-      query= opts[:query]
-      fragment= opts[:fragment]
+    def self.build_uri(uri, opts={})
+      query_params= opts[:params] || {}
+      fragment= opts[:fragment] || {}
       url = Addressable::URI.parse uri
-      temp_query = url.query_values || {}
-      temp_frag = url.fragment || nil
-      url.query_values = temp_query.merge(query) unless query.nil?
-      url.fragment = Addressable::URI.form_encode(fragment) unless fragment.nil?
+
+      url.query_values = new_query unless new_query.empty?
+      url.fragment = Addressable::URI.form_encode(fragment) unless fragment.empty?
       url.to_s
     end
 

@@ -1,5 +1,5 @@
 module OAuth2Client
-  module Device
+  module Grant
     # Device Grant
     # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
     class Device < Base
@@ -25,11 +25,12 @@ module OAuth2Client
       #
       # @param [Hash] params additional params
       # @param [Hash] opts options
-      def get_token(opts={})
+      def get_token(code, opts={})
         headers = opts[:headers] || {}
         path    = opts[:path]    || @token_path
         method  = opts[:method]  || 'post'
         params  = opts[:params]  || {}
+        params[:code] = code
         params.merge!(token_params)
         @http_client.send_request(path, params, method, headers)
       end
@@ -43,7 +44,8 @@ module OAuth2Client
       def token_params
         {
           :grant_type => @grant_type,
-          :client_id  => @client_id
+          :client_id  => @client_id,
+          :client_secret => @client_secret
         }
       end
     end

@@ -1,8 +1,7 @@
 class GoogleClientTest < Test::Unit::TestCase
 
   def setup
-    config = OAuth2Client::Config.new(:filename => client_config, :service => :google, :env => :test)
-    @google_client = GoogleClient.new(config)
+    @google_client = GoogleClient.new(:filename => client_config_file, :service => :google, :env => :test)
   end
   #
   # https://developers.google.com/accounts/docs/OAuth2WebServer#formingtheurl
@@ -32,7 +31,7 @@ class GoogleClientTest < Test::Unit::TestCase
         :approval_prompt => 'force',
         :response_type => 'token'
       }
-    uri = @google_client.client_side_authorization_url(params)
+    uri = @google_client.clientside_authorization_url(params)
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/o/oauth2/auth', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys

@@ -4,6 +4,7 @@ module OAuth2Client
     attr_reader :properties, :env 
 
     def initialize(opts)
+      raise "Expected Hash but got #{opts.class.name}" unless opts.is_a?(Hash)
       filename = opts[:filename]
       config = YAML.load_file(filename)
       @service = opts[:service].to_s
@@ -15,7 +16,7 @@ module OAuth2Client
     def define_methods_for_client(keys)
       keys.each do |key|
         self.class.class_eval do
-           define_method key do
+          define_method key do
             @properties[key]
           end
         end

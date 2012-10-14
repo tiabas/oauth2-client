@@ -40,8 +40,8 @@ module OAuth2Client
       @scheme = scheme
     end
 
-    def use_ssl
-      @scheme == "https" ? true : false
+    def use_ssl?(scheme)
+      scheme == "https" ? true : false
     end
 
     def configure_ssl(http, ssl)
@@ -62,7 +62,7 @@ module OAuth2Client
         if ssl.fetch(:verify, false)
           OpenSSL::SSL::VERIFY_PEER
         else
-        OpenSSL::SSL::VERIFY_NONE
+          OpenSSL::SSL::VERIFY_NONE
         end
       end
     end
@@ -74,22 +74,30 @@ module OAuth2Client
       cert_store
     end
 
-    def http_connection 
-      @http_client = Net::HTTP.new(@host, @port)
-      if use_ssl
+    def http_connection(opts={})
+      _host   = opts[:host]   || @host
+      _port   = opts[:port]   || @port
+      _scheme = opts[:scheme] || @scheme
+
+      @http_client = Net::HTTP.new(_host, _port)
+
+      if use_ssl?(_scheme)
         configure_ssl(@http_client, @ssl)
       end
+
       @http_client
     end
 
-    def send_request(path, params, method, headers={})
-      connection = http_connection
+    def send_request(path, params, method, headers={}, cnxn={})
+      connection = http_connection(cnxn)
+      params ||= {}
+      path   ||= '/'
 
       case method.to_s.downcase
       when 'get'
-        query = params ? Addressable::URI.form_encode(params) : nil
-        uri = query ? [path, query].join("?") : path
-        response = connection.get(uri, headers)
+        query = params.empty? ? nil : Addressable::URI.form_encode(params)
+        normalized_path = query ? [path, query].join("?") : path
+        response = connection.get(normalized_path, headers)
       when 'post'
         response = connection.post(path, params, headers)
       when 'put'
@@ -97,26 +105,32 @@ module OAuth2Client
       when 'delete'
         response = connection.delete(path, params, headers)
       else
-        raise "Unsupported HTTP method, #{method}"
+        raise "Unsupported HTTP method, #{method.inspect}"
       end
+
       status = response.code.to_i
+
       case status
       when 301, 302, 303, 307
-        return response if redirect_limit_reached?
-        if status == 303
-          method = :get
-          params = nil
+        unless redirect_limit_reached?
+          if status == 303
+            method = :get
+            params = nil
+          end
+          uri = Addressable::URI.parse(response.header['Location'])
+          redirect_opts = {
+            :scheme => uri.scheme,
+            :host=>uri.host,
+            :port=>uri.port
+          }
+          return send_request(uri.path, params, method, {}, redirect_opts)
         end
-        uri = Addressable::URI.parse(response.header['Location'])
-        @scheme = uri.scheme
-        @host = uri.host
-        @port = uri.port
-        send_request(uri.path, params, method)
       when 200..599
-        response
+        # do nothing
       else
         raise "Unhandled status code value of #{response.code}"
       end
+      response
     rescue *NET_HTTP_EXCEPTIONS
       raise "Error::ConnectionFailed, $!"
     end

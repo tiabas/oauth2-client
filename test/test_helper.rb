@@ -8,7 +8,7 @@ require 'examples'
 TEST_ROOT = File.dirname(__FILE__)
 
 module OAuth2ClientsHelper
-  def client_config
+  def client_config_file
     File.join(TEST_ROOT, 'mocks/oauth_client.yml')
   end
 end
