@@ -65,7 +65,7 @@ class YammerClient < OAuth2Client::Client
   #
   # @see https://developer.yammer.com/api/oauth2.html#server-side
   #
-  # @params [Hash] additional parameters to be include in URL eg. scope, state, etc
+  # @params [Hash] must include authorization code and redirect uri in additon to others
   #
   # >> client = YammerClient.new(config)
   # >> client.exchange_auth_code_for_token({
@@ -73,16 +73,15 @@ class YammerClient < OAuth2Client::Client
   #      :code => 'G3Y6jU3a',
   #    })
   #
-  # >> POST /oauth2/access_token HTTP/1.1
-  #    Host: www.yammer.com
-  #    Content-Type: application/x-www-form-urlencoded
-  #
-  #     client_id={client_id}&code=G3Y6jU3a&grant_type=authorization_code&
-  #     redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret={client_secret}
-  #
+  # POST /oauth2/access_token HTTP/1.1
+  # Host: www.yammer.com
+  # Content-Type: application/x-www-form-urlencoded
+
+  #  client_id={client_id}&code=G3Y6jU3a&grant_type=authorization_code&
+  #  redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret={client_secret}
+
   def exchange_auth_code_for_token(opts={})
     opts[:params] ||= {}
-    opts[:params][:redirect_uri] ||= redirect_uri
     code = opts[:params].delete(:code)
     authorization_code.get_token(code, opts)
   end
