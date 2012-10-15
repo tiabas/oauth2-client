@@ -6,7 +6,7 @@ everyone who claims to support OAuth 2.0 actually implements it according to the
 the developer some degree of flexibility in generating the URLs and requests
 needed to authorize an OAuth 2.0 application.
 
-For more about the standard, take a look at the http://tools.ietf.org/html/rfc6749 
+For more about the standard, take a look at http://tools.ietf.org/html/rfc6749 
 
 ## Installation
 Download the library and include the its location in your Gemfile
@@ -33,7 +33,7 @@ client.authorization_code.authorization_path(:redirect_uri => 'http://localhost/
 ## Authorization Grants
 The client wraps around the creation of any given grant and passing in the parameters defined in the configuration
 file. The supported grants include Authorization Code, Implicit, Resource Owner Password Credentials, Client Credentials.
-There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the #authorization_code, #implicit, #password, #client_credentials,
+There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the #authorization_code, #implicit, #password, #client_credentials, #refresh_token
 and #device methods on a client object.
 
 ### Authorization Code
@@ -58,6 +58,11 @@ auth_url = client.implicit.authorization_path(:redirect_uri => 'http://localhost
 token = client.password.get_token('username', 'password')
 ```
 
+### Refresh Token
+```ruby
+token = client.refresh_token.get_token(refresh_token_value, :params => {:scope => 'abc xyz', :state => 'state'})
+```
+
 ### Client Credentials
 ```ruby
 token = client.client_credentials.get_token
@@ -77,23 +82,23 @@ providers.
 ## Yammer Client
 
 ```ruby
-@yammer_client  = YammerClient.new(:filename => client_config_file, :service => :yammer, :env => :test)
+yammer_client  = YammerClient.new(:filename => client_config_file, :service => :yammer, :env => :test)
 ```
 
 ### Client-side authorization URL(Implicit grant)
 ```ruby
-auth_url = @yammer_client.webserver_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
+auth_url = yammer_client.webserver_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
 # > https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=token&client_id=PQbTcg6qjgKpp4jjpm4pw
 ```
 
 ### Server-side authorization URL(Authorization code grant)
 ```ruby
 
-auth_url = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
+auth_url = yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
 # > https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=code&client_id=PQbTcg6qjgKpp4jjpm4pw
 
 # exchange authorization code for access token
-token_url = @yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
+token_url = yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
 # > https://www.yammer.com/oauth2/access_token?code=aXW2c6bYz&redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret=Xn4kp7Ly0TCY4GaZWkmSsqIEPg10DmMADyjWkf2U&grant_type=authorization_code&client_id=PQbTcg6qjgKpp4jjpm4pw
 
 ```
