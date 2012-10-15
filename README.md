@@ -1,7 +1,6 @@
 # OAuth2 Client Library
 
-A Ruby wrapper for the OAuth 2.0 specification. This is an alternative to 
-https://github.com/intridea/oauth2 wrapper. It designed with the idea that not
+A Ruby wrapper for the OAuth 2.0 specification. It is designed with the idea that not
 everyone who claims to support OAuth 2.0 actually implements it according to the
 [standard]( http://tools.ietf.org/html/rfc6749). This version therefore, affords 
 the developer some degree of flexibility in generating the URLs and requests
