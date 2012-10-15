@@ -3,8 +3,11 @@
 A Ruby wrapper for the OAuth 2.0 specification. This is an alternative to 
 https://github.com/intridea/oauth2 wrapper. It designed with the idea that not
 everyone who claims to support OAuth 2.0 actually implements it according to the
-standard. This version therefore, affords the developer some degree of flexibility
-in generating the URLs and requests needed to authorize an OAuth 2.0 application.
+[standard]( http://tools.ietf.org/html/rfc6749). This version therefore, affords 
+the developer some degree of flexibility in generating the URLs and requests
+needed to authorize an OAuth 2.0 application.
+
+For more about the standard, take a look at the http://tools.ietf.org/html/rfc6749 
 
 ## Installation
 Download the library and include the its location in your Gemfile
