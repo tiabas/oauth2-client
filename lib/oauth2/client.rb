@@ -44,7 +44,7 @@ module OAuth2Client
     end
 
     def implicit
-      Grant::Implicit.new(http_connection, grant_params)
+      @implicit ||= Grant::Implicit.new(http_connection, grant_params)
     end
 
     def authorization_code
@@ -63,7 +63,7 @@ module OAuth2Client
       @password ||= Grant::Password.new(http_connection, grant_params)
     end
 
-    def device
+    def device_code
       @device ||=  Grant::Device.new(http_connection, grant_params)
     end
   end
