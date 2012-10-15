@@ -4,7 +4,7 @@ A Ruby wrapper for the OAuth 2.0 specification. This is an alternative to
 https://github.com/intridea/oauth2 wrapper. It designed with the idea that not
 everyone who claims to support OAuth 2.0 actually implements it according to the
 standard. This version therefore, affords the developer some degree of flexibility
-in generating the URLs and requests needed to authorization an OAuth 2.0 application.
+in generating the URLs and requests needed to authorize an OAuth 2.0 application.
 
 ## Installation
 Download the library and include the its location in your Gemfile
@@ -88,7 +88,7 @@ auth_url = @yammer_client.webserver_authorization_url(:redirect_uri =>"http://lo
 ```ruby
 
 auth_url = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
-# > https://www.staging.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=code&client_id=PQbTcg6qjgKpp4jjpm4pw
+# > https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=code&client_id=PQbTcg6qjgKpp4jjpm4pw
 
 # exchange authorization code for access token
 token_url = @yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
