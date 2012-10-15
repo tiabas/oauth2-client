@@ -72,6 +72,9 @@ token = client.client_credentials.get_token
 ```ruby
 auth_url = client.device_code.authorization_path(:scope => 'abc xyz', :state => 'state')
 # > "/oauth/device/code?scope=abc+xyz&state=state&client_id={client_id}"
+
+# exchange device authorization code for access token
+token = client.device_code.get_token(device_auth_code)
 ```
 
 # Client Examples
