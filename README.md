@@ -68,8 +68,9 @@ auth_url = client.device_code.authorization_path(:scope => 'abc xyz', :state => 
 ```
 
 # Client Examples
-This library comes bundle with two sample implementations of the library for authenticating agains Google and Yammer OAuth 
-services.
+This library comes bundled with two sample implementations of Google and Yammer OAuth clients. These clients are 
+meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0
+providers.
 
 ## Yammer Client
 
