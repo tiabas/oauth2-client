@@ -11,7 +11,6 @@ class YammerClientTest < Test::Unit::TestCase
         :response_type => 'code'
       }
     uri = @yammer_client.webserver_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
-    puts uri
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/dialog/oauth/', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
@@ -26,7 +25,6 @@ class YammerClientTest < Test::Unit::TestCase
         :code => 'aXW2c6bYz'
       }
     uri = @yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
-    puts uri
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/oauth2/access_token', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
@@ -39,7 +37,6 @@ class YammerClientTest < Test::Unit::TestCase
         :response_type => 'token'
       }
     uri = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
-    puts uri
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/dialog/oauth/', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys

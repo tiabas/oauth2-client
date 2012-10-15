@@ -82,6 +82,38 @@ This library comes bundled with two sample implementations of Google and Yammer 
 meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0
 providers.
 
+## Configuration
+The client setting are loaded from a configuration file.
+
+```yaml
+test:
+  google:
+    client_id: '812741506391.apps.googleusercontent.com'
+    client_secret: 'SplxlOBeZQQYbYS6WxSbIA'
+    scheme: https
+    host: accounts.google.com
+    port: 443
+    token_path: /o/oauth2/token
+    authorize_path: /o/oauth2/auth
+    device_path: /o/oauth2/device/code
+    http_client: 
+    max_redirects: 5
+    ssl:
+
+  yammer:
+    client_id: 'PRbTcg9qjgKsp4jjpm1pw'
+    client_secret: 'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'
+    scheme: https
+    host: www.yammer.com
+    port: 443
+    token_path: /oauth2/access_token
+    authorize_path: /dialog/oauth/
+    device_path:
+    http_client: 
+    max_redirects: 5
+    ssl: 
+```
+
 ## Yammer Client
 
 ```ruby
@@ -104,6 +136,32 @@ auth_url = yammer_client.clientside_authorization_url(:redirect_uri =>"http://lo
 token_url = yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
 # > https://www.yammer.com/oauth2/access_token?code=aXW2c6bYz&redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret=Xn4kp7Ly0TCY4GaZWkmSsqIEPg10DmMADyjWkf2U&grant_type=authorization_code&client_id=PQbTcg6qjgKpp4jjpm4pw
 
+```
+
+## Google Client
+
+```ruby
+google_client = GoogleClient.new(:filename => client_config_file, :service => :google, :env => :test)
+```
+
+### Client-side authorization URL(Implicit grant)
+```ruby
+auth_url = google_client.webserver_authorization_url(
+    :scope => 'https://www.googleapis.com/auth/userinfo.email',
+    :state => '/profile',
+    :redirect_uri => 'https://oauth2-login-demo.appspot.com/code',
+    :approval_prompt => 'force')
+# > https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&state=%2Fprofile&redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Ftoken&approval_prompt=force&response_type=token&client_id=812741506391.apps.googleusercontent.com
+```
+
+### Server-side authorization URL(Authorization code grant)
+```ruby
+auth_url = google_client.clientside_authorization_url(
+    :scope => 'https://www.googleapis.com/auth/userinfo.email',
+    :state => '/profile',
+    :redirect_uri => 'https://oauth2-login-demo.appspot.com/token',
+    :approval_prompt => 'force')
+# > https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&state=%2Fprofile&redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Fcode&approval_prompt=force&response_type=code&client_id=812741506391.apps.googleusercontent.com
 ```
 
 ## Copyright

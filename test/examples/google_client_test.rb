@@ -14,7 +14,13 @@ class GoogleClientTest < Test::Unit::TestCase
         :approval_prompt => 'force',
         :response_type => 'code'
       }
-    uri = @google_client.webserver_authorization_url(params)
+    uri = @google_client.webserver_authorization_url(        
+        :scope => 'https://www.googleapis.com/auth/userinfo.email',
+        :state => '/profile',
+        :redirect_uri => 'https://oauth2-login-demo.appspot.com/code',
+        :approval_prompt => 'force'
+    )
+    puts uri
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/o/oauth2/auth', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
@@ -31,7 +37,13 @@ class GoogleClientTest < Test::Unit::TestCase
         :approval_prompt => 'force',
         :response_type => 'token'
       }
-    uri = @google_client.clientside_authorization_url(params)
+    uri = @google_client.clientside_authorization_url(
+        :scope => 'https://www.googleapis.com/auth/userinfo.email',
+        :state => '/profile',
+        :redirect_uri => 'https://oauth2-login-demo.appspot.com/token',
+        :approval_prompt => 'force'
+    )
+    puts uri
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/o/oauth2/auth', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
