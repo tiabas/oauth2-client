@@ -67,6 +67,34 @@ auth_url = client.device_code.authorization_path(:scope => 'abc xyz', :state => 
 # > "/oauth/device/code?scope=abc+xyz&state=state&client_id={client_id}"
 ```
 
+# Client Examples
+This library comes bundle with two sample implementations of the library for authenticating agains Google and Yammer OAuth 
+services.
+
+## Yammer Client
+
+```ruby
+@yammer_client  = YammerClient.new(:filename => client_config_file, :service => :yammer, :env => :test)
+```
+
+### Client-side authorization URL(Implicit grant)
+```ruby
+auth_url = @yammer_client.webserver_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
+# > https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=token&client_id=PQbTcg6qjgKpp4jjpm4pw
+```
+
+### Server-side authorization URL(Authorization code grant)
+```ruby
+
+auth_url = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
+# > https://www.staging.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=code&client_id=PQbTcg6qjgKpp4jjpm4pw
+
+# exchange authorization code for access token
+token_url = @yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
+# > https://www.yammer.com/oauth2/access_token?code=aXW2c6bYz&redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret=Xn4kp7Ly0TCY4GaZWkmSsqIEPg10DmMADyjWkf2U&grant_type=authorization_code&client_id=PQbTcg6qjgKpp4jjpm4pw
+
+```
+
 ## Copyright
 Copyright (c) 2012 Kevin Mutyaba
 See [LICENSE][] for details.
