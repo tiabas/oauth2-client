@@ -1,6 +1,6 @@
 # OAuth2 Client
 
-A Ruby wrapper for the OAuth 2.0 specification. It is designed with the idea that not
+A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that not
 every service that claims to support OAuth 2.0 actually implements it according to the
 [standard]( http://tools.ietf.org/html/rfc6749). This version therefore, affords 
 the developer some degree of flexibility in generating the URLs and requests
@@ -35,6 +35,10 @@ The client wraps around the creation of any given grant and passing in the param
 file. The supported grants include Authorization Code, Implicit, Resource Owner Password Credentials, Client Credentials.
 There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the #authorization_code, #implicit, #password, #client_credentials, #refresh_token
 and #device methods on a client object.
+
+The #get_token method on the grants does not make any assumptions about the format ofthe response from the OAuth provider. The ideal
+case would be to treat all responses as JSON. However, some services may respond with in XML instead of JSON. The #get_token method
+therefore, returns with an HTTPResponse object.
 
 ### Authorization Code
 ```ruby
@@ -86,8 +90,7 @@ providers.
 The client settings are loaded from a configuration file.
 
 ```yaml
-#oauth_client.yml
-
+# oauth_client.yml
 test:
   google:
     client_id: '812741506391.apps.googleusercontent.com'
@@ -165,13 +168,17 @@ auth_url = google_client.clientside_authorization_url(
     :approval_prompt => 'force')
 # => https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&state=%2Fprofile&redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Fcode&approval_prompt=force&response_type=code&client_id=812741506391.apps.googleusercontent.com
 
-# exchange authorization code for access token
+# exchange authorization code for access token. we will get back a Net::HTTPResponse
 response = google_client.exchange_auth_code_for_token(
   :params => {
     :code => '4/dbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI',
     :redirect_uri => 'http://localhost/oauth/token'
   }
 )
+response.inspect 
+# => #<Net::HTTPOK:0x007ff8bc7c1200>
+
+response.body
 # => {
   "access_token" : "ya91.AHES8ZS-oCZnc5yHepnsosFjNln9ZKLuioF6FcMRCGUIzA",
   "token_type" : "Bearer",
