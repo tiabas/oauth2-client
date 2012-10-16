@@ -83,9 +83,11 @@ meant to showcase the degree of flexibilty that you get when using this library 
 providers.
 
 ## Configuration
-The client setting are loaded from a configuration file.
+The client settings are loaded from a configuration file.
 
 ```yaml
+#oauth_client.yml
+
 test:
   google:
     client_id: '812741506391.apps.googleusercontent.com'
@@ -164,7 +166,7 @@ auth_url = google_client.clientside_authorization_url(
 # => https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&state=%2Fprofile&redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Fcode&approval_prompt=force&response_type=code&client_id=812741506391.apps.googleusercontent.com
 
 # exchange authorization code for access token
-response = @google_client.exchange_auth_code_for_token(
+response = google_client.exchange_auth_code_for_token(
   :params => {
     :code => '4/dbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI',
     :redirect_uri => 'http://localhost/oauth/token'

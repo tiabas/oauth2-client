@@ -55,7 +55,7 @@ class GoogleClientTest < Test::Unit::TestCase
     assert_equal 'accounts.google.com', parsed_uri.host
   end
 
-  def test_webserver_authorization_url_with_scope_as_array
+  def test_webserver_authorization_url_with_scope_as_hash
     assert_raises ArgumentError do 
       uri = @google_client.webserver_authorization_url(
           :scope => {},

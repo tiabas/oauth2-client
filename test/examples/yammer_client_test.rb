@@ -4,7 +4,7 @@ class YammerClientTest < Test::Unit::TestCase
     @yammer_client  = YammerClient.new(:filename => client_config_file, :service => :yammer, :env => :test)
   end
 
-  def test_webserver_generate_authorization_url
+  def test_webserver_generate_authorization_code_grant_authorize_url
     params = {
         :client_id => @yammer_client.client_id,
         :redirect_uri =>"http://localhost/oauth/cb",
@@ -18,7 +18,7 @@ class YammerClientTest < Test::Unit::TestCase
     assert_equal 'www.yammer.com', parsed_uri.host
   end
 
-  def test_webserver_generate_authorization_code_token_url
+  def test_webserver_generate_authorization_code_grant_token_url
     params = {
         :client_id => @yammer_client.client_id,
         :client_secret => @yammer_client.client_secret,
@@ -34,7 +34,7 @@ class YammerClientTest < Test::Unit::TestCase
     assert_equal 'www.yammer.com', parsed_uri.host
   end
 
-  def test_client_authorization_url
+  def test_client_generate_implicit_grant_token_url
     params = {
         :client_id => @yammer_client.client_id,
         :redirect_uri=>"http://localhost/oauth/cb",
