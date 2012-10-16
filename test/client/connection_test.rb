@@ -45,7 +45,7 @@ class ConnectionTest < MiniTest::Unit::TestCase
     headers = {}
     uri = '/users/1'
  
-    Net::HTTP.any_instance.expects(:delete).with(uri, params, headers).returns(@mock_response)
+    Net::HTTP.any_instance.expects(:delete).with(uri, headers).returns(@mock_response)
    
     response = @http_client.send_request(path, params, method, {})
 
@@ -57,11 +57,12 @@ class ConnectionTest < MiniTest::Unit::TestCase
   def test_should_make_successfull_post_request
     path = '/users'
     params = {:first_name => 'john', :last_name => 'smith'}
+    query  = Addressable::URI.form_encode(params)
     method = 'post'
     headers = {}
     uri = '/users'
 
-    Net::HTTP.any_instance.expects(:post).with(uri, params, headers).returns(@mock_response)
+    Net::HTTP.any_instance.expects(:post).with(uri, query, headers).returns(@mock_response)
 
     response = @http_client.send_request(path, params, method, {})
 
@@ -73,11 +74,12 @@ class ConnectionTest < MiniTest::Unit::TestCase
   def test_should_make_successfull_put_request
     path = '/users/1'
     params = {:first_name => 'jane', :last_name => 'doe'}
+    query  = Addressable::URI.form_encode(params)
     method = 'put'
     headers = {}
     uri = '/users/1'
 
-    Net::HTTP.any_instance.expects(:put).with(uri, params, headers).returns(@mock_response)
+    Net::HTTP.any_instance.expects(:put).with(uri, query, headers).returns(@mock_response)
 
     response = @http_client.send_request(path, params, method, {})
 
@@ -90,6 +92,7 @@ class ConnectionTest < MiniTest::Unit::TestCase
     @http_client.max_redirects = 1
     path = '/users/1'
     params = {:first_name => 'jane', :last_name => 'doe'}
+    query  = Addressable::URI.form_encode(params)
     method = 'post'
 
     http_connection2 = Net::HTTP.new('abc.example.com')
@@ -97,8 +100,8 @@ class ConnectionTest < MiniTest::Unit::TestCase
     redirect_response1 = build_mock_response(302, {'Location' => 'http://abc.example.com/'}, '')
     redirect_response2 = build_mock_response(200, {'Content-Type' => 'text/plain'}, 'success')
 
-    @http_connection.expects(:post).with('/users/1', params, {}).returns(redirect_response1)
-    http_connection2.expects(:post).with('/', params, {}).returns(redirect_response2)
+    @http_connection.expects(:post).with('/users/1', query, {}).returns(redirect_response1)
+    http_connection2.expects(:post).with('/', query, {}).returns(redirect_response2)
     @http_client.stubs(:http_connection).returns(@http_connection).then.returns(http_connection2)
 
     response = @http_client.send_request(path, params, method)
@@ -112,6 +115,7 @@ class ConnectionTest < MiniTest::Unit::TestCase
     @http_client.max_redirects = 2
     path = '/users/1'
     params = {:first_name => 'jane', :last_name => 'doe'}
+    query  = Addressable::URI.form_encode(params)
     method = 'post'
 
     http_connection2 = mock()
@@ -121,9 +125,9 @@ class ConnectionTest < MiniTest::Unit::TestCase
     redirect_response2 = build_mock_response(302, {'Location' => 'http://xyz.example.com/'}, '')
     redirect_response3 = build_mock_response(302, {'Location' => 'http://123.example.com/'}, '')
 
-    @http_connection.expects(:post).with('/users/1', params, {}).returns(redirect_response1)
-    http_connection2.expects(:post).with('/', params, {}).returns(redirect_response2)
-    http_connection3.expects(:post).with('/', params, {}).returns(redirect_response3)
+    @http_connection.expects(:post).with('/users/1', query, {}).returns(redirect_response1)
+    http_connection2.expects(:post).with('/', query, {}).returns(redirect_response2)
+    http_connection3.expects(:post).with('/', query, {}).returns(redirect_response3)
     @http_client.stubs(:http_connection).returns(@http_connection).then.returns(http_connection2).then.returns(http_connection3)
 
     response = @http_client.send_request(path, params, method)

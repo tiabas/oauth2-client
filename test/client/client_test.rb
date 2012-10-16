@@ -38,7 +38,7 @@ class ClientTest < Test::Unit::TestCase
     auth.get_token(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
   end
 
-  def test_authorization_code_grant_code_request
+  def test_authorization_code_grant_request_for_authorization_code
     auth = @client.authorization_code
     params = {
       :client_id => @client_id ,
@@ -49,10 +49,11 @@ class ClientTest < Test::Unit::TestCase
     auth.fetch_authorization_url(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
   end
 
-  def test_authorization_code_grant
+  def test_authorization_code_grant_request_to_swap_code_for_token
     auth = @client.authorization_code
     params = {
       :client_id => @client_id,
+      :client_secret => @client_secret,
       :code => 'SplxlOBeZQQYbYS6WxSbIA',
       :grant_type => 'authorization_code' 
     }

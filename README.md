@@ -1,4 +1,4 @@
-# OAuth2 Client Library
+# OAuth2 Client
 
 A Ruby wrapper for the OAuth 2.0 specification. It is designed with the idea that not
 everyone who claims to support OAuth 2.0 actually implements it according to the

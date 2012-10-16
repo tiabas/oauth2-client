@@ -1,7 +1,7 @@
 test:
   google:
-    client_id: '812741506391.apps.googleusercontent.com'
-    client_secret: 'SplxlOBeZQQYbYS6WxSbIA'
+    client_id: '325808310634.apps.googleusercontent.com'
+    client_secret: 'a2nQpcUm2Dgq1chWdAvbXGTk'
     scheme: https
     host: accounts.google.com
     port: 443

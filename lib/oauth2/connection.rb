@@ -89,21 +89,21 @@ module OAuth2Client
     end
 
     def send_request(path, params, method, headers={}, cnxn={})
+      params   ||= {}
+      path     ||= '/'
       connection = http_connection(cnxn)
-      params ||= {}
-      path   ||= '/'
+      query      = Addressable::URI.form_encode(params)
+      normalized_path = query.empty? ? path : [path, query].join("?")
 
       case method.to_s.downcase
       when 'get'
-        query = params.empty? ? nil : Addressable::URI.form_encode(params)
-        normalized_path = query ? [path, query].join("?") : path
         response = connection.get(normalized_path, headers)
       when 'post'
-        response = connection.post(path, params, headers)
+        response = connection.post(path, query, headers)
       when 'put'
-        response = connection.put(path, params, headers)
+        response = connection.put(path, query, headers)
       when 'delete'
-        response = connection.delete(path, params, headers)
+        response = connection.delete(normalized_path, headers)
       else
         raise "Unsupported HTTP method, #{method.inspect}"
       end

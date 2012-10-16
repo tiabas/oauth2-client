@@ -14,6 +14,8 @@ class YammerClientTest < Test::Unit::TestCase
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/dialog/oauth/', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
+    assert_equal 'https', parsed_uri.scheme
+    assert_equal 'www.yammer.com', parsed_uri.host
   end
 
   def test_webserver_generate_authorization_code_token_url
@@ -28,6 +30,8 @@ class YammerClientTest < Test::Unit::TestCase
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/oauth2/access_token', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
+    assert_equal 'https', parsed_uri.scheme
+    assert_equal 'www.yammer.com', parsed_uri.host
   end
 
   def test_client_authorization_url
@@ -40,5 +44,7 @@ class YammerClientTest < Test::Unit::TestCase
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/dialog/oauth/', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys
+    assert_equal 'https', parsed_uri.scheme
+    assert_equal 'www.yammer.com', parsed_uri.host
   end
 end
