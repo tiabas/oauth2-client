@@ -159,7 +159,7 @@ auth_url = google_client.webserver_authorization_url(
 auth_url = google_client.clientside_authorization_url(
     :scope => 'https://www.googleapis.com/auth/userinfo.email',
     :state => '/profile',
-    :redirect_uri => 'https://oauth2-login-demo.appspot.com/token',
+    :redirect_uri => 'http://localhost/oauth/code',
     :approval_prompt => 'force')
 # => https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&state=%2Fprofile&redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Fcode&approval_prompt=force&response_type=code&client_id=812741506391.apps.googleusercontent.com
 
@@ -167,7 +167,7 @@ auth_url = google_client.clientside_authorization_url(
 response = @google_client.exchange_auth_code_for_token(
   :params => {
     :code => '4/dbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI',
-    :redirect_uri => @redirect_uri
+    :redirect_uri => 'http://localhost/oauth/token'
   }
 )
 # => {
