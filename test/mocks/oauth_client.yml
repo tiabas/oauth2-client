@@ -1,6 +1,6 @@
 test:
   google:
-    client_id: '325808310634.apps.googleusercontent.com'
+    client_id: '827502413694.apps.googleusercontent.com'
     client_secret: 'a2nQpcUm2Dgq1chWdAvbXGTk'
     scheme: https
     host: accounts.google.com
