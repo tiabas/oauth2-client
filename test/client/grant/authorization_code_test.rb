@@ -47,6 +47,7 @@ class AuthorizationCodeTest < Test::Unit::TestCase
                                 :authorize_path => @authorize_path)
     params = {
       :client_id => @client_id,
+      :client_secret => @client_secret,
       :code => 'G3Y6jU3a',
       :grant_type => 'authorization_code',
       :scope => 'abc xyz',

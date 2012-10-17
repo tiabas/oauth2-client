@@ -9,6 +9,7 @@ class ClientTest < Test::Unit::TestCase
     @scheme = 'https'
     @token_path = '/oauth/token'
     @authorize_path = '/oauth/authorize'
+    @device_path = '/oauth/device'
     @http_connection = mock()
     @config = mock()
 
@@ -19,9 +20,10 @@ class ClientTest < Test::Unit::TestCase
     @config.stubs(:port).returns(443)
     @config.stubs(:authorize_path).returns(@authorize_path)
     @config.stubs(:token_path).returns(@token_path)
+    @config.stubs(:device_path).returns(@device_path)
     @config.stubs(:http_client).returns(mock())
-
-    @client = OAuth2Client::Client.new(@config)
+    OAuth2Client::Config.stubs(:new).returns(@config)
+    @client = OAuth2Client::Client.new({})
     @client.stubs(:http_connection).returns(@http_connection)
   end
 
@@ -36,7 +38,7 @@ class ClientTest < Test::Unit::TestCase
     auth.get_token(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
   end
 
-  def test_authorization_code_grant_code_request
+  def test_authorization_code_grant_request_for_authorization_code
     auth = @client.authorization_code
     params = {
       :client_id => @client_id ,
@@ -44,13 +46,14 @@ class ClientTest < Test::Unit::TestCase
       :redirect_uri => 'http://client.example.com/oauth/v2/callback'
     }
     @http_connection.expects(:send_request).with('/oauth/authorize', params, 'get', {}).returns(true)
-    auth.get_authorization_url(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
+    auth.fetch_authorization_url(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
   end
 
-  def test_authorization_code_grant
+  def test_authorization_code_grant_request_to_swap_code_for_token
     auth = @client.authorization_code
     params = {
       :client_id => @client_id,
+      :client_secret => @client_secret,
       :code => 'SplxlOBeZQQYbYS6WxSbIA',
       :grant_type => 'authorization_code' 
     }

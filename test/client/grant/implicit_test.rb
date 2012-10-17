@@ -25,7 +25,7 @@ class ImplicitTest < Test::Unit::TestCase
       :state => 'abc xyz'
     }
     @http_cnxn.expects(:send_request).with(@authorize_path, params, 'get', {}).returns(true)
-    grant.get_authorization_url(:params => {:scope => 'xyz', :state => 'abc xyz'})
+    grant.fetch_authorization_url(:params => {:scope => 'xyz', :state => 'abc xyz'})
   end
 
   def test_implicit_grant_request_for_access_token

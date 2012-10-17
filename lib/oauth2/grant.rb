@@ -1,5 +1,6 @@
 require 'oauth2/grant/base'
 require 'oauth2/grant/implicit'
+require 'oauth2/grant/device'
 require 'oauth2/grant/authorization_code'
 require 'oauth2/grant/refresh_token'
 require 'oauth2/grant/client_credentials'

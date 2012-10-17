@@ -1,9 +1,10 @@
 TODO:
-- Parse the URI hostname and path from request object and use that
-  for verification in request handler
+- Streamline configuration of client
 
-- Make changes to read OAuth2 Client and Connection configurations to configuration files
+- Add documentation for connection class
 
 - Make gem 1.8.7 compatible
 
-- Write documentation
+- Update documentation
+
+- Submit to gem library

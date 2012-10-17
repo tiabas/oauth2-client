@@ -27,7 +27,7 @@ module OAuth2Client
       # Retrieve page at authorization path
       #
       # @param [Hash] opts options
-      def get_authorization_url(opts={})
+      def fetch_authorization_url(opts={})
         headers = opts[:headers] || {}
         path    = opts[:path]    || @authorize_path
         method  = opts[:method]  || 'get'
@@ -72,7 +72,8 @@ module OAuth2Client
       def token_params
         {
           :grant_type => @grant_type,
-          :client_id  => @client_id
+          :client_id  => @client_id,
+          :client_secret => @client_secret
         }
       end
     end

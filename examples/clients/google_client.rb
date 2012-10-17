@@ -2,7 +2,7 @@ class GoogleClient < OAuth2Client::Client
 
   def normalize_scope(scope, sep=' ')
     unless (scope.is_a?(String) || scope.is_a?(Array))
-      raise "Expected scope of type String or Array but was #{scope.class.name}"
+      raise ArgumentError.new("Expected scope of type String or Array but was: #{scope.class.name}")
     end
     return scope if scope.is_a?(String)
     scope.join(sep)
@@ -25,7 +25,7 @@ class GoogleClient < OAuth2Client::Client
   # #=>
   def clientside_authorization_url(params={})
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    implicit.token_path(params)
+    absolute_url(implicit.token_path(params))
   end
 
   # Generates the Google URL that the user will be redirected to in order to
@@ -45,7 +45,7 @@ class GoogleClient < OAuth2Client::Client
   # #=>
   def webserver_authorization_url(params={})
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    authorization_code.authorization_path(params)
+    absolute_url(authorization_code.authorization_path(params))
   end
 
   # Generates the Google URL that allows a user to obtain an authorization
@@ -54,7 +54,7 @@ class GoogleClient < OAuth2Client::Client
   # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
   def device_authorization_url(params={})
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    device.authorization_path(opts)
+    absolute_url(device.authorization_path(params))
   end
 
   # Makes a request to google server that will swap your authorization code for an access
@@ -72,8 +72,9 @@ class GoogleClient < OAuth2Client::Client
   #    })
   # #=>
   def exchange_auth_code_for_token(opts={})
-    opts[:params] ||= {}
-    opts[:params][:redirect_uri] ||= redirect_uri
+    unless (opts[:params] && opts[:params][:code])
+      raise ArgumentError.new("You must include an authorization code as a parameter")
+    end
     code = opts[:params].delete(:code)
     authorization_code.get_token(code, opts)
   end
@@ -86,14 +87,15 @@ class GoogleClient < OAuth2Client::Client
   # @params [Hash] additional parameters to be include in URL eg. state
   #
   # client = GoogleClient.new(config)
-  # client.exchange_auth_code_for_token({
+  # client.refresh({
   #      :state => '/profile',
   #      :refresh_token => '2YotnFZFEjr1zCsicMWpAA'
   #    })
   # #=>
   def refresh_access_token(opts={})
-    opts[:params] ||= {}
-    opts[:params][:scope] = normalize_scope(opts[:params][:scope]) if opts[:params][:scope]
+    unless (opts[:params] && opts[:params][:refresh_token])
+      raise ArgumentError.new("You must provide a refresh_token as a parameter")
+    end
     token = opts[:params].delete(:refresh_token)
     refresh_token.get_token(token, opts)
   end
