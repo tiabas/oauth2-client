@@ -21,9 +21,9 @@ module OAuth2Client
       SocketError,
       Zlib::GzipFile::Error,
     ]
-    
+
     attr_accessor :config, :scheme, :host, :port, :max_redirects, :ssl
-    
+
     def initialize(config)
       @config        = config
       @scheme        = config.scheme
@@ -32,7 +32,7 @@ module OAuth2Client
       @max_redirects = config.max_redirects || 5
       @ssl           = config.ssl || {}
     end
-    
+
     def scheme=(scheme)
       unless ['http', 'https'].include? scheme
         raise "The scheme #{scheme} is not supported. Only http and https are supported"
@@ -59,7 +59,7 @@ module OAuth2Client
 
     def ssl_verify_mode(ssl)
       ssl[:verify_mode] || begin
-        if ssl.fetch(:verify, false)
+        if ssl.fetch(:verify, true)
           OpenSSL::SSL::VERIFY_PEER
         else
         OpenSSL::SSL::VERIFY_NONE
@@ -74,7 +74,7 @@ module OAuth2Client
       cert_store
     end
 
-    def http_connection 
+    def http_connection
       @http_client = Net::HTTP.new(@host, @port)
       if use_ssl
         configure_ssl(@http_client, @ssl)

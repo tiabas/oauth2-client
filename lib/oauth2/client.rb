@@ -1,5 +1,3 @@
-require 'net/http'
-
 module OAuth2Client
   class Client
 
