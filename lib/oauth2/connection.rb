@@ -7,8 +7,9 @@ end
 require 'zlib'
 require 'addressable/uri'
 
-module OAuth2Client
-  class Connection
+module OAuth2
+  class HTTPConnection
+    
     NET_HTTP_EXCEPTIONS = [
       EOFError,
       Errno::ECONNABORTED,
@@ -24,13 +25,22 @@ module OAuth2Client
 
     attr_accessor :config, :scheme, :host, :port, :max_redirects, :ssl
 
-    def initialize(config)
-      @config        = config
-      @scheme        = config.scheme
-      @host          = config.host
-      @port          = config.port
-      @max_redirects = config.max_redirects || 5
-      @ssl           = config.ssl || {}
+    def self.default_connection_options
+      {
+      :headers => {
+        :accept => 'application/json',
+        :user_agent => "OAuth2 Ruby Gem #{OAuth2::Version}"
+      },
+      :ssl => {:verify => true},
+      :max_redirects => 5,
+      }
+    end
+
+    def initialize(url, options={})
+      @uri = Addressable::URI.parse(url)
+      default_connection_options.keys.each do
+        instance_variable_set(:"@#{key}", options.fetch(key,  default_connection_options[key]))
+      end
     end
 
     def scheme=(scheme)
@@ -38,6 +48,22 @@ module OAuth2Client
         raise "The scheme #{scheme} is not supported. Only http and https are supported"
       end
       @scheme = scheme
+    end
+
+    def scheme
+      @scheme    ||= @uri.scheme
+    end
+
+    def host
+      @host      ||= @uri.host
+    end
+
+    def port
+      @port      ||= @uri.port
+    end
+
+    def absolute_url(path='')
+      "#{@scheme}://#{@host}#{path}"
     end
 
     def use_ssl?(scheme)
@@ -58,12 +84,10 @@ module OAuth2Client
     end
 
     def ssl_verify_mode(ssl)
-      ssl[:verify_mode] || begin
-        if ssl.fetch(:verify, true)
+      if ssl.fetch(:verify, true)
           OpenSSL::SSL::VERIFY_PEER
-        else
+      else
           OpenSSL::SSL::VERIFY_NONE
-        end
       end
     end
 
@@ -88,14 +112,21 @@ module OAuth2Client
       @http_client
     end
 
-    def send_request(path, params, method, headers={}, cnxn={})
-      params   ||= {}
-      path     ||= '/'
+    def send_request(method, path, opts)
+      params     = opts[:params] || {}
+      headers    = opts[:headers] || {}
+      cnxn       = opts[:cnxn] || {}
+
       connection = http_connection(cnxn)
       query      = Addressable::URI.form_encode(params)
+      method     = method.to_s.downcase
       normalized_path = query.empty? ? path : [path, query].join("?")
 
-      case method.to_s.downcase
+      if method == 'post' || method == 'put'
+        headers['Content-Type'] = 'application/x-www-form-urlencoded'
+      end
+
+      case method
       when 'get'
         response = connection.get(normalized_path, headers)
       when 'post'

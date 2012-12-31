@@ -2,7 +2,7 @@ require 'openssl'
 require 'base64'
 
 module OAuth2Client
-  module Helper
+  module UrlHelper
     # convenience method to build response URI  
     def self.build_uri(uri, opts={})
       query_params= opts[:params] || {}

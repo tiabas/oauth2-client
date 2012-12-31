@@ -37,10 +37,11 @@ class YammerClientTest < Test::Unit::TestCase
   def test_client_generate_implicit_grant_token_url
     params = {
         :client_id => @yammer_client.client_id,
-        :redirect_uri=>"http://localhost/oauth/cb",
-        :response_type => 'token'
+        :redirect_uri=>"http://localhost/oauth/cb?state=%2Fprofile",
+        :response_type => 'token',
       }
-    uri = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
+    uri = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb?state=%2Fprofile")
+    puts uri
     parsed_uri = Addressable::URI.parse(uri)
     assert_equal '/dialog/oauth/', parsed_uri.path
     assert_equal params, parsed_uri.query_values.symbolize_keys

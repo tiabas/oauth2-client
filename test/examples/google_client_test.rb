@@ -37,7 +37,8 @@ class GoogleClientTest < Test::Unit::TestCase
         :scope => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
         :state => '/profile',
         :redirect_uri => @redirect_uri,
-        :response_type => 'code'
+        :response_type => 'code',
+        :approval_prompt => 'force'
       }
     uri = @google_client.webserver_authorization_url(
         :scope => [

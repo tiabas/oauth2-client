@@ -4,21 +4,18 @@ module OAuth2Client
     # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
     class Device < Base
 
-      def initialize(http_client, opts)
-        @grant_type = "http://oauth.net/grant_type/device/1.0"
-        super(http_client, opts)
-      end
-
-      def query(params={})
-        params = params.merge(authorize_params)
-        query_string = to_query(params)
+      def grant_type
+        "http://oauth.net/grant_type/device/1.0"
       end
 
       # Generate the authorization path using the given parameters .
       #
       # @param [Hash] query parameters
-      def authorization_path(params={})
-        "#{@device_path}?#{query(params)}"
+      def get_code(params={})
+        opts[:method] ||= :post
+        opts[:params] ||= {}
+        opts[:params][:client_id] = @client_id
+        make_request(@token_path, opts)
       end
 
       # Retrieve an access token given the specified client.
@@ -26,27 +23,13 @@ module OAuth2Client
       # @param [Hash] params additional params
       # @param [Hash] opts options
       def get_token(code, opts={})
-        headers = opts[:headers] || {}
-        path    = opts[:path]    || @token_path
-        method  = opts[:method]  || 'post'
-        params  = opts[:params]  || {}
-        params[:code] = code
-        params.merge!(token_params)
-        @http_client.send_request(path, params, method, headers)
-      end
-
-    private
-
-      def authorize_params
-        { :client_id => @client_id }
-      end
-
-      def token_params
-        {
-          :grant_type => @grant_type,
-          :client_id  => @client_id,
-          :client_secret => @client_secret
-        }
+        opts[:params] ||= {}
+        opts[:params].merge!({
+          :code       => code,
+          :grant_type => grant_type
+        })
+        method = opts[:method] || :post
+        make_request(method, @token_path, opts)
       end
     end
   end
