@@ -1,4 +1,4 @@
-module OAuth2Client
+module OAuth2
   module Grant
     # Device Grant
     # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
@@ -11,7 +11,7 @@ module OAuth2Client
       # Generate the authorization path using the given parameters .
       #
       # @param [Hash] query parameters
-      def get_code(params={})
+      def get_user_code(params={})
         opts[:method] ||= :post
         opts[:params] ||= {}
         opts[:params][:client_id] = @client_id

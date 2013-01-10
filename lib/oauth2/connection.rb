@@ -36,6 +36,10 @@ module OAuth2
       }
     end
 
+    def self.new_from_url(url)
+
+    end
+
     def initialize(url, options={})
       @uri = Addressable::URI.parse(url)
       default_connection_options.keys.each do
@@ -115,9 +119,8 @@ module OAuth2
     def send_request(method, path, opts)
       params     = opts[:params] || {}
       headers    = opts[:headers] || {}
-      cnxn       = opts[:cnxn] || {}
 
-      connection = http_connection(cnxn)
+      connection = http_connection
       query      = Addressable::URI.form_encode(params)
       method     = method.to_s.downcase
       normalized_path = query.empty? ? path : [path, query].join("?")
@@ -148,16 +151,16 @@ module OAuth2
             method = :get
             params = nil
           end
-          uri = Addressable::URI.parse(response.header['Location'])
-          redirect_opts = {
-            :scheme => uri.scheme,
-            :host=>uri.host,
-            :port=>uri.port
-          }
-          return send_request(uri.path, params, method, {}, redirect_opts)
+          redirect_uri = Addressable::URI.parse(response.header['Location'])
+          conn = http_connection({
+            :scheme => redirect_uri.scheme
+            :host   => redirect_uri.host,
+            :post   => redirect_uri.port
+          })
+          response = conn.send_request(method, uri.path, :params => params, :headers => headers)
         end
       when 200..599
-        # do nothing
+        @redirect_count = 0
       else
         raise "Unhandled status code value of #{response.code}"
       end
@@ -167,9 +170,9 @@ module OAuth2
     end
 
     def redirect_limit_reached?
-        @redirect_count ||= 0
-        @redirect_count += 1
-        @redirect_count > @max_redirects
+      @redirect_count ||= 0
+      @redirect_count += 1
+      @redirect_count > @max_redirects
     end
   end
 end

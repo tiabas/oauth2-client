@@ -1,6 +1,6 @@
 require "base64"
 
-module OAuth2Client
+module OAuth2
   module Grant
     # Client Credentials Grant
     #

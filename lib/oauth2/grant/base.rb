@@ -1,7 +1,7 @@
-module OAuth2Client
+module OAuth2
   module Grant
     class Base
-      include OAuth2Client::UrlHelper
+      include OAuth2::UrlHelper
 
       class InvalidAuthorizationTypeError < StandardError; end
     
@@ -24,7 +24,7 @@ module OAuth2Client
       end
 
       def make_request(path, opts={})
-        if auth = opts.delete(:authenticate)
+        if auth_type = opts.delete(:authenticate)
           case auth_type.to_sym
           when :body
             opts[:params] || = {}
@@ -37,7 +37,9 @@ module OAuth2Client
             headers['Authorization'] = http_basic_encode(@client_id, @client_secret)
           end
         end
-        @connection.send_request(method, path, opts)
+        response = @connection.send_request(method, path, opts)
+        yield response if block_given
+        response
       end
   end
 end

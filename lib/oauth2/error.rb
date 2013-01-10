@@ -1,3 +1,3 @@
-module OAuth2Client
+module OAuth2
     class Error < StandardError; end
 end

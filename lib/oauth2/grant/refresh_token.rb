@@ -1,4 +1,4 @@
-module OAuth2Client
+module OAuth2
   module Grant
     class RefreshToken < Base
 

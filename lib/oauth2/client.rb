@@ -27,27 +27,27 @@ module OAuth2
     end
 
     def implicit(opts={})
-      OAuth2::Grant::Implicit.new(self, opts={})
+      OAuth2::Grant::Implicit.new(self, opts)
     end
 
     def authorization_code(opts={})
-      OAuth2::Grant::AuthorizationCode.new(self, opts={})
+      OAuth2::Grant::AuthorizationCode.new(self, opts)
     end
 
     def refresh_token(opts={})
-      OAuth2::Grant::RefreshToken.new(self, opts={})
+      OAuth2::Grant::RefreshToken.new(self, opts)
     end
 
     def client_credentials(opts={})
-      OAuth2::Grant::ClientCredentials.new(self, opts={})
+      OAuth2::Grant::ClientCredentials.new(self, opts)
     end
 
     def password(opts={})
-      OAuth2::Grant::Password.new(self, opts={})
+      OAuth2::Grant::Password.new(self, opts)
     end
 
     def device_code(opts={})
-      OAuth2::Grant::Device.new(self, opts={})
+      OAuth2::Grant::Device.new(self, opts)
     end
 
   private
