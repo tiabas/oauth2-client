@@ -23,25 +23,33 @@ describe Connection do
 
   describe "#default_headers"
     it "returns user_agent and response format" do
+      expect(conn.default_headers).to eq {:accept => 'application/json',
+                                          :user_agent => "OAuth2 Ruby Gem #{OAuth2::Version}"
+                                         }
     end
   end
 
   describe "#scheme" do
-
+    it "returns the http scheme" do
+      expect(conn.scheme).to eq 'http'
+    end
   end
   
   describe "#host"
     it "returns the host server" do
+      expect(conn.host).to eq 'yammer.com'
     end
   end
 
   describe "#port"
     it "returns the port" do
+      expect(conn.port).to eq 80
     end
   end
 
   describe "#ssl?"
     it "returns a boolean based on the scheme" do
+      expect(conn.ssl?).to eq false
     end
   end
 

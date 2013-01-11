@@ -4,12 +4,21 @@ module OAuth2
     attr_reader   :host, :connection_options
     attr_accessor :client_id, :client_secret, :connection_client
 
+    DEFAULTS_PATHS = {
+      :authorize_path     => '/oauth/authorize',
+      :token_path         => '/oauth/token',
+      :device_path        => '/device/code',
+    }
+
     def initialize(host, client_id, client_secret, options={})
       @host               = host
       @client_id          = client_id
       @client_secret      = client_secret
       @connection_options = options.fetch(:connection_options, {})
       @connection_client  = options.fetch(:connection_client, OAuth2::HTTPConnection)
+      DEFAULTS_PATHS.keys.each do
+        instance_variable_set(:"@#{key}", options.fetch(key, DEFAULTS_PATHS[key]))
+      end
     end
 
     def host=(hostname)
@@ -20,10 +29,6 @@ module OAuth2
     def connection_options=(options)
       @connection = nil
       @connection_options = options
-    end
-
-    def request
-
     end
 
     def implicit(opts={})

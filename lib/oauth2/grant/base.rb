@@ -4,23 +4,18 @@ module OAuth2
       include OAuth2::UrlHelper
 
       class InvalidAuthorizationTypeError < StandardError; end
-    
-      DEFAULTS_PATHS = {
-        :authorize_path     => '/oauth/authorize',
-        :token_path         => '/oauth/token',
-        :device_path        => '/device/code',
-      }
-
+  
       # attr_reader   :state
-      attr_accessor :client_id, :client_secret, :connection
+      attr_accessor :client_id, :client_secret, :connection,
+                    :authorize_path, :token_path, :device_path
 
-      def initialize(client, options={})
-        @connection    = client.connection
-        @client_id     = client.client_id
-        @client_secret = client.client_secret
-        DEFAULTS_PATHS.keys.each do
-          instance_variable_set(:"@#{key}", options.fetch(key, DEFAULTS_PATHS[key]))
-        end
+      def initialize(client)
+        @connection     = client.connection
+        @client_id      = client.client_id
+        @client_secret  = client.client_secret
+        @token_path     = client.token_path
+        @authorize_path = client.authorize_path
+        @device_path    = client.device_path
       end
 
       def make_request(path, opts={})
