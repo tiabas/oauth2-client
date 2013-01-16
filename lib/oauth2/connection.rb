@@ -56,15 +56,15 @@ module OAuth2
     end
 
     def scheme
-      @scheme    ||= @uri.scheme
+      @scheme ||= @uri.scheme
     end
 
     def host
-      @host      ||= @uri.host
+      @host ||= @uri.host
     end
 
     def port
-      @port      ||= (@uri.port || 80)
+      @port ||= (@uri.port || 80)
     end
 
     def absolute_url(path='')
@@ -100,8 +100,8 @@ module OAuth2
       normalized_path = query.empty? ? path : [path, query].join("?")
       client          = http_connection(opts.fetch(:connection_options, {}))
 
-      if (method == 'post' || method == 'put') && headers['Content-Type'].nil?
-        headers['Content-Type'] = 'application/x-www-form-urlencoded'
+      if (method == 'post' || method == 'put')
+        headers['Content-Type'] ||= 'application/x-www-form-urlencoded'
       end
 
       case method
