@@ -23,47 +23,56 @@ describe Connection do
 
   describe "#default_headers"
     it "returns user_agent and response format" do
-      expect(conn.default_headers).to eq {:accept => 'application/json',
-                                          :user_agent => "OAuth2 Ruby Gem #{OAuth2::Version}"
-                                         }
+      expect(conn.default_headers).to eq {
+        :accept => 'application/json',
+        :user_agent => "OAuth2 Ruby Gem #{OAuth2::Version}"
+       }
     end
   end
 
   describe "#scheme" do
     it "returns the http scheme" do
-      expect(conn.scheme).to eq 'http'
+      expect(subject.scheme).to eq 'http'
     end
   end
-  
+
   describe "#host"
     it "returns the host server" do
-      expect(conn.host).to eq 'yammer.com'
+      expect(subject.host).to eq 'yammer.com'
     end
   end
 
   describe "#port"
     it "returns the port" do
-      expect(conn.port).to eq 80
+      expect(subject.port).to eq 80
     end
   end
 
   describe "#ssl?"
     it "returns a boolean based on the scheme" do
-      expect(conn.ssl?).to eq false
+      expect(subject.ssl?).to eq false
     end
   end
 
   describe "#http_connection"
+    it "looks like Net::HTTP client" do
+      expect(subject.connection).to respond_to(:get)
+      expect(subject.connection).to respond_to(:post)
+      expect(subject.connection).to respond_to(:put)
+      expect(subject.connection).to respond_to(:delete)
+    end
   end
 
   describe "#absolute_url"
     context "with no parameters"
       it "returns a uri without path" do
+        expect(subject.absolute_url).to eq "http://yammer.com"
       end
     end
 
     context "with parameters"
       it "returns a uri with path" do
+        expect(subject.absolute_url('/oauth/v2/authorize')).to eq "http://yammer.com/oauth/v2/authorize"
       end
     end
   end
@@ -74,6 +83,7 @@ describe Connection do
   describe "#ssl_verify_mode" do
     context "ssl verify not specified" do
       it "returns OpenSSL::SSL::VERIFY_PEER" do
+        expect(subject.
       end
     end
 
@@ -87,7 +97,7 @@ describe Connection do
   end
 
   describe "ssl_cert_store" do
-  end 
+  end
 
   describe "#request" do
 
@@ -111,7 +121,7 @@ describe Connection do
       params = {}
       method = 'delete'
       headers = {}
-   
+
       Net::HTTP.should_receive(:delete).with(path, headers).and_return(@mock_response)
       response = @http_client.request(path, params, method, {})
 
@@ -194,7 +204,7 @@ describe Connection do
       @http_client.stubs(:http_connection).returns(@http_connection).then.returns(http_connection2).then.returns(http_connection3)
 
       response = @http_client.request(path, params, method)
-      
+
       assert_equal 302, response.code
       assert_equal '', response.body
       assert_equal 'http://123.example.com/', response.header['Location']

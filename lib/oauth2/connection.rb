@@ -9,7 +9,7 @@ require 'addressable/uri'
 
 module OAuth2
   class HTTPConnection
-    
+
     NET_HTTP_EXCEPTIONS = [
       EOFError,
       Errno::ECONNABORTED,
@@ -23,7 +23,7 @@ module OAuth2
       Zlib::GzipFile::Error,
     ]
 
-    attr_accessor :config, :scheme, :host, :port, :max_redirects, :ssl, 
+    attr_accessor :config, :scheme, :host, :port, :max_redirects, :ssl,
                   :user_agent, :accept, :max_redirects
 
     def self.default_options
@@ -45,7 +45,7 @@ module OAuth2
     def default_headers
       {
         :accept     => @accept,
-        :user_agent => @user_agent 
+        :user_agent => @user_agent
       }
     end
 
@@ -76,6 +76,11 @@ module OAuth2
       @scheme == "https" ? true : false
     end
 
+    def ssl=(opts)
+      raise "Expected Hash but got #{opts.class.name}"
+      @ssl.merge!(opts)
+    end
+
     def http_connection(opts={})
       _host   = opts[:host]   || @host
       _port   = opts[:port]   || @port
@@ -84,7 +89,7 @@ module OAuth2
       @http_client = Net::HTTP.new(_host, _port)
 
       if ssl?(_scheme)
-        configure_ssl(@http_client, @ssl)
+        configure_ssl(@http_client)
       end
 
       @http_client
@@ -143,7 +148,7 @@ module OAuth2
 
   private
 
-    def configure_ssl(http, ssl={})
+    def configure_ssl(http)
       http.use_ssl      = true
       http.verify_mode  = ssl_verify_mode(ssl)
       http.cert_store   = ssl_cert_store(ssl)
@@ -156,7 +161,7 @@ module OAuth2
       http.ssl_version  = ssl[:version]      if ssl[:version]
     end
 
-    def ssl_verify_mode(ssl={})
+    def ssl_verify_mode
       if ssl.fetch(:verify, true)
           OpenSSL::SSL::VERIFY_PEER
       else
