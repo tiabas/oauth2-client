@@ -28,8 +28,10 @@ module OAuth2
 
     def self.default_options
       {
-        :accept => 'application/json',
-        :user_agent => "OAuth2 Ruby Gem #{OAuth2::Version}"
+        :headers => {
+          'Accept'     => 'application/json',
+          'User-Agent' => "OAuth2 Ruby Gem #{OAuth2::Version}"
+        },
         :ssl => {:verify => true},
         :max_redirects => 5
       }
@@ -37,16 +39,13 @@ module OAuth2
 
     def initialize(url, options={})
       @uri = Addressable::URI.parse(url)
-      default_options.keys.each do
-        instance_variable_set(:"@#{key}", options.fetch(key,  default_options[key]))
+      self.class.default_options.keys.each do |key|
+        instance_variable_set(:"@#{key}", options.fetch(key,  self.class.default_options[key]))
       end
     end
 
     def default_headers
-      {
-        :accept     => @accept,
-        :user_agent => @user_agent
-      }
+      self.class.default_options[:headers]
     end
 
     def scheme=(scheme)
@@ -65,56 +64,55 @@ module OAuth2
     end
 
     def port
-      @port      ||= @uri.port
+      @port      ||= (@uri.port || 80)
     end
 
     def absolute_url(path='')
-      "#{@scheme}://#{@host}#{path}"
+      "#{scheme}://#{host}#{path}"
     end
 
-    def ssl?
-      @scheme == "https" ? true : false
+    def ssl?(newscheme)
+      (newscheme) == "https" ? true : false
     end
 
     def ssl=(opts)
-      raise "Expected Hash but got #{opts.class.name}"
+      raise "Expected Hash but got #{opts.class.name}" unless opts.is_a?(Hash)
       @ssl.merge!(opts)
     end
 
     def http_connection(opts={})
-      _host   = opts[:host]   || @host
-      _port   = opts[:port]   || @port
-      _scheme = opts[:scheme] || @scheme
+      _host   = opts[:host]   || host
+      _port   = opts[:port]   || port
+      _scheme = opts[:scheme] || scheme
 
       @http_client = Net::HTTP.new(_host, _port)
 
-      if ssl?(_scheme)
-        configure_ssl(@http_client)
-      end
+      configure_ssl(@http_client) if ssl?(_scheme)
 
       @http_client
     end
 
-    def request(method, path, opts)
+    def request(method, path, opts={})
       headers         = default_headers.merge(opts.fetch(:headers, {}))
       params          = opts[:params] || {}
       query           = Addressable::URI.form_encode(params)
       method          = method.to_s.downcase
       normalized_path = query.empty? ? path : [path, query].join("?")
+      client          = http_connection(opts.fetch(:connection_options, {}))
 
-      if method == 'post' || method == 'put'
+      if (method == 'post' || method == 'put') && headers['Content-Type'].nil?
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
       end
 
       case method
       when 'get'
-        response = http_connection.get(normalized_path, headers)
+        response = client.get(normalized_path, headers)
       when 'post'
-        response = http_connection.post(path, query, headers)
+        response = client.post(path, query, headers)
       when 'put'
-        response = http_connection.put(path, query, headers)
+        response = client.put(path, query, headers)
       when 'delete'
-        response = http_connection.delete(normalized_path, headers)
+        response = client.delete(normalized_path, headers)
       else
         raise "Unsupported HTTP method, #{method.inspect}"
       end
@@ -129,12 +127,12 @@ module OAuth2
             params = nil
           end
           redirect_uri = Addressable::URI.parse(response.header['Location'])
-          conn = http_connection({
-            :scheme => redirect_uri.scheme
+          conn = {
+            :scheme => redirect_uri.scheme,
             :host   => redirect_uri.host,
-            :post   => redirect_uri.port
-          })
-          response = conn.send_request(method, uri.path, :params => params, :headers => headers)
+            :port   => redirect_uri.port
+          }
+          return request(method, redirect_uri.path, :params => params, :headers => headers, :connection_options => conn)
         end
       when 200..599
         @redirect_count = 0
@@ -150,8 +148,8 @@ module OAuth2
 
     def configure_ssl(http)
       http.use_ssl      = true
-      http.verify_mode  = ssl_verify_mode(ssl)
-      http.cert_store   = ssl_cert_store(ssl)
+      http.verify_mode  = ssl_verify_mode
+      http.cert_store   = ssl_cert_store
 
       http.cert         = ssl[:client_cert]  if ssl[:client_cert]
       http.key          = ssl[:client_key]   if ssl[:client_key]
@@ -169,7 +167,7 @@ module OAuth2
       end
     end
 
-    def ssl_cert_store(ssl={})
+    def ssl_cert_store
       return ssl[:cert_store] if ssl[:cert_store]
       cert_store = OpenSSL::X509::Store.new
       cert_store.set_default_paths

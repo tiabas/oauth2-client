@@ -22,7 +22,7 @@ module OAuth2
         if auth_type = opts.delete(:authenticate)
           case auth_type.to_sym
           when :body
-            opts[:params] || = {}
+            opts[:params] ||= {}
             opts[:params].merge!({
               :client_id     => @client_id,
               :client_secret => @client_secret
@@ -36,5 +36,6 @@ module OAuth2
         yield response if block_given
         response
       end
+    end
   end
 end

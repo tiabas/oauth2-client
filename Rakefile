@@ -1,14 +1,11 @@
-$:.unshift File.expand_path('../lib', __FILE__)
-$:.unshift File.expand_path('../examples', __FILE__)
+#Rakefile
+require 'rspec/core/rake_task'
 
-require 'rake/testtask'
-
-Rake::TestTask.new do |t|
-  t.libs << 'examples'
-  t.libs << 'test'
-  t.test_files = FileList['test/**/*test*.rb']
-  t.verbose = true
+RSpec::Core::RakeTask.new(:spec) do
+  config.rcov = true
 end
 
-desc "Run tests"
-task :default => :test
+desc "Run spec"
+task :default => :spec
+
+task :test => :spec
