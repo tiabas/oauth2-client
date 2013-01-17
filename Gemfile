@@ -8,8 +8,10 @@ gem 'addressable'
 
 gem 'rake'
 
-gem 'mocha', '>=0.12.1', :require => false
+gem 'rspec', '~>2.12'
+
+gem 'simplecov'
 
 gem 'activesupport', '~> 3.2.8'
 
-gem 'simplecov'
+# gem 'mocha', '>=0.12.1', :require => false

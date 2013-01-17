@@ -1,13 +1,10 @@
-# unless ENV['CI']
-#   require 'simplecov'
-#   SimpleCov.start do
-#     add_filter 'spec'
-#   end
-# end
+require 'simplecov'
+SimpleCov.start
+
 
 require 'rspec'
+require 'rspec/autorun'
 require 'oauth2'
-# require 'addressable/uri'
 
 RSpec.configure do |config|
   config.mock_with :rspec

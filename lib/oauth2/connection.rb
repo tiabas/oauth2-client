@@ -10,6 +10,9 @@ require 'addressable/uri'
 module OAuth2
   class HTTPConnection
 
+    class UnhandledHTTPMethodError < StandardError; end
+    class UnsupportedSchemeError < StandardError; end
+
     NET_HTTP_EXCEPTIONS = [
       EOFError,
       Errno::ECONNABORTED,
@@ -50,7 +53,7 @@ module OAuth2
 
     def scheme=(scheme)
       unless ['http', 'https'].include? scheme
-        raise "The scheme #{scheme} is not supported. Only http and https are supported"
+        raise UnsupportedSchemeError.new "#{scheme} is not supported, only http and https"
       end
       @scheme = scheme
     end
@@ -114,7 +117,7 @@ module OAuth2
       when 'delete'
         response = client.delete(normalized_path, headers)
       else
-        raise "Unsupported HTTP method, #{method.inspect}"
+        raise UnhandledHTTPMethodError.new("Unsupported HTTP method, #{method.inspect}")
       end
 
       status = response.code.to_i
@@ -125,6 +128,7 @@ module OAuth2
           if status == 303
             method = :get
             params = nil
+            headers.delete('Content-Type') 
           end
           redirect_uri = Addressable::URI.parse(response.header['Location'])
           conn = {
@@ -134,7 +138,7 @@ module OAuth2
           }
           return request(method, redirect_uri.path, :params => params, :headers => headers, :connection_options => conn)
         end
-      when 200..599
+      when 100..599
         @redirect_count = 0
       else
         raise "Unhandled status code value of #{response.code}"

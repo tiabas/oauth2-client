@@ -4,7 +4,7 @@ require 'ostruct'
 describe OAuth2::HTTPConnection do
 
   subject do
-    @conn = OAuth2::HTTPConnection.new('http://yammer.com')
+    @conn = OAuth2::HTTPConnection.new('https://yammer.com')
   end
 
   context "with user options" do
@@ -33,7 +33,29 @@ describe OAuth2::HTTPConnection do
 
   describe "#scheme" do
     it "returns the http scheme" do
-      expect(subject.scheme).to eq 'http'
+      expect(subject.scheme).to eq 'https'
+    end
+  end
+
+  describe "#scheme" do
+    context "scheme is unsupported" do
+      it "raises an error" do
+        expect { subject.scheme = 'ftp'}.to raise_error(OAuth2::HTTPConnection::UnsupportedSchemeError)
+      end
+    end
+
+    context "scheme is http" do
+      it "sets the scheme" do
+        subject.scheme = 'http'
+        expect(subject.scheme).to eq 'http'
+      end
+    end
+
+    context "scheme is https" do
+      it "sets the scheme" do
+        subject.scheme = 'https'
+        expect(subject.scheme).to eq 'https'
+      end
     end
   end
 
@@ -45,7 +67,7 @@ describe OAuth2::HTTPConnection do
 
   describe "#port" do
     it "returns the port" do
-      expect(subject.port).to eq 80
+      expect(subject.port).to eq 443
     end
   end
 
@@ -75,13 +97,13 @@ describe OAuth2::HTTPConnection do
   describe "#absolute_url" do
     context "with no parameters" do
       it "returns a uri without path" do
-        expect(subject.absolute_url).to eq "http://yammer.com"
+        expect(subject.absolute_url).to eq "https://yammer.com"
       end
     end
 
     context "with parameters" do
       it "returns a uri with path" do
-        expect(subject.absolute_url('/oauth/v2/authorize')).to eq "http://yammer.com/oauth/v2/authorize"
+        expect(subject.absolute_url('/oauth/v2/authorize')).to eq "https://yammer.com/oauth/v2/authorize"
       end
     end
   end
@@ -121,8 +143,14 @@ describe OAuth2::HTTPConnection do
       @http_redirect = OpenStruct.new(
         :code    => '301',
         :body    => 'redirect',
-        :header => {'Location' => "http://yammer.com/redirect"}
+        :header => {'Location' => "http://yammer.com/members"}
       )
+    end
+
+    context "when method is not supported" do
+      it "raises an error" do
+        expect {subject.request(:patch, '/')}.to raise_error(OAuth2::HTTPConnection::UnhandledHTTPMethodError)
+      end
     end
 
     context "when method is get" do
@@ -181,45 +209,58 @@ describe OAuth2::HTTPConnection do
       end
     end
 
-    # it "client_should_follow_redirect" do
-    #   subject.max_redirects = 1
-    #   path = '/users/1'
-    #   params = {:first_name => 'jane', :last_name => 'doe'}
-    #   normalized_path  = [path, Addressable::URI.form_encode(params)].join("?")
+    it "follows redirect" do
+      path = '/users'
+      params = {:first_name => 'jane', :last_name => 'doe'}
+      query  = Addressable::URI.form_encode(params)
+      headers = {'Content-Type' => 'application/x-www-form-urlencoded' }.merge(subject.default_headers)
+      client = double("client")
 
-      
-    #   Net::HTTP.any_instance.should_receive(:get).with(normalized_path, subject.default_headers).and_return(@http_redirect)
-    #   # subject.should_receive(:get).with('/redirect', query, subject.default_headers).and_return(@http_ok)
+      subject.should_receive(:http_connection).twice.and_return(client, client)
+      client.should_receive(:post).ordered.with(path, query, headers).and_return(@http_redirect)
+      client.should_receive(:post).ordered.with('/members', query, headers).and_return(@http_ok)
 
-    #   response = subject.request(:get, path, :params => params)
+      response = subject.request(:post, path, :params => params)
 
-    #   expect(response.code).to eq '200'
-    # end
+      expect(response.code).to eq '200'
+    end
 
-  #   it "client_should_return_response_when_redirect_limit_is_exceeded" do
-  #     @http_client.max_redirects = 2
-  #     path = '/users/1'
-  #     params = {:first_name => 'jane', :last_name => 'doe'}
-  #     query  = Addressable::URI.form_encode(params)
-  #     method = 'post'
+    it "respects the redirect limit " do
+      subject.max_redirects = 1
+      path = '/users'
+      params = {:first_name => 'jane', :last_name => 'doe'}
+      query  = Addressable::URI.form_encode(params)
+      headers = {'Content-Type' => 'application/x-www-form-urlencoded' }.merge(subject.default_headers)
+      client = double("client")
 
-  #     http_connection2 = mock()
-  #     http_connection3 = mock()
+      subject.should_receive(:http_connection).twice.and_return(client, client)
+      client.should_receive(:post).ordered.with(path, query, headers).and_return(@http_redirect)
+      client.should_receive(:post).ordered.with('/members', query, headers).and_return(@http_redirect)
 
-  #     redirect_response1 = build_mock_response(302, {'Location' => 'http://abc.example.com/'}, '')
-  #     redirect_response2 = build_mock_response(302, {'Location' => 'http://xyz.example.com/'}, '')
-  #     redirect_response3 = build_mock_response(302, {'Location' => 'http://123.example.com/'}, '')
+      response = subject.request(:post, path, :params => params)
 
-  #     @http_connection.expects(:post).with('/users/1', query, {}).returns(redirect_response1)
-  #     http_connection2.expects(:post).with('/', query, {}).returns(redirect_response2)
-  #     http_connection3.expects(:post).with('/', query, {}).returns(redirect_response3)
-  #     @http_client.stubs(:http_connection).returns(@http_connection).then.returns(http_connection2).then.returns(http_connection3)
+      expect(response.code).to eq '301'
+    end
 
-  #     response = @http_client.request(path, params, method)
+    it "modifies http 303 redirect from POST to GET " do
+      http_303 = OpenStruct.new(
+        :code    => '303',
+        :body    => 'redirect',
+        :header => {'Location' => "http://yammer.com/members"}
+      )
+      path = '/users'
+      params = {:first_name => 'jane', :last_name => 'doe'}
+      query  = Addressable::URI.form_encode(params)
+      headers = {'Content-Type' => 'application/x-www-form-urlencoded' }.merge(subject.default_headers)
+      client = double("client")
 
-  #     assert_equal 302, response.code
-  #     assert_equal '', response.body
-  #     assert_equal 'http://123.example.com/', response.header['Location']
-  #   end
+      subject.should_receive(:http_connection).twice.and_return(client, client)
+      client.should_receive(:post).ordered.with(path, query, headers).and_return(http_303)
+      client.should_receive(:get).ordered.with('/members', subject.default_headers).and_return(@http_ok)
+
+      response = subject.request(:post, path, :params => params)
+
+      expect(response.code).to eq '200'
+    end
   end
 end
