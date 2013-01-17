@@ -67,15 +67,16 @@ module OAuth2
     end
 
     def port
-      @port ||= (@uri.port || 80)
+      _port = ssl? ? 443 : 80
+      @port = @uri.port || _port
     end
 
     def absolute_url(path='')
       "#{scheme}://#{host}#{path}"
     end
 
-    def ssl?(newscheme)
-      (newscheme) == "https" ? true : false
+    def ssl?
+      scheme == "https" ? true : false
     end
 
     def ssl=(opts)
@@ -90,7 +91,7 @@ module OAuth2
 
       @http_client = Net::HTTP.new(_host, _port)
 
-      configure_ssl(@http_client) if ssl?(_scheme)
+      configure_ssl(@http_client) if _scheme == 'https'
 
       @http_client
     end

@@ -74,13 +74,15 @@ describe OAuth2::HTTPConnection do
   describe "#ssl?" do
     context "scheme is https" do
       it "returns true" do
-        expect(subject.ssl?('https')).to eq true
+        subject.scheme = 'https'
+        expect(subject.ssl?).to eq true
       end
     end
 
     context "scheme is http" do
       it "returns false" do
-        expect(subject.ssl?('http')).to eq false
+        subject.scheme = 'http'
+        expect(subject.ssl?).to eq false
       end
     end
   end
