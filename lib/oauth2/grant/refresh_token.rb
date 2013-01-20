@@ -17,7 +17,7 @@ module OAuth2
           :grant_type    => grant_type,
           :refresh_token => refresh_token 
         })
-        method = opts[:method] || :post
+        method = opts.delete(:method) || :post
         make_request(method, @token_path, opts)
       end
     end

@@ -19,7 +19,7 @@ module OAuth2
           :username   => username,
           :password   => password
         })
-        method = opts[:method] || :post
+        method = opts.delete(:method) || :post
         make_request(method, @token_path, opts)
       end
     end

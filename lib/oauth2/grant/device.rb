@@ -11,11 +11,11 @@ module OAuth2
       # Generate the authorization path using the given parameters .
       #
       # @param [Hash] query parameters
-      def get_user_code(params={})
-        opts[:method] ||= :post
+      def get_user_code(opts={})
         opts[:params] ||= {}
         opts[:params][:client_id] = @client_id
-        make_request(@token_path, opts)
+        method = opts.delete(:method) || :post
+        make_request(method, @token_path, opts)
       end
 
       # Retrieve an access token given the specified client.
@@ -28,7 +28,7 @@ module OAuth2
           :code       => code,
           :grant_type => grant_type
         })
-        method = opts[:method] || :post
+        method = opts.delete(:method) || :post
         make_request(method, @token_path, opts)
       end
     end

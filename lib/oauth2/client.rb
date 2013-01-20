@@ -32,27 +32,27 @@ module OAuth2
       @connection_options = options
     end
 
-    def implicit(opts={})
+    def implicit
       OAuth2::Grant::Implicit.new(self)
     end
 
-    def authorization_code(opts={})
+    def authorization_code
       OAuth2::Grant::AuthorizationCode.new(self)
     end
 
-    def refresh_token(opts={})
+    def refresh_token
       OAuth2::Grant::RefreshToken.new(self)
     end
 
-    def client_credentials(opts={})
+    def client_credentials
       OAuth2::Grant::ClientCredentials.new(self)
     end
 
-    def password(opts={})
+    def password
       OAuth2::Grant::Password.new(self)
     end
 
-    def device_code(opts={})
+    def device_code
       OAuth2::Grant::DeviceCode.new(self)
     end
 

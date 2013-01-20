@@ -19,6 +19,16 @@ module OAuth2
         "#{@authorize_path}?#{to_query(params)}"
       end
 
+
+      # Access Token Request
+      # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1.3
+      def token_path(params={})
+        unless params.empty?
+          return "#{@token_path}?#{to_query(params)}"
+        end
+        @token_path
+      end
+
       # Retrieve page at authorization path
       #
       # @param [Hash] opts options
@@ -26,14 +36,8 @@ module OAuth2
         opts[:method] ||= :get
         opts[:params] ||= {}
         opts[:params].merge!(authorization_params)
-        method = opts[:method] || :get
+        method = opts.delete(:method) || :get
         make_request(method, @authorize_path, opts)
-      end
-
-      # Access Token Request
-      # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1.3
-      def token_url(params)
-        "#{@token_path}?#{to_query(params)}"
       end
 
       # Retrieve an access token for a given auth code
@@ -44,8 +48,8 @@ module OAuth2
       def get_token(code, opts={})
         opts[:params] ||= {}
         opts[:params][:code] = code
-        method = opts[:method] || :post
-        make_request(method, @token_path, opts)
+        method = opts.delete(:method) || :post
+        make_request(method, token_path, opts)
       end
 
     private
