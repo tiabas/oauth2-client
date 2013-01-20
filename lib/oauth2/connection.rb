@@ -8,7 +8,7 @@ require 'zlib'
 require 'addressable/uri'
 
 module OAuth2
-  class HTTPConnection
+  class HttpConnection
 
     class UnhandledHTTPMethodError < StandardError; end
     class UnsupportedSchemeError < StandardError; end

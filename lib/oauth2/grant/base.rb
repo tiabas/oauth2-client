@@ -5,7 +5,6 @@ module OAuth2
 
       class InvalidAuthorizationTypeError < StandardError; end
   
-      # attr_reader   :state
       attr_accessor :client_id, :client_secret, :connection,
                     :authorize_path, :token_path, :device_path
 

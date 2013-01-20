@@ -2,7 +2,7 @@ module OAuth2
   module Grant
     # Device Grant
     # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
-    class Device < Base
+    class DeviceCode < Base
 
       def grant_type
         "http://oauth.net/grant_type/device/1.0"

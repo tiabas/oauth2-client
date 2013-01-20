@@ -1,99 +1,157 @@
-# require File.expand_path('../../test_helper', __FILE__)
+require 'spec_helper'
+require 'ostruct'
 
-# class ClientTest < Test::Unit::TestCase
+describe OAuth2::Client do
 
-#   def setup
-#     @client_id = 's6BhdRkqt3'
-#     @client_secret = '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'
-#     @host = 'server.example.com' 
-#     @scheme = 'https'
-#     @token_path = '/oauth/token'
-#     @authorize_path = '/oauth/authorize'
-#     @device_path = '/oauth/device'
-#     @http_connection = mock()
-#     @config = mock()
+  before :all do
+    @client_id= 's6BhdRkqt3'
+    @client_secret = '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'
+    @host = 'example.com' 
+    @client = OAuth2::Client.new(@host, @client_id, @client_secret)
+  end
 
-#     @config.stubs(:client_id).returns(@client_id)
-#     @config.stubs(:client_secret).returns(@client_secret)
-#     @config.stubs(:scheme).returns(@scheme)
-#     @config.stubs(:host).returns(@host)
-#     @config.stubs(:port).returns(443)
-#     @config.stubs(:authorize_path).returns(@authorize_path)
-#     @config.stubs(:token_path).returns(@token_path)
-#     @config.stubs(:device_path).returns(@device_path)
-#     @config.stubs(:http_client).returns(mock())
-#     OAuth2Client::Config.stubs(:new).returns(@config)
-#     @client = OAuth2Client::Client.new({})
-#     @client.stubs(:http_connection).returns(@http_connection)
-#   end
+  subject { @client }
 
-#   def test_implicit_grant_token_request
-#     auth = @client.implicit
-#     params = {
-#       :client_id => @client_id ,
-#       :response_type => 'token',
-#       :redirect_uri => 'http://client.example.com/oauth/v2/callback'
-#     }
-#     @http_connection.expects(:send_request).with('/oauth/authorize', params, 'get', {}).returns(true)
-#     auth.get_token(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
-#   end
+  context "with default options" do
+    describe "#token_path" do
+      it "returns " do
+        expect(subject.token_path).to eq '/oauth2/token'
+      end
+    end
 
-#   def test_authorization_code_grant_request_for_authorization_code
-#     auth = @client.authorization_code
-#     params = {
-#       :client_id => @client_id ,
-#       :response_type => 'code',
-#       :redirect_uri => 'http://client.example.com/oauth/v2/callback'
-#     }
-#     @http_connection.expects(:send_request).with('/oauth/authorize', params, 'get', {}).returns(true)
-#     auth.fetch_authorization_url(:params => {:redirect_uri => 'http://client.example.com/oauth/v2/callback'})
-#   end
+    describe "#authorize_path" do
+      it "returns " do
+        expect(subject.authorize_path).to eq '/oauth2/authorize'
+      end
+    end
 
-#   def test_authorization_code_grant_request_to_swap_code_for_token
-#     auth = @client.authorization_code
-#     params = {
-#       :client_id => @client_id,
-#       :client_secret => @client_secret,
-#       :code => 'SplxlOBeZQQYbYS6WxSbIA',
-#       :grant_type => 'authorization_code' 
-#     }
-#     @http_connection.expects(:send_request).with('/oauth/token', params, 'post', {}).returns(true)
-#     auth.get_token('SplxlOBeZQQYbYS6WxSbIA')
-#   end
+    describe "#device_path" do
+      it "returns " do
+        expect(subject.device_path).to eq '/oauth2/device/code'
+      end
+    end
+  end
 
-#   def test_resource_owner_password_credentials_grant
-#     auth = @client.password
-#     params = {
-#       :client_id => @client_id,
-#       :client_secret => @client_secret,
-#       :username => 'johndoe',
-#       :password => 'A3ddj3w',
-#       :grant_type => 'password' 
-#     }
-#     @http_connection.expects(:send_request).with('/oauth/token', params, 'post', {}).returns(true)
-#     auth.get_token('johndoe', 'A3ddj3w')
-#   end
+  context "with custom options" do
+    subject do
+      OAuth2::Client.new(@host, @client_id, @client_secret, {
+        :token_path => '/o/v2/token',
+        :authorize_path => '/o/v2/authorize',
+        :device_path => '/o/v2/device/code'
+      })
+    end
 
-#   def test_client_credentials_grant
-#     auth = @client.client_credentials
-#     params = {
-#       :client_id => @client_id,
-#       :client_secret => @client_secret,
-#       :grant_type => 'client_credentials' 
-#     }
-#     @http_connection.expects(:send_request).with('/oauth/token', params, 'post', {}).returns(true)
-#     auth.get_token
-#   end
+    describe "#token_path" do
+      it "returns token path" do
+        expect(subject.token_path).to eq '/o/v2/token'
+      end
+    end
 
-#   def test_refresh_token_grant
-#     auth = @client.refresh_token
-#     params = {
-#       :client_id => @client_id,
-#       :client_secret => @client_secret,
-#       :refresh_token => 'tGzv3JOkF0XG5Qx2TlKWIA',
-#       :grant_type => 'refresh_token' 
-#     }
-#     @http_connection.expects(:send_request).with('/oauth/token', params, 'post', {}).returns(true)
-#     auth.get_token('tGzv3JOkF0XG5Qx2TlKWIA')
-#   end
-# end
+    describe "#authorize_path" do
+      it "returns authorize path" do
+        expect(subject.authorize_path).to eq '/o/v2/authorize'
+      end
+    end
+
+    describe "#device_path" do
+      it "returns device path" do
+        expect(subject.device_path).to eq '/o/v2/device/code'
+      end
+    end
+  end
+
+  describe "host" do
+    it "returns host" do
+      expect(subject.host).to eq 'example.com'
+    end
+  end
+
+  describe "host=" do
+    before do
+      subject.host = 'elpmaxe.com'
+    end
+
+    it "set the connection to nil" do
+      expect(subject.instance_variable_get(:'@connection')).to eq nil
+    end
+
+    it "sets new host on client" do
+      expect(subject.host).to eq 'elpmaxe.com'
+    end
+  end
+
+  describe "#connection_options" do
+    context "with default connection options" do
+      it "returns empty hash" do
+        expect(subject.connection_options).to eq ({})
+      end
+    end
+
+    context "with custom connection options" do
+      it "returns default options" do
+        subject.connection_options = { :max_redirects => 10, :use_ssl => true }
+        expect(subject.connection_options).to eq ({:max_redirects => 10, :use_ssl => true})
+      end
+    end
+  end
+
+  describe "#implicit" do
+    it "returns implicit grant object" do
+    expect(@client.implicit).to be_instance_of(OAuth2::Grant::Implicit)
+    end
+  end
+
+  describe "#authorization_code" do
+    it "returns authorization code grant" do
+    expect(@client.authorization_code).to be_instance_of(OAuth2::Grant::AuthorizationCode)
+    end
+  end
+
+  describe "#refresh_token" do
+    it "returns refresh token grant" do
+    expect(@client.refresh_token).to be_instance_of(OAuth2::Grant::RefreshToken)
+    end
+  end
+
+  describe "#client_credentials" do
+    it "returns client credentials grant" do
+    expect(@client.client_credentials).to be_instance_of(OAuth2::Grant::ClientCredentials)
+    end
+  end
+
+  describe "#password" do
+    it "returns password grant" do
+      expect(@client.password).to be_instance_of(OAuth2::Grant::Password)
+    end
+  end
+
+  describe "" do
+    it "returns device code grant" do
+      expect(@client.device_code).to be_instance_of(OAuth2::Grant::DeviceCode)
+    end
+  end
+
+
+  describe "#implicit" do
+    it "returns implicit grant object" do
+      expect(subject.implicit).to be_instance_of(OAuth2::Grant::Implicit)
+    end
+  end
+
+  describe "#connection" do
+    context "with default connection options" do
+      it "returns HttpConnection" do
+        expect(subject.send(:connection)).to be_instance_of(OAuth2::HttpConnection)
+      end
+    end
+
+    context "with custom connection options" do
+      it "returns custom connection" do
+        # custom_http  = Struct.new('CustomHttpClient')
+        # conn_options = { :connection_client => custom_http }
+        # oauth_client = OAuth2::Client.new('example.com', @client_id, @client_secret, conn_options)
+        # expect(oauth_client.send(:connection)).to be_instance_of custom_http
+      end
+    end
+  end
+end

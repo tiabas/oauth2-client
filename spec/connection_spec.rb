@@ -1,24 +1,29 @@
 require 'spec_helper'
 require 'ostruct'
 
-describe OAuth2::HTTPConnection do
+describe OAuth2::HttpConnection do
 
   subject do
-    @conn = OAuth2::HTTPConnection.new('https://yammer.com')
+    @conn = OAuth2::HttpConnection.new('https://yammer.com')
   end
 
   context "with user options" do
     before do
-      @conn = OAuth2::HTTPConnection.new('https://microsoft.com', {
+      @conn = OAuth2::HttpConnection.new('https://microsoft.com', {
         :accept => 'application/xml',
         :user_agent => "OAuth2 Test Client",
         :ssl => {:verify => false},
         :max_redirects => 2
-        })
-      options = OAuth2::HTTPConnection.default_options
-      options.each do |key|
-          expect(@conn.instance_variable_get(:"@#{key}")).to eq options[key]
-      end
+      })
+    end
+
+    describe "connection options" do
+      # it " " do
+      #   options = OAuth2::HttpConnection.default_options
+      #   options.keys.each do |key|
+      #     expect(@conn.instance_variable_get(:"@#{key}")).to eq options[key]
+      #   end
+      # end
     end
   end
 
@@ -40,7 +45,7 @@ describe OAuth2::HTTPConnection do
   describe "#scheme" do
     context "scheme is unsupported" do
       it "raises an error" do
-        expect { subject.scheme = 'ftp'}.to raise_error(OAuth2::HTTPConnection::UnsupportedSchemeError)
+        expect { subject.scheme = 'ftp'}.to raise_error(OAuth2::HttpConnection::UnsupportedSchemeError)
       end
     end
 
@@ -151,7 +156,7 @@ describe OAuth2::HTTPConnection do
 
     context "when method is not supported" do
       it "raises an error" do
-        expect {subject.request(:patch, '/')}.to raise_error(OAuth2::HTTPConnection::UnhandledHTTPMethodError)
+        expect {subject.request(:patch, '/')}.to raise_error(OAuth2::HttpConnection::UnhandledHTTPMethodError)
       end
     end
 
