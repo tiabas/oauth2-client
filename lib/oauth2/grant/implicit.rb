@@ -23,8 +23,9 @@ module OAuth2
       def get_token(opts={})
         opts[:params] ||= {}
         opts[:params].merge!(token_params)
+        opts[:authenticate] ||= :headers
         method = opts.delete(:method) || :get
-        make_request(method, @authorize_path, opts)
+        make_request(method, @token_path, opts)
       end
 
     private

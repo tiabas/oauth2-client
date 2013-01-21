@@ -18,6 +18,7 @@ module OAuth2
       def get_token(opts={})
         opts[:params] ||= {}
         opts[:params][:grant_type] = grant_type
+        opts[:authenticate] ||= :headers
         method = opts.delete(:method) || :post
         make_request(method, @token_path, opts)
       end

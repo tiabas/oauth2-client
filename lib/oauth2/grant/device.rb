@@ -28,6 +28,7 @@ module OAuth2
           :code       => code,
           :grant_type => grant_type
         })
+        opts[:authenticate] ||= :headers
         method = opts.delete(:method) || :post
         make_request(method, @token_path, opts)
       end

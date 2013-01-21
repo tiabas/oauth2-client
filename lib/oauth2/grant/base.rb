@@ -17,7 +17,7 @@ module OAuth2
         @device_path    = client.device_path
       end
 
-      def make_request(path, opts={})
+      def make_request(method, path, opts={})
         if auth_type = opts.delete(:authenticate)
           case auth_type.to_sym
           when :body
@@ -26,14 +26,14 @@ module OAuth2
               :client_id     => @client_id,
               :client_secret => @client_secret
             })
-          else :headers
+          when :headers
             opts[:headers] || {}
             headers['Authorization'] = http_basic_encode(@client_id, @client_secret)
+          else
+            #do nothing
           end
         end
-        response = @connection.send_request(method, path, opts)
-        yield response if block_given
-        response
+        @connection.send_request(method, path, opts)
       end
     end
   end

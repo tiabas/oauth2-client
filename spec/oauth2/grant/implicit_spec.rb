@@ -21,13 +21,15 @@ describe OAuth2::Grant::Implicit do
 
   describe "#token_url" do
     it "generates a token path using the given parameters" do
-
+      path = subject.token_url(:scope => 'xyz', :state => 'abc xyz')
+      query_values = Addressable::URI.parse(path).query_values
+      expect(query_values).to eq({"scope"=>"xyz", "state"=>"abc xyz", "response_type"=>"token", "client_id"=>"s6BhdRkqt3"})
     end
   end
 
   describe "#get_token" do
     it "gets access token" do
-      subject.should_receive(:make_request).with(:post, "/oauth2/token", {:params=>{:grant_type=>"refresh_token", :refresh_token=>"2YotnFZFEjr1zCsicMWpAA"}})
+      subject.should_receive(:make_request).with(:get, "/oauth2/token", {:params=>{:scope=>"xyz", :state=>"abc xyz", :response_type=>"token", :client_id=>"s6BhdRkqt3"}})
       subject.get_token(:params => {:scope => 'xyz', :state => 'abc xyz'})
     end
   end
