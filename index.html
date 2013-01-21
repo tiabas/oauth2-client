@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Oauth2-client by tiabas</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Oauth2-client</h1>
+          <h2>OAuth2 client library 0.9.5 Beta</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/tiabas/oauth2-client/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/tiabas/oauth2-client/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/tiabas/oauth2-client" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>OAuth2 Client</h1>
+
+<p>A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that not
+every service that claims to support OAuth 2.0 actually implements it according to the
+<a href="http://tools.ietf.org/html/rfc6749">standard</a>. This version therefore, affords 
+the developer some degree of flexibility in generating the URLs and requests
+needed to authorize an OAuth 2.0 application.</p>
+
+<p>For more about the standard, take a look at <a href="http://tools.ietf.org/html/rfc6749">http://tools.ietf.org/html/rfc6749</a> </p>
+
+<h2>Installation</h2>
+
+<p>Download the library and include the its location in your Gemfile</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="https://github.com/tiabas/oauth2-client">View Source on GitHub</a></li>
+<li><a href="https://github.com/tiabas/oauth2-client/issues">Report Issues on GitHub</a></li>
+</ul><h2>Usage Examples</h2>
+
+<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'oauth2-client'</span>
+
+<span class="vi">@client</span>  <span class="o">=</span> <span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">client_config_file</span><span class="p">,</span> <span class="ss">:service</span> <span class="o">=&gt;</span> <span class="ss">:yammer</span><span class="p">,</span> <span class="ss">:env</span> <span class="o">=&gt;</span> <span class="ss">:test</span><span class="p">)</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
+<span class="c1"># =&gt; "/oauth/authorize?response_type=code&amp;client_id={client_id}&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"</span>
+
+</pre></div>
+
+<h2>Authorization Grants</h2>
+
+<p>The client wraps around the creation of any given grant and passing in the parameters defined in the configuration
+file. The supported grants include Authorization Code, Implicit, Resource Owner Password Credentials, Client Credentials.
+There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(<a href="https://developers.google.com/accounts/docs/OAuth2ForDevices">https://developers.google.com/accounts/docs/OAuth2ForDevices</a>). They are available via the #authorization_code, #implicit, #password, #client_credentials, #refresh_token
+and #device methods on a client object.</p>
+
+<p>The #get_token method on the grants does not make any assumptions about the format ofthe response from the OAuth provider. The ideal
+case would be to treat all responses as JSON. However, some services may respond with in XML instead of JSON. The #get_token method
+therefore, returns with an HTTPResponse object.</p>
+
+<h3>Authorization Code</h3>
+
+<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
+<span class="c1"># =&gt; "/oauth/authorize?response_type=code&amp;client_id={client_id}&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"</span>
+
+<span class="n">token_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">token_path</span><span class="p">(</span>
+    <span class="ss">:code</span> <span class="o">=&gt;</span> <span class="n">aXW2c6bYz</span><span class="p">,</span> 
+    <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
+<span class="c1"># =&gt; "/oauth/token?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;client_secret={client_secret}&amp;grant_type=authorization_code&amp;client_id={client_id}&amp;code=aXW2c6bYz"</span>
+</pre></div>
+
+<h3>Implicit Grant</h3>
+
+<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">implicit</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
+<span class="c1"># =&gt; "oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;response_type=token&amp;client_id={client_id}"</span>
+</pre></div>
+
+<h3>Password Credentials</h3>
+
+<div class="highlight"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">password</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">)</span>
+</pre></div>
+
+<h3>Refresh Token</h3>
+
+<div class="highlight"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">refresh_token</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">refresh_token_value</span><span class="p">,</span> <span class="ss">:params</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'abc xyz'</span><span class="p">,</span> <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'state'</span><span class="p">})</span>
+</pre></div>
+
+<h3>Client Credentials</h3>
+
+<div class="highlight"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">client_credentials</span><span class="o">.</span><span class="n">get_token</span>
+</pre></div>
+
+<h3>Device Code</h3>
+
+<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">device_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'abc xyz'</span><span class="p">,</span> <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'state'</span><span class="p">)</span>
+<span class="c1"># =&gt; "/oauth/device/code?scope=abc+xyz&amp;state=state&amp;client_id={client_id}"</span>
+
+<span class="c1"># exchange device authorization code for access token</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">device_code</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">device_auth_code</span><span class="p">)</span>
+</pre></div>
+
+<h1>Client Examples</h1>
+
+<p>This library comes bundled with two sample implementations of Google and Yammer OAuth clients. These clients are 
+meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0
+providers.</p>
+
+<h2>Configuration</h2>
+
+<p>The client settings are loaded from a configuration file.</p>
+
+<div class="highlight"><pre><span class="c1"># oauth_client.yml</span>
+<span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">google</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">client_id</span><span class="p-Indicator">:</span> <span class="s">'812741506391.apps.googleusercontent.com'</span>
+    <span class="l-Scalar-Plain">client_secret</span><span class="p-Indicator">:</span> <span class="s">'SplxlOBeZQQYbYS6WxSbIA'</span>
+    <span class="l-Scalar-Plain">scheme</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https</span>
+    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">accounts.google.com</span>
+    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">443</span>
+    <span class="l-Scalar-Plain">token_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/o/oauth2/token</span>
+    <span class="l-Scalar-Plain">authorize_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/o/oauth2/auth</span>
+    <span class="l-Scalar-Plain">device_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/o/oauth2/device/code</span>
+    <span class="l-Scalar-Plain">http_client</span><span class="p-Indicator">:</span> 
+    <span class="l-Scalar-Plain">max_redirects</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+    <span class="l-Scalar-Plain">ssl</span><span class="p-Indicator">:</span>
+
+  <span class="l-Scalar-Plain">yammer</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">client_id</span><span class="p-Indicator">:</span> <span class="s">'PRbTcg9qjgKsp4jjpm1pw'</span>
+    <span class="l-Scalar-Plain">client_secret</span><span class="p-Indicator">:</span> <span class="s">'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'</span>
+    <span class="l-Scalar-Plain">scheme</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https</span>
+    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">www.yammer.com</span>
+    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">443</span>
+    <span class="l-Scalar-Plain">token_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/oauth2/access_token</span>
+    <span class="l-Scalar-Plain">authorize_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/dialog/oauth/</span>
+    <span class="l-Scalar-Plain">device_path</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">http_client</span><span class="p-Indicator">:</span> 
+    <span class="l-Scalar-Plain">max_redirects</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+    <span class="l-Scalar-Plain">ssl</span><span class="p-Indicator">:</span> 
+</pre></div>
+
+<h2>Yammer Client</h2>
+
+<div class="highlight"><pre><span class="n">yammer_client</span>  <span class="o">=</span> <span class="no">YammerClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">client_config_file</span><span class="p">,</span> <span class="ss">:service</span> <span class="o">=&gt;</span> <span class="ss">:yammer</span><span class="p">,</span> <span class="ss">:env</span> <span class="o">=&gt;</span> <span class="ss">:test</span><span class="p">)</span>
+</pre></div>
+
+<h3>Client-side authorization URL(Implicit grant)</h3>
+
+<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">yammer_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span><span class="s2">"http://localhost/oauth/cb"</span><span class="p">)</span>
+<span class="c1"># =&gt; https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;response_type=token&amp;client_id=PQbTcg6qjgKpp4jjpm4pw</span>
+</pre></div>
+
+<h3>Server-side authorization URL(Authorization code grant)</h3>
+
+<div class="highlight"><pre>
+<span class="n">auth_url</span> <span class="o">=</span> <span class="n">yammer_client</span><span class="o">.</span><span class="n">clientside_authorization_url</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span><span class="s2">"http://localhost/oauth/cb"</span><span class="p">)</span>
+<span class="c1"># =&gt; https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;response_type=code&amp;client_id=PQbTcg6qjgKpp4jjpm4pw</span>
+
+<span class="c1"># exchange authorization code for access token</span>
+<span class="n">token_url</span> <span class="o">=</span> <span class="n">yammer_client</span><span class="o">.</span><span class="n">webserver_token_url</span><span class="p">(</span><span class="ss">:code</span> <span class="o">=&gt;</span> <span class="s1">'aXW2c6bYz'</span><span class="p">,</span> <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span><span class="s2">"http://localhost/oauth/cb"</span><span class="p">)</span>
+<span class="c1"># =&gt; https://www.yammer.com/oauth2/access_token?code=aXW2c6bYz&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;client_secret=Xn4kp7Ly0TCY4GaZWkmSsqIEPg10DmMADyjWkf2U&amp;grant_type=authorization_code&amp;client_id=PQbTcg6qjgKpp4jjpm4pw</span>
+
+</pre></div>
+
+<h2>Google Client</h2>
+
+<div class="highlight"><pre><span class="n">google_client</span> <span class="o">=</span> <span class="no">GoogleClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">client_config_file</span><span class="p">,</span> <span class="ss">:service</span> <span class="o">=&gt;</span> <span class="ss">:google</span><span class="p">,</span> <span class="ss">:env</span> <span class="o">=&gt;</span> <span class="ss">:test</span><span class="p">)</span>
+</pre></div>
+
+<h3>Client-side authorization URL(Implicit grant)</h3>
+
+<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span><span class="p">(</span>
+    <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'https://www.googleapis.com/auth/userinfo.email'</span><span class="p">,</span>
+    <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'/profile'</span><span class="p">,</span>
+    <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'https://oauth2-login-demo.appspot.com/code'</span><span class="p">,</span>
+    <span class="ss">:approval_prompt</span> <span class="o">=&gt;</span> <span class="s1">'force'</span><span class="p">)</span>
+<span class="c1"># =&gt; https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&amp;state=%2Fprofile&amp;redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Ftoken&amp;approval_prompt=force&amp;response_type=token&amp;client_id=812741506391.apps.googleusercontent.com</span>
+</pre></div>
+
+<h3>Server-side authorization URL(Authorization code grant)</h3>
+
+<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">clientside_authorization_url</span><span class="p">(</span>
+    <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'https://www.googleapis.com/auth/userinfo.email'</span><span class="p">,</span>
+    <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'/profile'</span><span class="p">,</span>
+    <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth/code'</span><span class="p">,</span>
+    <span class="ss">:approval_prompt</span> <span class="o">=&gt;</span> <span class="s1">'force'</span><span class="p">)</span>
+<span class="c1"># =&gt; https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&amp;state=%2Fprofile&amp;redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Fcode&amp;approval_prompt=force&amp;response_type=code&amp;client_id=812741506391.apps.googleusercontent.com</span>
+
+<span class="c1"># exchange authorization code for access token. we will get back a Net::HTTPResponse</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">exchange_auth_code_for_token</span><span class="p">(</span>
+  <span class="ss">:params</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="ss">:code</span> <span class="o">=&gt;</span> <span class="s1">'4/dbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI'</span><span class="p">,</span>
+    <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth/token'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+<span class="n">response</span><span class="o">.</span><span class="n">inspect</span> 
+<span class="c1"># =&gt; #&lt;Net::HTTPOK:0x007ff8bc7c1200&gt;</span>
+
+<span class="n">response</span><span class="o">.</span><span class="n">body</span>
+<span class="c1"># =&gt; {</span>
+  <span class="s2">"access_token"</span> <span class="p">:</span> <span class="s2">"ya91.AHES8ZS-oCZnc5yHepnsosFjNln9ZKLuioF6FcMRCGUIzA"</span><span class="p">,</span>
+  <span class="s2">"token_type"</span> <span class="p">:</span> <span class="s2">"Bearer"</span><span class="p">,</span>
+  <span class="s2">"expires_in"</span> <span class="p">:</span> <span class="mi">3600</span><span class="p">,</span>
+  <span class="s2">"id_token"</span> <span class="p">:</span> <span class="s2">"eyJhbGciOiJSUzI1NiIsImtpZCI6IjY4ZGM2ZmIxNDQ5OGJmMWRhNjNiMWYyMDA2YmRmMDA2N2Q4MzY"</span><span class="p">,</span>
+  <span class="s2">"refresh_token"</span> <span class="p">:</span> <span class="s2">"6/Ju8uhi9xOctGEyHRzWwHhaYimfxmY0tiJ_qW3qvjWXM"</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Copyright</h2>
+
+<p>Copyright (c) 2012 Kevin Mutyaba
+See <a href="https://github.com/tiabas/oauth2-client/blob/master/LICENSE">LICENSE</a> for details.</p>
+        </section>
+
+        <footer>
+          Oauth2-client is maintained by <a href="https://github.com/tiabas">tiabas</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
