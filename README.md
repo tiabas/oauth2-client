@@ -16,7 +16,9 @@ providers.
 For more about the standard checkout: http://tools.ietf.org/html/rfc6749 
 
 ## Installation
-Download the library and include the its location in your Gemfile
+```sh
+gem install twitter
+```
 
 ## Resources
 * [View Source on GitHub][code]
@@ -148,6 +150,17 @@ response.body
   "refresh_token" : "6/Ju8uhi9xOctGEyHRzWwHhaYimfxmY0tiJ_qW3qvjWXM"
 }
 ```
+
+## Supported Ruby Versions
+This library aims to support and is [tested against][travis] the following Ruby
+version:
+
+* Ruby 1.9.2
+* Ruby 1.9.3
+
+This library may inadvertently work (or seem to work) on other Ruby
+implementations, however support will only be provided for the versions listed
+above.
 
 ## Copyright
 Copyright (c) 2012 Kevin Mutyaba
