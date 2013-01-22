@@ -1,4 +1,8 @@
-# OAuth2 Client
+# OAuth2 Ruby Client
+
+[![Build Status](https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master)][travis]
+
+[travis]: http://travis-ci.org/tiabas/oauth2-client
 
 A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that not
 every service that claims to support OAuth 2.0 actually implements it according to the
