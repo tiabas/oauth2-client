@@ -19,10 +19,10 @@ describe OAuth2::Grant::DeviceCode do
     end
   end
 
-  describe "#get_user_code" do
+  describe "#get_code" do
     it "gets user code" do
-      subject.should_receive(:make_request).with(:post, "/oauth2/token", {:params=>{:client_id=>"s6BhdRkqt3"}})
-      subject.get_user_code
+      subject.should_receive(:make_request).with(:post, "/oauth2/device/code", {:params=>{:client_id=>"s6BhdRkqt3"}})
+      subject.get_code
     end
   end
 

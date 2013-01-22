@@ -96,7 +96,7 @@ module OAuth2
       @http_client
     end
 
-    def request(method, path, opts={})
+    def send_request(method, path, opts={})
       headers         = default_headers.merge(opts.fetch(:headers, {}))
       params          = opts[:params] || {}
       query           = Addressable::URI.form_encode(params)
@@ -137,7 +137,7 @@ module OAuth2
             :host   => redirect_uri.host,
             :port   => redirect_uri.port
           }
-          return request(method, redirect_uri.path, :params => params, :headers => headers, :connection_options => conn)
+          return send_request(method, redirect_uri.path, :params => params, :headers => headers, :connection_options => conn)
         end
       when 100..599
         @redirect_count = 0

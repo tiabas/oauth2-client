@@ -19,6 +19,10 @@ module OAuth2
         "#{@authorize_path}?#{to_query(params)}"
       end
 
+      def authorization_url(params={})
+        params = params.merge(authorization_params)
+        build_url(host, :path => authorize_path, :params => params)
+      end
 
       # Access Token Request
       # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.1.3

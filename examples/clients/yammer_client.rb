@@ -1,4 +1,4 @@
-class YammerClient < OAuth2Client::Client
+class YammerClient < OAuth2::Client
 
   # Generates the Yammer URL that the user will be redirected to in order to
   # authorize your application

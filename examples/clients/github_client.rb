@@ -1,4 +1,4 @@
-class GithubClient < OAuth2Client::Client
+class GithubClient < OAuth2::Client
   def normalize_scope(scope, sep=',')
     unless (scope.is_a?(String) || scope.is_a?(Array))
       raise "Expected scope of type String or Array but was #{scope.class.name}"

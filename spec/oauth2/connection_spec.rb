@@ -140,7 +140,7 @@ describe OAuth2::HttpConnection do
   describe "ssl_cert_store" do
   end
 
-  describe "#request" do
+  describe "#send_request" do
     before do
       @http_ok = OpenStruct.new(
         :code    => '200',
@@ -156,7 +156,7 @@ describe OAuth2::HttpConnection do
 
     context "when method is not supported" do
       it "raises an error" do
-        expect {subject.request(:patch, '/')}.to raise_error(OAuth2::HttpConnection::UnhandledHTTPMethodError)
+        expect {subject.send_request(:patch, '/')}.to raise_error(OAuth2::HttpConnection::UnhandledHTTPMethodError)
       end
     end
 
@@ -169,7 +169,7 @@ describe OAuth2::HttpConnection do
         normalized_path = '/oauth/authorize?client_id=001337&client_secret=abcxyz'
 
         Net::HTTP.any_instance.should_receive(:get).with(normalized_path, subject.default_headers).and_return(@http_ok)
-        response = subject.request(method, path, :params => params)
+        response = subject.send_request(method, path, :params => params)
 
         expect(response.code).to eq '200'
       end
@@ -181,7 +181,7 @@ describe OAuth2::HttpConnection do
         method = 'delete'
 
         Net::HTTP.any_instance.should_receive(:delete).with(path, subject.default_headers).and_return(@http_ok)
-        response = subject.request(method, path)
+        response = subject.send_request(method, path)
 
         expect(response.code).to eq '200'
       end
@@ -195,7 +195,7 @@ describe OAuth2::HttpConnection do
         headers = {'Content-Type' => 'application/x-www-form-urlencoded' }.merge(subject.default_headers)
 
         Net::HTTP.any_instance.should_receive(:post).with(path, query, headers).and_return(@http_ok)
-        response =subject.request(:post, path, :params => params)
+        response =subject.send_request(:post, path, :params => params)
 
         expect(response.code).to eq '200'
       end
@@ -210,7 +210,7 @@ describe OAuth2::HttpConnection do
 
         Net::HTTP.any_instance.should_receive(:put).with(path, query, headers).and_return(@http_ok)
 
-        response = subject.request(:put, path, :params => params)
+        response = subject.send_request(:put, path, :params => params)
 
         expect(response.code).to eq '200'
       end
@@ -227,7 +227,7 @@ describe OAuth2::HttpConnection do
       client.should_receive(:post).ordered.with(path, query, headers).and_return(@http_redirect)
       client.should_receive(:post).ordered.with('/members', query, headers).and_return(@http_ok)
 
-      response = subject.request(:post, path, :params => params)
+      response = subject.send_request(:post, path, :params => params)
 
       expect(response.code).to eq '200'
     end
@@ -244,7 +244,7 @@ describe OAuth2::HttpConnection do
       client.should_receive(:post).ordered.with(path, query, headers).and_return(@http_redirect)
       client.should_receive(:post).ordered.with('/members', query, headers).and_return(@http_redirect)
 
-      response = subject.request(:post, path, :params => params)
+      response = subject.send_request(:post, path, :params => params)
 
       expect(response.code).to eq '301'
     end
@@ -265,7 +265,7 @@ describe OAuth2::HttpConnection do
       client.should_receive(:post).ordered.with(path, query, headers).and_return(http_303)
       client.should_receive(:get).ordered.with('/members', subject.default_headers).and_return(@http_ok)
 
-      response = subject.request(:post, path, :params => params)
+      response = subject.send_request(:post, path, :params => params)
 
       expect(response.code).to eq '200'
     end

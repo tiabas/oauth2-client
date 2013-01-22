@@ -1,4 +1,4 @@
-class GoogleClient < OAuth2Client::Client
+class GoogleClient < OAuth2::Client
 
   def normalize_scope(scope, sep=' ')
     unless (scope.is_a?(String) || scope.is_a?(Array))
@@ -15,7 +15,11 @@ class GoogleClient < OAuth2Client::Client
   #
   # @params [Hash] additional parameters to be include in URL eg. scope, state, etc
   #
-  # client = GoogleClient.new(config)
+  # client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+  #   :token_path     => '/o/oauth2/token',
+  #   :authorize_path => '/o/oauth2/auth',
+  #   :device_path    => '/o/oauth2/device/code'
+  # })
   # client.clientside_authorization_url({
   #      :scope => 'https://www.googleapis.com/auth/userinfo.email',
   #      :state => '/profile',
@@ -25,7 +29,7 @@ class GoogleClient < OAuth2Client::Client
   # #=>
   def clientside_authorization_url(params={})
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    absolute_url(implicit.token_path(params))
+    implicit.token_url(params)
   end
 
   # Generates the Google URL that the user will be redirected to in order to
@@ -35,7 +39,11 @@ class GoogleClient < OAuth2Client::Client
   #
   # @params [Hash] additional parameters to be include in URL eg. scope, state, etc
   #
-  # client = GoogleClient.new(config)
+  # client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+  #   :token_path     => '/o/oauth2/token',
+  #   :authorize_path => '/o/oauth2/auth',
+  #   :device_path    => '/o/oauth2/device/code'
+  # })
   # client.webserver_authorization_url({
   #      :scope => 'https://www.googleapis.com/auth/userinfo.email',
   #      :state => '/profile',
@@ -45,17 +53,17 @@ class GoogleClient < OAuth2Client::Client
   # #=>
   def webserver_authorization_url(params={})
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    absolute_url(authorization_code.authorization_path(params))
+    authorization_code.authorization_url(params)
   end
 
   # Generates the Google URL that allows a user to obtain an authorization
   # code for a given device
   #
   # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
-  def device_authorization_url(params={})
-    params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    absolute_url(device.authorization_path(params))
-  end
+  # def device_authorization_url(params={})
+  #   params[:scope] = normalize_scope(params[:scope]) if params[:scope]
+  #   device.authorization_url(params)
+  # end
 
   # Makes a request to google server that will swap your authorization code for an access
   # token
@@ -64,7 +72,11 @@ class GoogleClient < OAuth2Client::Client
   #
   # @params [Hash] additional parameters to be include in URL eg. scope, state, etc
   #
-  # client = GoogleClient.new(config)
+  # client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+  #   :token_path     => '/o/oauth2/token',
+  #   :authorize_path => '/o/oauth2/auth',
+  #   :device_path    => '/o/oauth2/device/code'
+  # })
   # client.exchange_auth_code_for_token({
   #      :scope => 'https://www.googleapis.com/auth/userinfo.email',
   #      :state => '/profile',
@@ -86,8 +98,12 @@ class GoogleClient < OAuth2Client::Client
   #
   # @params [Hash] additional parameters to be include in URL eg. state
   #
-  # client = GoogleClient.new(config)
-  # client.refresh({
+  # client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+  #   :token_path     => '/o/oauth2/token',
+  #   :authorize_path => '/o/oauth2/auth',
+  #   :device_path    => '/o/oauth2/device/code'
+  # })
+  # client.refresh_access_token({
   #      :state => '/profile',
   #      :refresh_token => '2YotnFZFEjr1zCsicMWpAA'
   #    })
@@ -100,10 +116,44 @@ class GoogleClient < OAuth2Client::Client
     refresh_token.get_token(token, opts)
   end
 
-  # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
-  def exchange_device_code_for_token(opts={})
+  # @see https://developers.google.com/accounts/docs/OAuth2ForDevices#obtainingacode
+  #
+  # @params [Hash] additional parameters to be include in URL eg. state
+  #
+  # client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+  #   :token_path     => '/o/oauth2/token',
+  #   :authorize_path => '/o/oauth2/auth',
+  #   :device_path    => '/o/oauth2/device/code'
+  # })
+  # client.device_code({
+  #   :state => '/profile',
+  # })
+  # #=>
+  def get_device_code(opts={})
     opts[:params] ||= {}
     opts[:params][:scope] = normalize_scope(opts[:params][:scope]) if opts[:params][:scope]
-    device.get_token(opts)
+    device_code.get_code(opts)
+  end
+
+  # @see https://developers.google.com/accounts/docs/OAuth2ForDevices#obtainingatoken
+  #
+  # @params [Hash] additional parameters to be include in URL eg. state
+  #
+  # client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+  #   :token_path     => '/o/oauth2/token',
+  #   :authorize_path => '/o/oauth2/auth',
+  #   :device_path    => '/o/oauth2/device/code'
+  # })
+  # client.exchange_device_code_for_token({
+  #      :state => '/profile',
+  #      :code => 'G3Y6jU3a',
+  #    })
+  # #=>
+  def exchange_device_code_for_token(opts={})
+    unless (opts[:params] && opts[:params][:code])
+      raise ArgumentError.new("You must include an device code as a parameter")
+    end
+    code = opts[:params].delete(:code)
+    device_code.get_token(code, opts)
   end
 end

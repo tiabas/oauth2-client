@@ -5,10 +5,11 @@ module OAuth2
 
       class InvalidAuthorizationTypeError < StandardError; end
   
-      attr_accessor :client_id, :client_secret, :connection,
+      attr_accessor :client_id, :client_secret, :connection, :host,
                     :authorize_path, :token_path, :device_path
 
       def initialize(client)
+        @host           = client.host
         @connection     = client.connection
         @client_id      = client.client_id
         @client_secret  = client.client_secret

@@ -1,15 +1,16 @@
 require 'openssl'
 require 'base64'
-
+require 'addressable/uri'
 module OAuth2
   module UrlHelper
     # convenience method to build response URI  
-    def build_uri(uri, opts={})
-      query_params= opts[:params] || {}
-      fragment= opts[:fragment] || {}
+    def build_url(uri, opts={})
+      path     = opts[:path] || ''
+      query    = opts[:params] || {}
+      fragment = opts[:fragment] || {}
       url = Addressable::URI.parse uri
-
-      url.query_values = new_query unless new_query.empty?
+      url.path = path
+      url.query_values = query unless query.empty?
       url.fragment = Addressable::URI.form_encode(fragment) unless fragment.empty?
       url.to_s
     end

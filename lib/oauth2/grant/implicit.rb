@@ -11,9 +11,14 @@ module OAuth2
       # Generate a token path using the given parameters .
       #
       # @param [Hash] query parameters
-      def token_url(params={})
+      def token_path(params={})
         params = params.merge(token_params)
         "#{@authorize_path}?#{to_query(params)}"
+      end
+
+      def token_url(params={})
+        params = params.merge(token_params)
+        build_url(host, :path => authorize_path, :params => params)
       end
 
       # Retrieve an access token given the specified client.
