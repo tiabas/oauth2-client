@@ -19,7 +19,7 @@
 
         <header>
           <h1>Oauth2-client</h1>
-          <h2>OAuth2 client library 0.9.5 Beta</h2>
+          <h2>OAuth2 client library 1.0.0</h2>
         </header>
 
         <section id="downloads" class="clearfix">
@@ -54,7 +54,7 @@ needed to authorize an OAuth 2.0 application.</p>
 
 <div class="highlight"><pre><span class="nb">require</span> <span class="s1">'oauth2-client'</span>
 
-<span class="vi">@client</span>  <span class="o">=</span> <span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">client_config_file</span><span class="p">,</span> <span class="ss">:service</span> <span class="o">=&gt;</span> <span class="ss">:yammer</span><span class="p">,</span> <span class="ss">:env</span> <span class="o">=&gt;</span> <span class="ss">:test</span><span class="p">)</span>
+<span class="vi">@client</span>  <span class="o">=</span> <span class="no">OAuth2</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">,</span> <span class="s1">'s6BhdRkqt3'</span><span class="p">,</span> <span class="s1">'4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'</span><span class="p">)</span>
 
 <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
 <span class="c1"># =&gt; "/oauth/authorize?response_type=code&amp;client_id={client_id}&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"</span>
@@ -119,65 +119,20 @@ therefore, returns with an HTTPResponse object.</p>
 meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0
 providers.</p>
 
-<h2>Configuration</h2>
-
-<p>The client settings are loaded from a configuration file.</p>
-
-<div class="highlight"><pre><span class="c1"># oauth_client.yml</span>
-<span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">google</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">client_id</span><span class="p-Indicator">:</span> <span class="s">'812741506391.apps.googleusercontent.com'</span>
-    <span class="l-Scalar-Plain">client_secret</span><span class="p-Indicator">:</span> <span class="s">'SplxlOBeZQQYbYS6WxSbIA'</span>
-    <span class="l-Scalar-Plain">scheme</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https</span>
-    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">accounts.google.com</span>
-    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">443</span>
-    <span class="l-Scalar-Plain">token_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/o/oauth2/token</span>
-    <span class="l-Scalar-Plain">authorize_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/o/oauth2/auth</span>
-    <span class="l-Scalar-Plain">device_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/o/oauth2/device/code</span>
-    <span class="l-Scalar-Plain">http_client</span><span class="p-Indicator">:</span> 
-    <span class="l-Scalar-Plain">max_redirects</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
-    <span class="l-Scalar-Plain">ssl</span><span class="p-Indicator">:</span>
-
-  <span class="l-Scalar-Plain">yammer</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">client_id</span><span class="p-Indicator">:</span> <span class="s">'PRbTcg9qjgKsp4jjpm1pw'</span>
-    <span class="l-Scalar-Plain">client_secret</span><span class="p-Indicator">:</span> <span class="s">'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'</span>
-    <span class="l-Scalar-Plain">scheme</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">https</span>
-    <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">www.yammer.com</span>
-    <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">443</span>
-    <span class="l-Scalar-Plain">token_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/oauth2/access_token</span>
-    <span class="l-Scalar-Plain">authorize_path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/dialog/oauth/</span>
-    <span class="l-Scalar-Plain">device_path</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">http_client</span><span class="p-Indicator">:</span> 
-    <span class="l-Scalar-Plain">max_redirects</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
-    <span class="l-Scalar-Plain">ssl</span><span class="p-Indicator">:</span> 
-</pre></div>
-
-<h2>Yammer Client</h2>
-
-<div class="highlight"><pre><span class="n">yammer_client</span>  <span class="o">=</span> <span class="no">YammerClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">client_config_file</span><span class="p">,</span> <span class="ss">:service</span> <span class="o">=&gt;</span> <span class="ss">:yammer</span><span class="p">,</span> <span class="ss">:env</span> <span class="o">=&gt;</span> <span class="ss">:test</span><span class="p">)</span>
-</pre></div>
-
-<h3>Client-side authorization URL(Implicit grant)</h3>
-
-<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">yammer_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span><span class="s2">"http://localhost/oauth/cb"</span><span class="p">)</span>
-<span class="c1"># =&gt; https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;response_type=token&amp;client_id=PQbTcg6qjgKpp4jjpm4pw</span>
-</pre></div>
-
-<h3>Server-side authorization URL(Authorization code grant)</h3>
-
-<div class="highlight"><pre>
-<span class="n">auth_url</span> <span class="o">=</span> <span class="n">yammer_client</span><span class="o">.</span><span class="n">clientside_authorization_url</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span><span class="s2">"http://localhost/oauth/cb"</span><span class="p">)</span>
-<span class="c1"># =&gt; https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;response_type=code&amp;client_id=PQbTcg6qjgKpp4jjpm4pw</span>
-
-<span class="c1"># exchange authorization code for access token</span>
-<span class="n">token_url</span> <span class="o">=</span> <span class="n">yammer_client</span><span class="o">.</span><span class="n">webserver_token_url</span><span class="p">(</span><span class="ss">:code</span> <span class="o">=&gt;</span> <span class="s1">'aXW2c6bYz'</span><span class="p">,</span> <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span><span class="s2">"http://localhost/oauth/cb"</span><span class="p">)</span>
-<span class="c1"># =&gt; https://www.yammer.com/oauth2/access_token?code=aXW2c6bYz&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;client_secret=Xn4kp7Ly0TCY4GaZWkmSsqIEPg10DmMADyjWkf2U&amp;grant_type=authorization_code&amp;client_id=PQbTcg6qjgKpp4jjpm4pw</span>
-
-</pre></div>
-
 <h2>Google Client</h2>
 
-<div class="highlight"><pre><span class="n">google_client</span> <span class="o">=</span> <span class="no">GoogleClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:filename</span> <span class="o">=&gt;</span> <span class="n">client_config_file</span><span class="p">,</span> <span class="ss">:service</span> <span class="o">=&gt;</span> <span class="ss">:google</span><span class="p">,</span> <span class="ss">:env</span> <span class="o">=&gt;</span> <span class="ss">:test</span><span class="p">)</span>
+<div class="highlight"><pre>
+<span class="n">google_client</span> <span class="o">=</span> <span class="no">GoogleClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+  <span class="s1">'https://accounts.google.com'</span><span class="p">,</span>
+  <span class="s1">'827502413694.apps.googleusercontent.com'</span><span class="p">,</span>
+  <span class="s1">'a2nQpcUm2Dgq1chWdAvbXGTk'</span><span class="p">,</span>
+  <span class="p">{</span>
+    <span class="ss">:token_path</span>     <span class="o">=&gt;</span> <span class="s1">'/o/oauth2/token'</span><span class="p">,</span>
+    <span class="ss">:authorize_path</span> <span class="o">=&gt;</span> <span class="s1">'/o/oauth2/auth'</span><span class="p">,</span>
+    <span class="ss">:device_path</span>    <span class="o">=&gt;</span> <span class="s1">'/o/oauth2/device/code'</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+
 </pre></div>
 
 <h3>Client-side authorization URL(Implicit grant)</h3>
