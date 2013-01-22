@@ -31,19 +31,23 @@
         <hr>
 
         <section id="main_content">
-          <h1>OAuth2 Client</h1>
+          <h1>OAuth2 Ruby Client</h1>
 
-<p>A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that not
-every service that claims to support OAuth 2.0 actually implements it according to the
-<a href="http://tools.ietf.org/html/rfc6749">standard</a>. This version therefore, affords 
-the developer some degree of flexibility in generating the URLs and requests
-needed to authorize an OAuth 2.0 application.</p>
+<p><a href="https://rubygems.org/gems/oauth2-client"><img src="https://badge.fury.io/rb/oauth2-client.png" alt="Gem Version"></a>
+<a href="http://travis-ci.org/tiabas/oauth2-client"><img src="https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master" alt="Build Status"></a></p>
 
-<p>For more about the standard, take a look at <a href="http://tools.ietf.org/html/rfc6749">http://tools.ietf.org/html/rfc6749</a> </p>
+<p>A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that 
+different service providers implement OAuth 2.0 differently and not exactly according to the
+<a href="http://tools.ietf.org/html/rfc6749">RFC</a>. This gem therefore, affords 
+the developer some degree of flexibility in creating a client that will work with many OAuth2
+providers.</p>
+
+<p>For more about the standard checkout: <a href="http://tools.ietf.org/html/rfc6749">http://tools.ietf.org/html/rfc6749</a> </p>
 
 <h2>Installation</h2>
 
-<p>Download the library and include the its location in your Gemfile</p>
+<div class="highlight"><pre>gem install twitter
+</pre></div>
 
 <h2>Resources</h2>
 
@@ -173,6 +177,18 @@ providers.</p>
   <span class="s2">"refresh_token"</span> <span class="p">:</span> <span class="s2">"6/Ju8uhi9xOctGEyHRzWwHhaYimfxmY0tiJ_qW3qvjWXM"</span>
 <span class="p">}</span>
 </pre></div>
+
+<h2>Supported Ruby Versions</h2>
+
+<p>This library aims to support and is <a href="http://travis-ci.org/tiabas/oauth2-client">tested against</a> the following Ruby
+version:</p>
+
+<ul>
+<li>Ruby 1.9.2</li>
+<li>Ruby 1.9.3</li>
+</ul><p>This library may inadvertently work (or seem to work) on other Ruby
+implementations, however support will only be provided for the versions listed
+above.</p>
 
 <h2>Copyright</h2>
 
