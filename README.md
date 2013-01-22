@@ -23,7 +23,7 @@ Download the library and include the its location in your Gemfile
 ```ruby
 require 'oauth2-client'
 
-@client  = Client.new(:filename => client_config_file, :service => :yammer, :env => :test)
+@client  = OAuth2::Client.new('https://example.com', 's6BhdRkqt3', '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE')
 
 client.authorization_code.authorization_path(:redirect_uri => 'http://localhost/oauth2/cb')
 # => "/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"
@@ -86,67 +86,21 @@ This library comes bundled with two sample implementations of Google and Yammer 
 meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0
 providers.
 
-## Configuration
-The client settings are loaded from a configuration file.
-
-```yaml
-# oauth_client.yml
-test:
-  google:
-    client_id: '812741506391.apps.googleusercontent.com'
-    client_secret: 'SplxlOBeZQQYbYS6WxSbIA'
-    scheme: https
-    host: accounts.google.com
-    port: 443
-    token_path: /o/oauth2/token
-    authorize_path: /o/oauth2/auth
-    device_path: /o/oauth2/device/code
-    http_client: 
-    max_redirects: 5
-    ssl:
-
-  yammer:
-    client_id: 'PRbTcg9qjgKsp4jjpm1pw'
-    client_secret: 'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'
-    scheme: https
-    host: www.yammer.com
-    port: 443
-    token_path: /oauth2/access_token
-    authorize_path: /dialog/oauth/
-    device_path:
-    http_client: 
-    max_redirects: 5
-    ssl: 
-```
-
-## Yammer Client
-
-```ruby
-yammer_client  = YammerClient.new(:filename => client_config_file, :service => :yammer, :env => :test)
-```
-
-### Client-side authorization URL(Implicit grant)
-```ruby
-auth_url = yammer_client.webserver_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
-# => https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=token&client_id=PQbTcg6qjgKpp4jjpm4pw
-```
-
-### Server-side authorization URL(Authorization code grant)
-```ruby
-
-auth_url = yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
-# => https://www.yammer.com/dialog/oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=code&client_id=PQbTcg6qjgKpp4jjpm4pw
-
-# exchange authorization code for access token
-token_url = yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
-# => https://www.yammer.com/oauth2/access_token?code=aXW2c6bYz&redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret=Xn4kp7Ly0TCY4GaZWkmSsqIEPg10DmMADyjWkf2U&grant_type=authorization_code&client_id=PQbTcg6qjgKpp4jjpm4pw
-
-```
-
 ## Google Client
 
 ```ruby
-google_client = GoogleClient.new(:filename => client_config_file, :service => :google, :env => :test)
+
+google_client = GoogleClient.new(
+  'https://accounts.google.com',
+  '827502413694.apps.googleusercontent.com',
+  'a2nQpcUm2Dgq1chWdAvbXGTk',
+  {
+    :token_path     => '/o/oauth2/token',
+    :authorize_path => '/o/oauth2/auth',
+    :device_path    => '/o/oauth2/device/code'
+  }
+)
+
 ```
 
 ### Client-side authorization URL(Implicit grant)
