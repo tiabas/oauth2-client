@@ -162,6 +162,6 @@ implementations, however support will only be provided for the versions listed
 above.
 
 ## Copyright
-Copyright (c) 2012 Kevin Mutyaba
-See [LICENSE][] for details.
+Copyright (c) 2013 Kevin Mutyaba
+See [LICENSE][license] for details.
 [license]: https://github.com/tiabas/oauth2-client/blob/master/LICENSE
