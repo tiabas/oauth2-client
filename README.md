@@ -1,16 +1,19 @@
 # OAuth2 Ruby Client
 
+
+[![Gem Version](https://badge.fury.io/rb/oauth2-client.png)][gem]
 [![Build Status](https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master)][travis]
 
+[gem]: https://rubygems.org/gems/oauth2-client
 [travis]: http://travis-ci.org/tiabas/oauth2-client
 
-A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that not
-every service that claims to support OAuth 2.0 actually implements it according to the
-[standard]( http://tools.ietf.org/html/rfc6749). This version therefore, affords 
-the developer some degree of flexibility in generating the URLs and requests
-needed to authorize an OAuth 2.0 application.
+A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that 
+different service providers implement OAuth 2.0 differently and not exactly according to the
+[RFC]( http://tools.ietf.org/html/rfc6749). This gem therefore, affords 
+the developer some degree of flexibility in creating a client that will work with many OAuth2
+providers.
 
-For more about the standard, take a look at http://tools.ietf.org/html/rfc6749 
+For more about the standard checkout: http://tools.ietf.org/html/rfc6749 
 
 ## Installation
 Download the library and include the its location in your Gemfile

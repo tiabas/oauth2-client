@@ -31,7 +31,7 @@ describe OAuth2::HttpConnection do
     it "returns user_agent and response format" do
       expect(subject.default_headers).to eq ({
         "Accept"     => "application/json", 
-        "User-Agent" => "OAuth2 Ruby Gem 0.9.0"
+        "User-Agent" => "OAuth2 Ruby Gem #{OAuth2::Version}"
       })
     end
   end
