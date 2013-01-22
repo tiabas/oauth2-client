@@ -8,7 +8,13 @@ describe GoogleClient do
     GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
       :token_path     => '/o/oauth2/token',
       :authorize_path => '/o/oauth2/auth',
-      :device_path    => '/o/oauth2/device/code'
+      :device_path    => '/o/oauth2/device/code',
+      :connection_options => {
+        :headers => {
+          "User-Agent" => "GoOAuth2 0.1",
+          "Accept"     => "application/json"
+        }
+      }
     })
   end
   #
@@ -95,7 +101,7 @@ describe GoogleClient do
         "redirect_uri=https%3A%2F%2Flocalhost&code=4%2FdbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI",
         {
           "Accept"=>"application/json", 
-          "User-Agent"=>"OAuth2 Ruby Gem 0.9.0",
+          "User-Agent"=>"GoOAuth2 0.1",
           "Authorization"=>"Basic ODI3NTAyNDEzNjk0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmEyblFwY1VtMkRncTFjaFdkQXZiWEdUaw==",
           "Content-Type"=>"application/x-www-form-urlencoded"
         }
@@ -148,7 +154,7 @@ describe GoogleClient do
         "state=%2Fprofile&grant_type=refresh_token&refresh_token=2YotnFZFEjr1zCsicMWpAA",
         {
           "Accept" => "application/json",
-          "User-Agent" => "OAuth2 Ruby Gem 0.9.0",
+          "User-Agent" => "GoOAuth2 0.1",
           "Authorization" => "Basic ODI3NTAyNDEzNjk0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmEyblFwY1VtMkRncTFjaFdkQXZiWEdUaw==",
           "Content-Type" => "application/x-www-form-urlencoded"
         }
@@ -175,7 +181,7 @@ describe GoogleClient do
         "scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&client_id=827502413694.apps.googleusercontent.com",
         {
           "Accept"=>"application/json",
-          "User-Agent"=>"OAuth2 Ruby Gem 0.9.0",
+          "User-Agent"=>"GoOAuth2 0.1",
           "Content-Type"=>"application/x-www-form-urlencoded"
         }
       ).and_return(fake_response)
@@ -200,7 +206,7 @@ describe GoogleClient do
         "state=%2Fprofile&code=G3Y6jU3a&grant_type=http%3A%2F%2Foauth.net%2Fgrant_type%2Fdevice%2F1.0",
         {
           "Accept"=>"application/json",
-          "User-Agent" => "OAuth2 Ruby Gem 0.9.0",
+          "User-Agent" => "GoOAuth2 0.1",
           "Authorization"=>"Basic ODI3NTAyNDEzNjk0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmEyblFwY1VtMkRncTFjaFdkQXZiWEdUaw==",
           "Content-Type"=>"application/x-www-form-urlencoded"
         }

@@ -27,7 +27,7 @@ module OAuth2
     ]
 
     attr_accessor :config, :scheme, :host, :port, :max_redirects, :ssl,
-                  :user_agent, :accept, :max_redirects
+                  :user_agent, :accept, :max_redirects, :headers
 
     def self.default_options
       {
@@ -43,7 +43,7 @@ module OAuth2
     def initialize(url, options={})
       @uri = Addressable::URI.parse(url)
       self.class.default_options.keys.each do |key|
-        instance_variable_set(:"@#{key}", options.fetch(key,  self.class.default_options[key]))
+        instance_variable_set(:"@#{key}", options.fetch(key, self.class.default_options[key]))
       end
     end
 
@@ -97,7 +97,7 @@ module OAuth2
     end
 
     def send_request(method, path, opts={})
-      headers         = default_headers.merge(opts.fetch(:headers, {}))
+      headers         = @headers.merge(opts.fetch(:headers, {}))
       params          = opts[:params] || {}
       query           = Addressable::URI.form_encode(params)
       method          = method.to_s.downcase
