@@ -1,6 +1,5 @@
 # OAuth2 Ruby Client
 
-
 [![Gem Version](https://badge.fury.io/rb/oauth2-client.png)][gem]
 [![Build Status](https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master)][travis]
 
@@ -17,7 +16,7 @@ For more about the standard checkout: http://tools.ietf.org/html/rfc6749
 
 ## Installation
 ```sh
-gem install twitter
+gem install oauth2-client
 ```
 
 ## Resources
