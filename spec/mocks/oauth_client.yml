@@ -2,7 +2,6 @@ test:
   google:
     client_id: '827502413694.apps.googleusercontent.com'
     client_secret: 'a2nQpcUm2Dgq1chWdAvbXGTk'
-    scheme: https
     host: accounts.google.com
     port: 443
     token_path: /o/oauth2/token
@@ -15,7 +14,6 @@ test:
   yammer:
     client_id: 'PRbTcg9qjgKsp4jjpm1pw'
     client_secret: 'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'
-    scheme: https
     host: www.yammer.com
     port: 443
     token_path: /oauth2/access_token
@@ -28,7 +26,6 @@ test:
   microsoft:
     client_id: 'PRbTcg9qjgKsp4jjpm1pw'
     client_secret: 'Xn7kp7Ly0TCY4GtZWkmSsqGEPg10DmMADyjWkf2U'
-    scheme: https
     host: login.live.com
     port: 443
     token_path: /oauth20_token.srf
@@ -41,7 +38,6 @@ test:
   github:
     client_id: '2945e6425da3d5d17ffc'
     client_secret: '0a8f686f2835a70a79dbcece2ec63bc5079f40a8'
-    scheme: https
     host: github.com
     port: 443
     token_path: /login/oauth/access_token
@@ -54,7 +50,6 @@ test:
   foursquare:
     client_id: '2945e6425da3d5d17ffc'
     client_secret: '0a8f686f2835a70a79dbcece2ec63bc5079f40a8'
-    scheme: https
     host: foursquare.com
     port: 443
     token_path: /oauth2/access_token

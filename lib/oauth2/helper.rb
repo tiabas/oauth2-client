@@ -4,7 +4,7 @@ require 'base64'
 module OAuth2
   module UrlHelper
     # convenience method to build response URI  
-    def self.build_uri(uri, opts={})
+    def build_uri(uri, opts={})
       query_params= opts[:params] || {}
       fragment= opts[:fragment] || {}
       url = Addressable::URI.parse uri
@@ -31,6 +31,7 @@ module OAuth2
       encoded_data = ["#{username}:#{password}"].pack("m0")
       "Basic #{encoded_data}"
     end
+    module_function :http_basic_encode
 
     # converts a hash to a URI query string
     # @params [Hash] params URI parameters

@@ -1,17 +1,17 @@
 require File.expand_path('../../../spec_helper', __FILE__)
+require 'oauth2/helper'
 
 describe OAuth2::Grant::Base do
 
   before :all do
-    @connection = double('HTTP Connection')
-    @client = double(
+    @client = OpenStruct.new(
       :host           => 'example.com',
       :client_id      => 's6BhdRkqt3',
       :client_secret  => 'SplxlOBeZQQYbYS6WxSbIA',
       :authorize_path => '/oauth2/authorize',
       :token_path     => '/oauth2/token',
       :device_path    => '/oauth2/device',
-      :connection     => @connection
+      :connection     => OpenStruct.new
     )
   end
 
@@ -22,9 +22,36 @@ describe OAuth2::Grant::Base do
   describe "#make_request" do
     context "without authenticate option" do
       it "does not send authorization credentials" do
-        @connection.should_receive(:send_request).with(:get, '/oauth2')
+        @client.connection.should_receive(:send_request).with(:get, '/oauth2', {})
         subject.make_request(:get, '/oauth2')
       end
     end
+
+    context "with authenticate option" do
+      context "option is headers" do
+        it "authorization credentials in headers" do
+          opts = {
+            :headers => {'Authorization' => OAuth2::UrlHelper::http_basic_encode(@client.client_id, @client.client_secret)},
+            :params  => {:client_id => @client.client_id}
+          }
+          @client.connection.should_receive(:send_request).with(:get, '/oauth2', opts)
+          subject.make_request(:get, '/oauth2', :authenticate => :headers, :params => {:client_id => @client.client_id})
+        end
+      end
+
+      context "option is body" do
+        it "authorization credentials in body" do
+          opts = {
+            :params  => {
+              :code => 'abc123',
+              :client_id => @client.client_id,
+              :client_secret => @client.client_secret
+            },
+          }
+          @client.connection.should_receive(:send_request).with(:get, '/oauth2', opts)
+          subject.make_request(:get, '/oauth2', :params => {:code => 'abc123'}, :authenticate => :body)
+        end
+      end
+    end   
   end
 end

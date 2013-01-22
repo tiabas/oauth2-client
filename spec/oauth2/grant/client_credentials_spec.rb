@@ -21,7 +21,7 @@ describe OAuth2::Grant::ClientCredentials do
 
   describe "#get_token" do
     it "exchanges authorization code for access token" do
-      subject.should_receive(:make_request).with(:post, "/oauth2/token", {:params=>{:grant_type=>"client_credentials"}})
+      subject.should_receive(:make_request).with(:post, "/oauth2/token", {:params=>{:grant_type=>"client_credentials"}, :authenticate=>:headers})
       subject.get_token
     end
   end

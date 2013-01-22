@@ -27,8 +27,8 @@ module OAuth2
               :client_secret => @client_secret
             })
           when :headers
-            opts[:headers] || {}
-            headers['Authorization'] = http_basic_encode(@client_id, @client_secret)
+            opts[:headers] ||= {}
+            opts[:headers]['Authorization'] = http_basic_encode(@client_id, @client_secret)
           else
             #do nothing
           end
