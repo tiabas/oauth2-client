@@ -50,8 +50,11 @@ module OAuth2
       # @param [Hash]   params additional params
       # @param [Hash]   opts options
       def get_token(code, opts={})
-        opts[:params] ||= {}
-        opts[:params][:code] = code
+        opts[:params] = {
+          :grant_type => grant_type,
+          :code       => code
+        }.merge(opts.fetch(:params, {}))
+
         opts[:authenticate] ||= :headers
         method = opts.delete(:method) || :post
         make_request(method, token_path, opts)

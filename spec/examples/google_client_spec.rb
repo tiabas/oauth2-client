@@ -25,7 +25,7 @@ describe GoogleClient do
         params = {
           "approval_prompt" => "force",
           "client_id" => "827502413694.apps.googleusercontent.com",
-          "redirect_uri" => "http://localhost",
+          "redirect_uri" => "https://localhost",
           "response_type" =>"code",
           "scope" => "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
           "state" => "/profile",
@@ -35,7 +35,7 @@ describe GoogleClient do
         auth_url = subject.webserver_authorization_url(
           :scope => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
           :state => '/profile',
-          :redirect_uri => 'http://localhost',
+          :redirect_uri => 'https://localhost',
           :approval_prompt => 'force',
           :access_type => 'offline'
         )
@@ -53,7 +53,7 @@ describe GoogleClient do
         params = {
           "approval_prompt"=>"force",
           "client_id"=>"827502413694.apps.googleusercontent.com",
-          "redirect_uri"=>"http://localhost",
+          "redirect_uri"=>"https://localhost",
           "response_type"=>"code",
           "scope"=>"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
           "state"=>"/profile"
@@ -65,7 +65,7 @@ describe GoogleClient do
             'https://www.googleapis.com/auth/userinfo.profile'
           ],
           :state => '/profile',
-          :redirect_uri => 'http://localhost',
+          :redirect_uri => 'https://localhost',
           :approval_prompt => 'force'
         )
 
@@ -98,18 +98,17 @@ describe GoogleClient do
 
       Net::HTTP.any_instance.should_receive(:post).with(
         "/o/oauth2/token", 
-        "redirect_uri=https%3A%2F%2Flocalhost&code=4%2FdbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI",
+        "grant_type=authorization_code&code=4%2Fo3xJkRT6SM_TpohrxC7T-4o3kqu6.MmOGL795LbIZuJJVnL49Cc-uiE7LeAI&redirect_uri=https%3A%2F%2Flocalhost&client_id=827502413694.apps.googleusercontent.com&client_secret=a2nQpcUm2Dgq1chWdAvbXGTk",
         {
           "Accept"=>"application/json", 
           "User-Agent"=>"GoOAuth2 0.1",
-          "Authorization"=>"Basic ODI3NTAyNDEzNjk0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmEyblFwY1VtMkRncTFjaFdkQXZiWEdUaw==",
           "Content-Type"=>"application/x-www-form-urlencoded"
         }
       ).and_return(fake_response)
 
-      subject.exchange_auth_code_for_token(
+      response = subject.exchange_auth_code_for_token(
         :params => {
-          :code => '4/dbB0-UD1cvrQg2EuEFtRtHwPEmvR.IrScsjgB5M4VuJJVnL49Cc8QdUjRdAI',
+          :code => '4/o3xJkRT6SM_TpohrxC7T-4o3kqu6.MmOGL795LbIZuJJVnL49Cc-uiE7LeAI',
           :redirect_uri => 'https://localhost'
         }
       )

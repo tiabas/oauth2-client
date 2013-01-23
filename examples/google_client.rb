@@ -87,6 +87,7 @@ class GoogleClient < OAuth2::Client
     unless (opts[:params] && opts[:params][:code])
       raise ArgumentError.new("You must include an authorization code as a parameter")
     end
+    opts[:authenticate] ||= :body
     code = opts[:params].delete(:code)
     authorization_code.get_token(code, opts)
   end
