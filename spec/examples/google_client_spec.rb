@@ -4,7 +4,6 @@ require 'google_client'
 describe GoogleClient do
 
   subject do
-
     GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
       :token_path     => '/o/oauth2/token',
       :authorize_path => '/o/oauth2/auth',

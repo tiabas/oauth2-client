@@ -37,9 +37,7 @@ module OAuth2
       #
       # @param [Hash] opts options
       def fetch_authorization_url(opts={})
-        opts[:method] ||= :get
-        opts[:params] ||= {}
-        opts[:params].merge!(authorization_params)
+        opts[:params] = opts.fetch(:params, {}).merge(authorization_params)
         method = opts.delete(:method) || :get
         make_request(method, @authorize_path, opts)
       end
@@ -59,9 +57,7 @@ module OAuth2
         method = opts.delete(:method) || :post
         make_request(method, token_path, opts)
       end
-
-    private
-
+      
       # Default authorization request parameters
       def authorization_params
         {

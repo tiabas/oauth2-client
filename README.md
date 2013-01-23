@@ -9,7 +9,7 @@
 A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that 
 different service providers implement OAuth 2.0 differently and not exactly according to the
 [RFC]( http://tools.ietf.org/html/rfc6749). This gem therefore, affords 
-the developer some degree of flexibility in creating a client that will work with many OAuth2
+the developer some degree of flexibility in creating a client that will work with different OAuth2
 providers.
 
 For more about the standard checkout: http://tools.ietf.org/html/rfc6749 

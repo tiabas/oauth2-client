@@ -107,7 +107,7 @@ module OAuth2
       if (method == 'post' || method == 'put')
         headers['Content-Type'] ||= 'application/x-www-form-urlencoded'
       end
-
+      
       case method
       when 'get'
         response = client.get(normalized_path, headers)
