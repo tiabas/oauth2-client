@@ -29,7 +29,10 @@ describe OAuth2::Grant::Implicit do
 
   describe "#get_token" do
     it "gets access token" do
-      subject.should_receive(:make_request).with(:get, "/oauth2/token", {:params=>{:scope=>"xyz", :state=>"abc xyz", :response_type=>"token", :client_id=>"s6BhdRkqt3"}, :authenticate=>:headers})
+      subject.should_receive(:make_request).with(:get, "/oauth2/token", {
+        :params       => {:scope=>"xyz", :state=>"abc xyz", :response_type=>"token", :client_id=>"s6BhdRkqt3"},
+        :authenticate => :headers
+      })
       subject.get_token(:params => {:scope => 'xyz', :state => 'abc xyz'})
     end
   end

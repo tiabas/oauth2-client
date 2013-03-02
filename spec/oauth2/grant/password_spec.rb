@@ -21,7 +21,10 @@ describe OAuth2::Grant::Password do
 
   describe "#get_token" do
     it "gets access token" do
-      subject.should_receive(:make_request).with(:post, "/oauth2/token", {:params=>{:grant_type=>"password", :username=>"benutzername", :password=>"passwort"}, :authenticate=>:headers})
+      subject.should_receive(:make_request).with(:post, "/oauth2/token", {
+        :params => {:grant_type=>"password", :username=>"benutzername", :password=>"passwort"},
+        :authenticate=>:headers
+      })
       subject.get_token('benutzername', 'passwort')
     end
   end
