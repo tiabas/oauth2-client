@@ -75,14 +75,19 @@ describe OAuth2::Grant::AuthorizationCode do
 
   describe "#fetch_authorization_url" do
     it "returns response authorization page from oauth server" do
-      subject.should_receive(:make_request).with(:get, "/oauth2/authorize", {:params=> {:response_type=>"code", :client_id=>"s6BhdRkqt3",}})
+      subject.should_receive(:make_request).with(:get, "/oauth2/authorize", {
+        :params=> {:response_type=>"code", :client_id=>"s6BhdRkqt3"}
+      })
       subject.fetch_authorization_url
     end
   end
 
   describe "#get_token" do
     it "exchanges authorization code for access token" do
-      subject.should_receive(:make_request).with(:post, "/oauth2/token", {:params=>{:scope=>"abc xyz", :state=>"state", :code=>"G3Y6jU3a", :grant_type=>"authorization_code"}, :authenticate=>:headers})
+      subject.should_receive(:make_request).with(:post, "/oauth2/token", {
+        :params       => {:scope => "abc xyz", :state => "state", :code=>"G3Y6jU3a", :grant_type => "authorization_code"},
+        :authenticate => :headers
+      })
       subject.get_token('G3Y6jU3a', :params => {:scope => 'abc xyz', :state => 'state'})
     end
   end
