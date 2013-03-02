@@ -85,7 +85,7 @@ describe OAuth2::Grant::AuthorizationCode do
   describe "#get_token" do
     it "exchanges authorization code for access token" do
       subject.should_receive(:make_request).with(:post, "/oauth2/token", {
-        :params       => {:scope=>"abc xyz", :state=>"state", :code=>"G3Y6jU3a"},
+        :params       => {:scope => "abc xyz", :state => "state", :code=>"G3Y6jU3a", :grant_type => "authorization_code"},
         :authenticate => :headers
       })
       subject.get_token('G3Y6jU3a', :params => {:scope => 'abc xyz', :state => 'state'})
