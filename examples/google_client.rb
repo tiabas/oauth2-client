@@ -56,15 +56,6 @@ class GoogleClient < OAuth2::Client
     authorization_code.authorization_url(params)
   end
 
-  # Generates the Google URL that allows a user to obtain an authorization
-  # code for a given device
-  #
-  # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
-  # def device_authorization_url(params={})
-  #   params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-  #   device.authorization_url(params)
-  # end
-
   # Makes a request to google server that will swap your authorization code for an access
   # token
   #
@@ -116,6 +107,16 @@ class GoogleClient < OAuth2::Client
     refresh_token.get_token(token, opts)
   end
 
+
+  # Generates the Google URL that allows a user to obtain an authorization
+  # code for a given device
+  #
+  # @see https://developers.google.com/accounts/docs/OAuth2ForDevices
+  def device_authorization_url(params={})
+    params[:scope] = normalize_scope(params[:scope]) if params[:scope]
+    device.authorization_url(params)
+  end
+  
   # @see https://developers.google.com/accounts/docs/OAuth2ForDevices#obtainingacode
   #
   # @params [Hash] additional parameters to be include in URL eg. state
