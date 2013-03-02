@@ -28,5 +28,5 @@ DEPENDENCIES
   bcrypt-ruby (~> 3.0.0)
   json
   rake
-  rspec (~> 2.12)
+  rspec (~> 2.11)
   simplecov

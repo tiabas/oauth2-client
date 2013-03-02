@@ -100,25 +100,21 @@ module OAuth2
       headers         = @headers.merge(opts.fetch(:headers, {}))
       params          = opts[:params] || {}
       query           = Addressable::URI.form_encode(params)
-      method          = method.to_s.downcase
+      method          = method.to_sym
       normalized_path = query.empty? ? path : [path, query].join("?")
       client          = http_connection(opts.fetch(:connection_options, {}))
 
-      if (method == 'post' || method == 'put')
+      if (method == :post || method == :put)
         headers['Content-Type'] ||= 'application/x-www-form-urlencoded'
       end
-      
+
       case method
-      when 'get'
-        response = client.get(normalized_path, headers)
-      when 'post'
-        response = client.post(path, query, headers)
-      when 'put'
-        response = client.put(path, query, headers)
-      when 'delete'
-        response = client.delete(normalized_path, headers)
+      when :get, :delete
+        response = client.send(method, normalized_path, headers)
+      when :post, :put
+        response = client.send(method, path, query, headers)
       else
-        raise UnhandledHTTPMethodError.new("Unsupported HTTP method, #{method.inspect}")
+        raise UnhandledHTTPMethodError.new("Unsupported HTTP method, #{method}")
       end
 
       status = response.code.to_i
@@ -129,7 +125,7 @@ module OAuth2
           if status == 303
             method = :get
             params = nil
-            headers.delete('Content-Type') 
+            headers.delete('Content-Type')
           end
           redirect_uri = Addressable::URI.parse(response.header['Location'])
           conn = {

@@ -8,6 +8,6 @@ gem 'addressable'
 
 gem 'rake'
 
-gem 'rspec', '~>2.12'
+gem 'rspec', '~>2.11'
 
 gem 'simplecov'
