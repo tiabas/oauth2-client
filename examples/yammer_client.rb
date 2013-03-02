@@ -15,7 +15,7 @@ class YammerClient < OAuth2::Client
   #    redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&response_type=token
   #
   def clientside_authorization_url(params)
-    absolute_url(implicit.token_path(params))
+    implicit.token_url(params)
   end
 
   # Generates the Yammer URL that the user will be redirected to in order to
@@ -34,7 +34,7 @@ class YammerClient < OAuth2::Client
   #
   def webserver_authorization_url(params)
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
-    absolute_url(authorization_code.authorization_path(params))
+    authorization_code.authorization_url(params)
   end
 
   # Generates the Yammer URL that the user will be redirected to in order to
@@ -57,7 +57,7 @@ class YammerClient < OAuth2::Client
   def webserver_token_url(params)
     params[:scope] = normalize_scope(params[:scope]) if params[:scope]
     params[:client_secret] = @client_secret
-    absolute_url(authorization_code.token_path(params))
+    authorization_code.token_path(params)
   end
 
   # Makes a request to Yammer server that will swap your authorization code for an access
@@ -81,7 +81,10 @@ class YammerClient < OAuth2::Client
   #  redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&client_secret={client_secret}
 
   def exchange_auth_code_for_token(opts={})
-    opts[:params] ||= {}
+    unless (opts[:params] && opts[:params][:code])
+      raise ArgumentError.new("You must include an authorization code as a parameter")
+    end
+    opts[:authenticate] ||= :body
     code = opts[:params].delete(:code)
     authorization_code.get_token(code, opts)
   end
