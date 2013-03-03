@@ -14,7 +14,7 @@ describe GithubClient do
         auth_url = subject.webserver_authorization_url(
           :scope => 'repo, user',
           :state => '1kd84ur7q0c9rbtnd',
-          :redirect_uri => 'https://localhost/callback',
+          :redirect_uri => 'https://localhost/callback'
         )
 
         parsed_url = Addressable::URI.parse(auth_url)

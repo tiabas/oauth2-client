@@ -89,7 +89,7 @@ auth_url = client.device_code.authorization_path(:scope => 'abc xyz', :state => 
 token = client.device_code.get_token(device_auth_code)
 ```
 
-# Using a custome Http wrapper
+# Using a custom Http wrapper
 By default, oauth2-client uses a Net::HTTP wrapper called OAuth2::HttpConnection. However, if you wish to use a different HTTP library, you only
 need to create a wrapper around your favorite library that will respond to the `send_request` method.
 
