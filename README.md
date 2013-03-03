@@ -1,4 +1,4 @@
-# OAuth2 Ruby Client
+# OAuth2 Client Ruby
 
 [![Gem Version](https://badge.fury.io/rb/oauth2-client.png)][gem]
 [![Build Status](https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master)][travis]
@@ -10,11 +10,17 @@
 [gemnasium]: https://gemnasium.com/tiabas/oauth2-client
 [coveralls]: https://coveralls.io/r/tiabas/oauth2-client
 
-A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that 
-different service providers implement OAuth 2.0 differently and not exactly according to the
-[RFC]( http://tools.ietf.org/html/rfc6749). This gem therefore, affords 
-the developer some degree of flexibility in creating a client that will work with different OAuth2
-providers.
+A Ruby wrapper based on the OAuth 2.0 specification for build oauth2 clients. It is designed with the philosophy that 
+many oauth2 providers implement OAuth 2.0 differently and not exactly according to the
+[RFC]( http://tools.ietf.org/html/rfc6749). With this gem, a developer has some degree of flexibilty in creating a 
+client that will work with different OAuth2 providers. This flexibilty comes at the same price of having to implement 
+a few things yourself. To that effect, an access token response is returned as an HTTPResponse from which the response
+body can be extracted. It turns out that not every oauth2 providers returns tokens in the same format. Therefore, rather 
+than make assumptions about the token response, this gem leaves that responsiblity to the developer.
+
+Bundled with the gem are working sample clients for Google, Yammer and Github. The structure of the clients is easy to 
+follow thus making it possible to simply copy code from one client and simply substitute the rights credentials and request
+URL paths.
 
 For more about the standard checkout: http://tools.ietf.org/html/rfc6749 
 
@@ -47,7 +53,7 @@ client.authorization_code.authorization_path(:redirect_uri => 'http://localhost/
 ## Authorization Grants
 The client wraps around the creation of any given grant and passing in the parameters defined in the configuration
 file. The supported grants include Authorization Code, Implicit, Resource Owner Password Credentials, Client Credentials.
-There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the #authorization_code, `implicit`, `password`, `client_credentials`, `refresh_token`
+There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the `authorization_code`, `implicit`, `password`, `client_credentials`, `refresh_token`
 and `device` methods on a client object.
 
 The `get_token` method on the grants does not make any assumptions about the format ofthe response from the OAuth provider. The ideal
@@ -189,12 +195,12 @@ response.inspect
 
 response.body
 # => {
-  "access_token" : "ya91.AHES8ZS-oCZnc5yHepnsosFjNln9ZKLuioF6FcMRCGUIzA",
-  "token_type" : "Bearer",
-  "expires_in" : 3600,
-  "id_token" : "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY4ZGM2ZmIxNDQ5OGJmMWRhNjNiMWYyMDA2YmRmMDA2N2Q4MzY",
-  "refresh_token" : "6/Ju8uhi9xOctGEyHRzWwHhaYimfxmY0tiJ_qW3qvjWXM"
-}
+#  "access_token" : "ya91.AHES8ZS-oCZnc5yHepnsosFjNln9ZKLuioF6FcMRCGUIzA",
+#  "token_type" : "Bearer",
+#  "expires_in" : 3600,
+#  "id_token" : "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY4ZGM2ZmIxNDQ5OGJmMWRhNjNiMWYyMDA2YmRmMDA2N2Q4MzY",
+#  "refresh_token" : "6/Ju8uhi9xOctGEyHRzWwHhaYimfxmY0tiJ_qW3qvjWXM"
+#}
 ```
 
 ## Github Client
@@ -223,9 +229,9 @@ response.inspect
 
 response.body
 # => {
-      "access_token" : "e409f4272fe539166a77c42479de030e7660812a",
-      "token_type" : "bearer"
-    }"
+#      "access_token" : "e409f4272fe539166a77c42479de030e7660812a",
+#      "token_type" : "bearer"
+#    }"
 ```
 
 ## Supported Ruby Versions
