@@ -147,10 +147,10 @@ describe OAuth2::Client do
 
     context "with custom connection options" do
       it "returns custom connection" do
-        # custom_http  = Struct.new('CustomHttpClient')
-        # conn_options = { :connection_client => custom_http }
-        # oauth_client = OAuth2::Client.new('example.com', @client_id, @client_secret, conn_options)
-        # expect(oauth_client.send(:connection)).to be_instance_of custom_http
+        custom_http  = Struct.new('CustomHttpClient')
+        conn_options = { :connection_client => custom_http }
+        oauth_client = OAuth2::Client.new('example.com', @client_id, @client_secret, conn_options)
+        expect(oauth_client.send(:connection)).to be_instance_of custom_http
       end
     end
   end

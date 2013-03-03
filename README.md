@@ -89,6 +89,52 @@ auth_url = client.device_code.authorization_path(:scope => 'abc xyz', :state => 
 token = client.device_code.get_token(device_auth_code)
 ```
 
+### HttpConnection
+By default, oauth2-client uses a Net::HTTP wrapper called OAuth2::HttpConnection. However, if you wish to use a different HTTP library, you only
+need to create a wrapper around your favorite library that will respond to the `send_request` method.
+
+```ruby
+class TyphoeusHttpConnection
+  
+  def initalize(site_url, connection_options={})
+    # set url and connection options
+    @site_url = site_url
+    @connection_options = connection_options
+  end
+
+  def base_url(path)
+    @site_url + path
+  end
+
+  def send_request(http_method, request_path, options={})
+    # options may contain optional arguments like http headers, request parameters etc
+    # send http request over the inter-webs
+
+    params          = options[:params] || {}
+    headers         = options[:headers]|| {}
+    method          = method.to_sym
+    client          = Typhoeus
+
+    case method
+    when :get, :delete
+      #pass
+    when :post, :put
+      options[:body] = options.delete(:params) if options[:params]
+    else
+      raise UnhandledHTTPMethodError.new("Unsupported HTTP method, #{method}")
+    end
+    response = client.send(method, base_url, params)
+  end
+end
+
+# now you can initialize the OAuth2 client with you custom client and expect that all requests
+# will be sent using this client
+oauth_client = OAuth2::Client.new('example.com', client_id, client_secret, {
+  :connection_client  => TyphoeusHttpConnection,
+  :connection_options => {}
+})
+```
+
 # Client Examples
 This library comes bundled with two sample implementations of Google and Yammer OAuth clients. These clients are 
 meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0

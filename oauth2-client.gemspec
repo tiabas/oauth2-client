@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.name             = 'oauth2-client'
   spec.version          = OAuth2::Version
-  spec.date             = %q{2013-01-22}
+  spec.date             = %q{2013-03-03}
   spec.summary          = "OAuth2 client wrapper in Ruby"
   spec.description      = "Create quick and dirty OAuth2 clients"
   spec.authors          = ["Kevin Mutyaba"]
