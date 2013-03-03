@@ -22,7 +22,9 @@ gem install oauth2-client
 ## Resources
 * [View Source on GitHub][code]
 * [Report Issues on GitHub][issues]
+* [Website][website]
 
+[website]: http://tiabas.github.com/oauth2-client/
 [code]: https://github.com/tiabas/oauth2-client
 [issues]: https://github.com/tiabas/oauth2-client/issues
 
@@ -226,6 +228,7 @@ response.body
 This library aims to support and is [tested against][travis] the following Ruby
 version:
 
+* Ruby 1.8.7
 * Ruby 1.9.2
 * Ruby 1.9.3
 
