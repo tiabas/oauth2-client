@@ -4,26 +4,28 @@ require 'ostruct'
 describe OAuth2::HttpConnection do
 
   subject do
-    @conn = OAuth2::HttpConnection.new('https://yammer.com')
+    @conn = OAuth2::HttpConnection.new('https://example.com')
   end
 
-  context "with user options" do
+  context "with user specified options" do
     before do
-      @conn = OAuth2::HttpConnection.new('https://microsoft.com', {
-        :accept => 'application/xml',
-        :user_agent => "OAuth2 Test Client",
+      @conn_opts = {
+        :headers => {
+          :accept     => 'application/json',
+          :user_agent => 'OAuth2 Test Client'
+        },
         :ssl => {:verify => false},
         :max_redirects => 2
-      })
+      }
+      @conn = OAuth2::HttpConnection.new('https://example.com', @conn_opts)
     end
 
     describe "connection options" do
-      # it " " do
-      #   options = OAuth2::HttpConnection.default_options
-      #   options.keys.each do |key|
-      #     expect(@conn.instance_variable_get(:"@#{key}")).to eq options[key]
-      #   end
-      # end
+      it "sets user options" do
+        OAuth2::HttpConnection.default_options.keys.each do |key|
+          expect(@conn.instance_variable_get(:"@#{key}")).to eq @conn_opts[key]
+        end
+      end
     end
   end
 
@@ -66,7 +68,7 @@ describe OAuth2::HttpConnection do
 
   describe "#host" do
     it "returns the host server" do
-      expect(subject.host).to eq 'yammer.com'
+      expect(subject.host).to eq 'example.com'
     end
   end
 
@@ -104,13 +106,13 @@ describe OAuth2::HttpConnection do
   describe "#absolute_url" do
     context "with no parameters" do
       it "returns a uri without path" do
-        expect(subject.absolute_url).to eq "https://yammer.com"
+        expect(subject.absolute_url).to eq "https://example.com"
       end
     end
 
     context "with parameters" do
       it "returns a uri with path" do
-        expect(subject.absolute_url('/oauth/v2/authorize')).to eq "https://yammer.com/oauth/v2/authorize"
+        expect(subject.absolute_url('/oauth/v2/authorize')).to eq "https://example.com/oauth/v2/authorize"
       end
     end
   end
@@ -150,7 +152,7 @@ describe OAuth2::HttpConnection do
       @http_redirect = OpenStruct.new(
         :code    => '301',
         :body    => 'redirect',
-        :header => {'Location' => "http://yammer.com/members"}
+        :header => {'Location' => "http://example.com/members"}
       )
     end
 
@@ -162,55 +164,66 @@ describe OAuth2::HttpConnection do
 
     context "when method is get" do
       it "returns an http response" do
-        path = '/oauth/authorize'
         params = {:client_id => '001337', :client_secret => 'abcxyz'}
-        method = :get
         
-        normalized_path = '/oauth/authorize?client_id=001337&client_secret=abcxyz'
-
-        Net::HTTP.any_instance.should_receive(:get).with(normalized_path, subject.default_headers).and_return(@http_ok)
-        response = subject.send_request(method, path, :params => params)
-
+        stub_get('/oauth/authorize').with(
+          :query =>  params,
+          :header => { 
+            'Accept'          => 'application/json',
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3'
+          }
+        )
+        response = subject.send_request(:get, '/oauth/authorize', :params => params)
         expect(response.code).to eq '200'
       end
     end
 
     context "when method is delete" do
       it "returns an http response" do
-        path = '/users/1'
-        method = 'delete'
-
-        Net::HTTP.any_instance.should_receive(:delete).with(path, subject.default_headers).and_return(@http_ok)
-        response = subject.send_request(method, path)
-
+        stub_delete('/users/1').with(
+          :header => { 
+            'Accept'          => 'application/json',
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3'
+          }
+        )
+        response = subject.send_request(:delete, '/users/1')
         expect(response.code).to eq '200'
       end
     end
 
     context "when method is post" do
       it "returns an http response" do
-        path = '/users'
         params = {:first_name => 'john', :last_name => 'smith'}
-        query  = Addressable::URI.form_encode(params)
-        headers = {'Content-Type' => 'application/x-www-form-urlencoded' }.merge(subject.default_headers)
-
-        Net::HTTP.any_instance.should_receive(:post).with(path, query, headers).and_return(@http_ok)
-        response =subject.send_request(:post, path, :params => params)
-
+        stub_post('/users').with(
+          :body   => params,
+          :header => { 
+            'Accept'          => 'application/json',
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'Content-Type'    => 'application/x-www-form-urlencoded'
+          }
+        )
+        response =subject.send_request(:post, '/users', :params => params)
         expect(response.code).to eq '200'
       end
     end
 
     context "when method is put" do
       it "returns an http response" do
-        path = '/users/1'
         params = {:first_name => 'jane', :last_name => 'doe'}
-        query  = Addressable::URI.form_encode(params)
-        headers = {'Content-Type' => 'application/x-www-form-urlencoded' }.merge(subject.default_headers)
 
-        Net::HTTP.any_instance.should_receive(:put).with(path, query, headers).and_return(@http_ok)
-
-        response = subject.send_request(:put, path, :params => params)
+        stub_put('/users/1').with(
+          :body   => params,
+          :header => { 
+            'Accept'          => 'application/json',
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            'Content-Type'    => 'application/x-www-form-urlencoded'
+          }
+        )
+        response = subject.send_request(:put, '/users/1', :params => params)
 
         expect(response.code).to eq '200'
       end
@@ -253,7 +266,7 @@ describe OAuth2::HttpConnection do
       http_303 = OpenStruct.new(
         :code    => '303',
         :body    => 'redirect',
-        :header => {'Location' => "http://yammer.com/members"}
+        :header => {'Location' => "http://example.com/members"}
       )
       path = '/users'
       params = {:first_name => 'jane', :last_name => 'doe'}

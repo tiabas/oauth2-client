@@ -104,6 +104,7 @@ class GoogleClient < OAuth2::Client
     unless (opts[:params] && opts[:params][:refresh_token])
       raise ArgumentError.new("You must provide a refresh_token as a parameter")
     end
+    opts[:authenticate] = :body
     token = opts[:params].delete(:refresh_token)
     refresh_token.get_token(token, opts)
   end

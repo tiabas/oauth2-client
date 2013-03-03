@@ -1,51 +1,84 @@
-# class YammerClientTest < Test::Unit::TestCase
+require File.expand_path('../../spec_helper', __FILE__)
+require 'yammer_client'
 
-#   def setup
-#     @yammer_client  = YammerClient.new(:filename => client_config_file, :service => :yammer, :env => :test)
-#   end
+describe YammerClient do
 
-#   def test_webserver_generate_authorization_code_grant_authorize_url
-#     params = {
-#         :client_id => @yammer_client.client_id,
-#         :redirect_uri =>"http://localhost/oauth/cb",
-#         :response_type => 'code'
-#       }
-#     uri = @yammer_client.webserver_authorization_url(:redirect_uri =>"http://localhost/oauth/cb")
-#     parsed_uri = Addressable::URI.parse(uri)
-#     assert_equal '/dialog/oauth/', parsed_uri.path
-#     assert_equal params, parsed_uri.query_values.symbolize_keys
-#     assert_equal 'https', parsed_uri.scheme
-#     assert_equal 'www.yammer.com', parsed_uri.host
-#   end
+  subject do
+    YammerClient.new('https://www.yammer.com', 'PRbTcg9qjgKsp4jjpm1pw', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
+      :token_path     => '/oauth2/token',
+      :authorize_path => '/dialog/oauth/authorize',
+      :connection_options => {
+        :headers => {
+          "User-Agent" => "YamOAuth2 0.1",
+          "Accept"     => "application/json"
+        }
+      }
+    })
+  end
 
-#   def test_webserver_generate_authorization_code_grant_token_url
-#     params = {
-#         :client_id => @yammer_client.client_id,
-#         :client_secret => @yammer_client.client_secret,
-#         :grant_type => "authorization_code",
-#         :redirect_uri => "http://localhost/oauth/cb",
-#         :code => 'aXW2c6bYz'
-#       }
-#     uri = @yammer_client.webserver_token_url(:code => 'aXW2c6bYz', :redirect_uri =>"http://localhost/oauth/cb")
-#     parsed_uri = Addressable::URI.parse(uri)
-#     assert_equal '/oauth2/access_token', parsed_uri.path
-#     assert_equal params, parsed_uri.query_values.symbolize_keys
-#     assert_equal 'https', parsed_uri.scheme
-#     assert_equal 'www.yammer.com', parsed_uri.host
-#   end
+  describe "#clientside_authorization_url" do
+    it "returns url string for obtaining authorization" do
+      params = {
+        'client_id'     => 'PRbTcg9qjgKsp4jjpm1pw',
+        'response_type' => 'token'
+      }
 
-#   def test_client_generate_implicit_grant_token_url
-#     params = {
-#         :client_id => @yammer_client.client_id,
-#         :redirect_uri=>"http://localhost/oauth/cb?state=%2Fprofile",
-#         :response_type => 'token',
-#       }
-#     uri = @yammer_client.clientside_authorization_url(:redirect_uri =>"http://localhost/oauth/cb?state=%2Fprofile")
-#     puts uri
-#     parsed_uri = Addressable::URI.parse(uri)
-#     assert_equal '/dialog/oauth/', parsed_uri.path
-#     assert_equal params, parsed_uri.query_values.symbolize_keys
-#     assert_equal 'https', parsed_uri.scheme
-#     assert_equal 'www.yammer.com', parsed_uri.host
-#   end
-# end
+      auth_url = subject.clientside_authorization_url
+
+      parsed_url = Addressable::URI.parse(auth_url)
+      expect(parsed_url.path).to eq '/dialog/oauth/authorize'
+      expect(parsed_url.query_values).to eq params
+      expect(parsed_url.scheme).to eq 'https'
+      expect(parsed_url.host).to eq 'www.yammer.com'
+    end
+  end
+
+  describe "#webserver_authorization_url" do
+    it "returns the authorization url" do
+      params = {
+        "client_id" => "PRbTcg9qjgKsp4jjpm1pw",
+        "redirect_uri" => "https://localhost/callback",
+        "response_type" =>"code",
+        "state" => "12345",
+      }
+
+      auth_url = subject.webserver_authorization_url(
+        :client_id => 'PRbTcg9qjgKsp4jjpm1pw',
+        :state => '12345',
+        :redirect_uri => 'https://localhost/callback',
+      )
+
+      parsed_url = Addressable::URI.parse(auth_url)
+      expect(parsed_url.path).to eq '/dialog/oauth/authorize'
+      expect(parsed_url.query_values).to eq params
+      expect(parsed_url.scheme).to eq 'https'
+      expect(parsed_url.host).to eq 'www.yammer.com'
+    end
+  end
+
+  describe "#exchange_auth_code_for_token" do
+    it "makes a request to google oauth2 server" do
+
+      stub_request(:post, "https://www.yammer.com/oauth2/token").with(
+        :body => {
+          :grant_type    => 'authorization_code',
+          :code          => 'MmOGL795LbIZuJJVnL49Cc',
+          :redirect_uri  => 'https://localhost',
+          :client_id     => 'PRbTcg9qjgKsp4jjpm1pw',
+          :client_secret => 'a2nQpcUm2Dgq1chWdAvbXGTk'
+        },
+        :headers => {
+          'Accept'       => "application/json", 
+          'User-Agent'   => "YamOAuth2 0.1",
+          'Content-Type' => "application/x-www-form-urlencoded"
+        }
+      )
+      response = subject.exchange_auth_code_for_token(
+        :params => {
+          :code => 'MmOGL795LbIZuJJVnL49Cc',
+          :redirect_uri => 'https://localhost'
+        }
+      )
+    end
+  end
+end

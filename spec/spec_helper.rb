@@ -16,17 +16,17 @@ RSpec.configure do |config|
 end
 
 def stub_delete(path)
-  stub_request(:delete, 'https://www.example.com' + path)
+  stub_request(:delete, 'https://example.com' + path)
 end
 
 def stub_get(path)
-  stub_request(:get, 'https://www.example.com' + path)
+  stub_request(:get, 'https://example.com' + path)
 end
 
 def stub_post(path)
-  stub_request(:post, 'https://www.example.com' + path)
+  stub_request(:post, 'https://example.com' + path)
 end
 
 def stub_put(path)
-  stub_request(:put, 'https://www.example.com' + path)
+  stub_request(:put, 'https://example.com' + path)
 end

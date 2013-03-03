@@ -90,21 +90,20 @@ describe GoogleClient do
   describe "#exchange_auth_code_for_token" do
     it "makes a request to google oauth2 server" do
 
-      fake_response = double(
-        :code => '200',
-        :body => ''
-      )
-
-      Net::HTTP.any_instance.should_receive(:post).with(
-        "/o/oauth2/token", 
-        "grant_type=authorization_code&code=4%2Fo3xJkRT6SM_TpohrxC7T-4o3kqu6.MmOGL795LbIZuJJVnL49Cc-uiE7LeAI&redirect_uri=https%3A%2F%2Flocalhost&client_id=827502413694.apps.googleusercontent.com&client_secret=a2nQpcUm2Dgq1chWdAvbXGTk",
-        {
-          "Accept"=>"application/json", 
-          "User-Agent"=>"GoOAuth2 0.1",
-          "Content-Type"=>"application/x-www-form-urlencoded"
+      stub_request(:post, "https://accounts.google.com/o/oauth2/token").with(
+        :body => {
+          :grant_type    => 'authorization_code',
+          :code          => '4/o3xJkRT6SM_TpohrxC7T-4o3kqu6.MmOGL795LbIZuJJVnL49Cc-uiE7LeAI',
+          :redirect_uri  => 'https://localhost',
+          :client_id     => '827502413694.apps.googleusercontent.com',
+          :client_secret => 'a2nQpcUm2Dgq1chWdAvbXGTk'
+        },
+        :headers => {
+          'Accept'       => "application/json", 
+          'User-Agent'   => "GoOAuth2 0.1",
+          'Content-Type' => "application/x-www-form-urlencoded"
         }
-      ).and_return(fake_response)
-
+      )
       response = subject.exchange_auth_code_for_token(
         :params => {
           :code => '4/o3xJkRT6SM_TpohrxC7T-4o3kqu6.MmOGL795LbIZuJJVnL49Cc-uiE7LeAI',
@@ -142,26 +141,23 @@ describe GoogleClient do
 
   describe "#refresh_token" do
     it "makes a request to google to obtain new token" do
-      fake_response = double(
-        :code => '200',
-        :body => ''
-      )
 
-      Net::HTTP.any_instance.should_receive(:post).with(
-        "/o/oauth2/token",
-        "state=%2Fprofile&grant_type=refresh_token&refresh_token=2YotnFZFEjr1zCsicMWpAA",
-        {
-          "Accept" => "application/json",
-          "User-Agent" => "GoOAuth2 0.1",
-          "Authorization" => "Basic ODI3NTAyNDEzNjk0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmEyblFwY1VtMkRncTFjaFdkQXZiWEdUaw==",
-          "Content-Type" => "application/x-www-form-urlencoded"
+      stub_request(:post, "https://accounts.google.com/o/oauth2/token").with(
+        :body => {
+          :grant_type    => 'refresh_token',
+          :refresh_token => '1/6BMfW9j53gdGImsiyUH5kU5RsR4zwI9lUVX-tqf8JXQ',
+          :client_id     => '827502413694.apps.googleusercontent.com',
+          :client_secret => 'a2nQpcUm2Dgq1chWdAvbXGTk'
+        },
+        :headers => {
+          'Accept'       => 'application/json', 
+          'User-Agent'   => 'GoOAuth2 0.1',
+          'Content-Type' => 'application/x-www-form-urlencoded'
         }
-      ).and_return(fake_response)
-
+      )
       subject.refresh_access_token(
         :params => {
-          :state => '/profile',
-          :refresh_token => '2YotnFZFEjr1zCsicMWpAA'
+          :refresh_token => '1/6BMfW9j53gdGImsiyUH5kU5RsR4zwI9lUVX-tqf8JXQ'
         }
       )
     end
@@ -169,21 +165,17 @@ describe GoogleClient do
 
   describe "#get_device_code" do
     it "makes a request to google to obtain a device code" do
-      fake_response = double(
-        :code => '200',
-        :body => ''
-      )
-
-      Net::HTTP.any_instance.should_receive(:post).with(
-        "/o/oauth2/device/code",
-        "scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&client_id=827502413694.apps.googleusercontent.com",
-        {
-          "Accept"=>"application/json",
-          "User-Agent"=>"GoOAuth2 0.1",
-          "Content-Type"=>"application/x-www-form-urlencoded"
+      stub_request(:post, "https://accounts.google.com/o/oauth2/device/code").with(
+        :body => {
+          :scope         => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+          :client_id     => '827502413694.apps.googleusercontent.com'
+        },
+        :headers => {
+          'Accept'       => 'application/json', 
+          'User-Agent'   => 'GoOAuth2 0.1',
+          'Content-Type' => 'application/x-www-form-urlencoded'
         }
-      ).and_return(fake_response)
-
+      )
       subject.get_device_code(
         :params => {
           :scope => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
@@ -194,22 +186,18 @@ describe GoogleClient do
 
   describe "#exchange_device_code_for_token" do
     it "makes request to google to obtain an access token" do
-      fake_response = double(
-        :code => '200',
-        :body => ''
-      )
-
-      Net::HTTP.any_instance.should_receive(:post).with(
-        "/o/oauth2/token",
-        "state=%2Fprofile&code=G3Y6jU3a&grant_type=http%3A%2F%2Foauth.net%2Fgrant_type%2Fdevice%2F1.0",
-        {
-          "Accept"=>"application/json",
-          "User-Agent" => "GoOAuth2 0.1",
-          "Authorization"=>"Basic ODI3NTAyNDEzNjk0LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tOmEyblFwY1VtMkRncTFjaFdkQXZiWEdUaw==",
-          "Content-Type"=>"application/x-www-form-urlencoded"
+      stub_request(:post, "https://827502413694.apps.googleusercontent.com:a2nQpcUm2Dgq1chWdAvbXGTk@accounts.google.com/o/oauth2/token").with(
+        :body => {
+          :grant_type    => 'http://oauth.net/grant_type/device/1.0',
+          :state         => '/profile',
+          :code          => 'G3Y6jU3a'
+        },
+        :headers => {
+          'Accept'       => 'application/json', 
+          'User-Agent'   => 'GoOAuth2 0.1',
+          'Content-Type' => 'application/x-www-form-urlencoded'
         }
-      ).and_return(fake_response)
-
+      )
       subject.exchange_device_code_for_token(
         :params => {
           :state => '/profile',
