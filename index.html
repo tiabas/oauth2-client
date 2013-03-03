@@ -1,33 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
     <title>OAuth2 Client by tiabas</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
-
-    <header>
-      <div class="container">
+    <div class="wrapper">
+      <header>
         <h1>OAuth2 Client</h1>
-        <h2>Make quick and elegant clients for many different OAuth2 implementations out there</h2>
+        <p>Make quick and elegant clients for many different OAuth2 implementations out there</p>
 
-        <section id="downloads">
-          <a href="https://github.com/tiabas/oauth2-client/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/tiabas/oauth2-client/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/tiabas/oauth2-client" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
+        <p class="view"><a href="https://github.com/tiabas/oauth2-client">View the Project on GitHub <small>tiabas/oauth2-client</small></a></p>
 
-    <div class="container">
-      <section id="main_content">
+
+        <ul>
+          <li><a href="https://github.com/tiabas/oauth2-client/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/tiabas/oauth2-client/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/tiabas/oauth2-client">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
         <h1>OAuth2 Ruby Client</h1>
 
 <p><a href="https://rubygems.org/gems/oauth2-client"><img src="https://badge.fury.io/rb/oauth2-client.png" alt="Gem Version"></a>
@@ -36,7 +36,7 @@
 <p>A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that 
 different service providers implement OAuth 2.0 differently and not exactly according to the
 <a href="http://tools.ietf.org/html/rfc6749">RFC</a>. This gem therefore, affords 
-the developer some degree of flexibility in creating a client that will work with many OAuth2
+the developer some degree of flexibility in creating a client that will work with different OAuth2
 providers.</p>
 
 <p>For more about the standard checkout: <a href="http://tools.ietf.org/html/rfc6749">http://tools.ietf.org/html/rfc6749</a> </p>
@@ -51,6 +51,7 @@ providers.</p>
 <ul>
 <li><a href="https://github.com/tiabas/oauth2-client">View Source on GitHub</a></li>
 <li><a href="https://github.com/tiabas/oauth2-client/issues">Report Issues on GitHub</a></li>
+<li><a href="http://tiabas.github.com/oauth2-client/">Website</a></li>
 </ul><h2>Usage Examples</h2>
 
 <div class="highlight"><pre><span class="nb">require</span> <span class="s1">'oauth2-client'</span>
@@ -114,6 +115,52 @@ therefore, returns with an HTTPResponse object.</p>
 <span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">device_code</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">device_auth_code</span><span class="p">)</span>
 </pre></div>
 
+<h1>Using a custom Http wrapper</h1>
+
+<p>By default, oauth2-client uses a Net::HTTP wrapper called OAuth2::HttpConnection. However, if you wish to use a different HTTP library, you only
+need to create a wrapper around your favorite library that will respond to the <code>send_request</code> method.</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">TyphoeusHttpConnection</span>
+
+  <span class="k">def</span> <span class="nf">initalize</span><span class="p">(</span><span class="n">site_url</span><span class="p">,</span> <span class="n">connection_options</span><span class="o">=</span><span class="p">{})</span>
+    <span class="c1"># set url and connection options</span>
+    <span class="vi">@site_url</span> <span class="o">=</span> <span class="n">site_url</span>
+    <span class="vi">@connection_options</span> <span class="o">=</span> <span class="n">connection_options</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">base_url</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="vi">@site_url</span> <span class="o">+</span> <span class="n">path</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">send_request</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">request_path</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+    <span class="c1"># options may contain optional arguments like http headers, request parameters etc</span>
+    <span class="c1"># send http request over the inter-webs</span>
+
+    <span class="n">params</span>          <span class="o">=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:params</span><span class="o">]</span> <span class="o">||</span> <span class="p">{}</span>
+    <span class="n">headers</span>         <span class="o">=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:headers</span><span class="o">]||</span> <span class="p">{}</span>
+    <span class="nb">method</span>          <span class="o">=</span> <span class="nb">method</span><span class="o">.</span><span class="n">to_sym</span>
+    <span class="n">client</span>          <span class="o">=</span> <span class="no">Typhoeus</span>
+
+    <span class="k">case</span> <span class="nb">method</span>
+    <span class="k">when</span> <span class="ss">:get</span><span class="p">,</span> <span class="ss">:delete</span>
+      <span class="c1">#pass</span>
+    <span class="k">when</span> <span class="ss">:post</span><span class="p">,</span> <span class="ss">:put</span>
+      <span class="n">options</span><span class="o">[</span><span class="ss">:body</span><span class="o">]</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:params</span><span class="p">)</span> <span class="k">if</span> <span class="n">options</span><span class="o">[</span><span class="ss">:params</span><span class="o">]</span>
+    <span class="k">else</span>
+      <span class="k">raise</span> <span class="no">UnhandledHTTPMethodError</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"Unsupported HTTP method, </span><span class="si">#{</span><span class="nb">method</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">http_method</span><span class="p">,</span> <span class="n">base_url</span><span class="p">(</span><span class="n">request_path</span><span class="p">),</span> <span class="n">params</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># now you can initialize the OAuth2 client with you custom client and expect that all requests</span>
+<span class="c1"># will be sent using this client</span>
+<span class="n">oauth_client</span> <span class="o">=</span> <span class="no">OAuth2</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'example.com'</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="p">{</span>
+  <span class="ss">:connection_client</span>  <span class="o">=&gt;</span> <span class="no">TyphoeusHttpConnection</span><span class="p">,</span>
+  <span class="ss">:connection_options</span> <span class="o">=&gt;</span> <span class="p">{}</span>
+<span class="p">})</span>
+</pre></div>
+
 <h1>Client Examples</h1>
 
 <p>This library comes bundled with two sample implementations of Google and Yammer OAuth clients. These clients are 
@@ -123,22 +170,15 @@ providers.</p>
 <h2>Google Client</h2>
 
 <div class="highlight"><pre>
-<span class="n">google_client</span> <span class="o">=</span> <span class="no">GoogleClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
-  <span class="s1">'https://accounts.google.com'</span><span class="p">,</span>
-  <span class="s1">'827502413694.apps.googleusercontent.com'</span><span class="p">,</span>
-  <span class="s1">'a2nQpcUm2Dgq1chWdAvbXGTk'</span><span class="p">,</span>
-  <span class="p">{</span>
-    <span class="ss">:token_path</span>     <span class="o">=&gt;</span> <span class="s1">'/o/oauth2/token'</span><span class="p">,</span>
-    <span class="ss">:authorize_path</span> <span class="o">=&gt;</span> <span class="s1">'/o/oauth2/auth'</span><span class="p">,</span>
-    <span class="ss">:device_path</span>    <span class="o">=&gt;</span> <span class="s1">'/o/oauth2/device/code'</span>
-  <span class="p">}</span>
-<span class="p">)</span>
+<span class="n">google_client</span> <span class="o">=</span> <span class="no">GoogleClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://accounts.google.com'</span><span class="p">,</span> <span class="s1">'827502413694.apps.googleusercontent.com'</span><span class="p">,</span><span class="s1">'a2nQpcUm2Dgq1chWdAvbXGTk'</span><span class="p">)</span>
 
 </pre></div>
 
 <h3>Client-side authorization URL(Implicit grant)</h3>
 
-<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span><span class="p">(</span>
+<div class="highlight"><pre>
+<span class="c1"># generate authorization url</span>
+<span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span><span class="p">(</span>
     <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'https://www.googleapis.com/auth/userinfo.email'</span><span class="p">,</span>
     <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'/profile'</span><span class="p">,</span>
     <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'https://oauth2-login-demo.appspot.com/code'</span><span class="p">,</span>
@@ -148,7 +188,9 @@ providers.</p>
 
 <h3>Server-side authorization URL(Authorization code grant)</h3>
 
-<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">clientside_authorization_url</span><span class="p">(</span>
+<div class="highlight"><pre>
+<span class="c1"># generate authorization url</span>
+<span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">clientside_authorization_url</span><span class="p">(</span>
     <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'https://www.googleapis.com/auth/userinfo.email'</span><span class="p">,</span>
     <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'/profile'</span><span class="p">,</span>
     <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth/code'</span><span class="p">,</span>
@@ -175,12 +217,43 @@ providers.</p>
 <span class="p">}</span>
 </pre></div>
 
+<h2>Github Client</h2>
+
+<div class="highlight"><pre>
+<span class="n">gihub_client</span> <span class="o">=</span> <span class="no">GithubClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://github.com'</span><span class="p">,</span> <span class="s1">'82f971d013e8d637a7e1'</span><span class="p">,</span> <span class="s1">'1a1d59e1f8b8afa5f73e9dc9f17e25f7876e64ac'</span><span class="p">)</span>
+
+</pre></div>
+
+<h3>Server-side authorization URL(Authorization code grant)</h3>
+
+<div class="highlight"><pre>
+<span class="c1"># generate authorization url</span>
+<span class="n">auth_url</span> <span class="o">=</span> <span class="n">gihub_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span>
+<span class="c1"># =&gt; https://github.com/login/oauth/authorize?client_id=82f971d013e8d637a7e1&amp;response_type=code</span>
+
+<span class="c1"># exchange authorization code for access token. we will get back a Net::HTTPResponse</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">gihub_client</span><span class="o">.</span><span class="n">exchange_auth_code_for_token</span><span class="p">({</span>
+    <span class="ss">:code</span> <span class="o">=&gt;</span> <span class="s1">'11a0b0b64db56c30e2ef'</span><span class="p">,</span>
+    <span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'https://localhost/callback'</span><span class="p">,</span>
+  <span class="p">})</span>
+
+<span class="n">response</span><span class="o">.</span><span class="n">inspect</span> 
+<span class="c1"># =&gt; #&lt;Net::HTTPOK:0x007ff8bc7c1200&gt;</span>
+
+<span class="n">response</span><span class="o">.</span><span class="n">body</span>
+<span class="c1"># =&gt; {</span>
+      <span class="s2">"access_token"</span> <span class="p">:</span> <span class="s2">"e409f4272fe539166a77c42479de030e7660812a"</span><span class="p">,</span>
+      <span class="s2">"token_type"</span> <span class="p">:</span> <span class="s2">"bearer"</span>
+    <span class="p">}</span><span class="s2">"</span>
+</pre></div>
+
 <h2>Supported Ruby Versions</h2>
 
 <p>This library aims to support and is <a href="http://travis-ci.org/tiabas/oauth2-client">tested against</a> the following Ruby
 version:</p>
 
 <ul>
+<li>Ruby 1.8.7</li>
 <li>Ruby 1.9.2</li>
 <li>Ruby 1.9.3</li>
 </ul><p>This library may inadvertently work (or seem to work) on other Ruby
@@ -192,8 +265,12 @@ above.</p>
 <p>Copyright (c) 2013 Kevin Mutyaba
 See <a href="https://github.com/tiabas/oauth2-client/blob/master/LICENSE">LICENSE</a> for details.</p>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/tiabas">tiabas</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-
+    <script src="javascripts/scale.fix.js"></script>
     
   </body>
 </html>
