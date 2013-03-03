@@ -47,11 +47,11 @@ client.authorization_code.authorization_path(:redirect_uri => 'http://localhost/
 ## Authorization Grants
 The client wraps around the creation of any given grant and passing in the parameters defined in the configuration
 file. The supported grants include Authorization Code, Implicit, Resource Owner Password Credentials, Client Credentials.
-There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the #authorization_code, #implicit, #password, #client_credentials, #refresh_token
-and #device methods on a client object.
+There is also support for device authentication as described in Google's OAuth 2.0 authentication methods(https://developers.google.com/accounts/docs/OAuth2ForDevices). They are available via the #authorization_code, `implicit`, `password`, `client_credentials`, `refresh_token`
+and `device` methods on a client object.
 
-The #get_token method on the grants does not make any assumptions about the format ofthe response from the OAuth provider. The ideal
-case would be to treat all responses as JSON. However, some services may respond with in XML instead of JSON. The #get_token method
+The `get_token` method on the grants does not make any assumptions about the format ofthe response from the OAuth provider. The ideal
+case would be to treat all responses as JSON. However, some services may respond with in XML instead of JSON. The `get_token` method
 therefore, returns with an HTTPResponse object.
 
 ### Authorization Code
@@ -96,13 +96,13 @@ token = client.device_code.get_token(device_auth_code)
 ```
 
 # Using a custom Http wrapper
-By default, oauth2-client uses a Net::HTTP wrapper called OAuth2::HttpConnection. However, if you wish to use a different HTTP library, you only
+By default, oauth2-client uses a `Net::HTTP` wrapper called `OAuth2::HttpConnection`. However, if you wish to use a different HTTP library, you only
 need to create a wrapper around your favorite library that will respond to the `send_request` method.
 
 ```ruby
 class TyphoeusHttpConnection
   
-  def initalize(site_url, connection_options={})
+  def initialize(site_url, connection_options={})
     # set url and connection options
     @site_url = site_url
     @connection_options = connection_options
