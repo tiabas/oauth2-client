@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    oauth2-client (1.1.1)
+    oauth2-client (1.1.0)
       addressable
       bcrypt-ruby (~> 3.0.0)
       json

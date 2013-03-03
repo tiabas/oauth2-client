@@ -4,16 +4,7 @@ require 'yammer_client'
 describe YammerClient do
 
   subject do
-    YammerClient.new('https://www.yammer.com', 'PRbTcg9qjgKsp4jjpm1pw', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
-      :token_path     => '/oauth2/token',
-      :authorize_path => '/dialog/oauth/authorize',
-      :connection_options => {
-        :headers => {
-          "User-Agent" => "YamOAuth2 0.1",
-          "Accept"     => "application/json"
-        }
-      }
-    })
+    YammerClient.new('https://www.yammer.com', 'PRbTcg9qjgKsp4jjpm1pw', 'a2nQpcUm2Dgq1chWdAvbXGTk')
   end
 
   describe "#clientside_authorization_url" do
@@ -69,7 +60,7 @@ describe YammerClient do
         },
         :headers => {
           'Accept'       => "application/json", 
-          'User-Agent'   => "YamOAuth2 0.1",
+          'User-Agent'   => "OAuth2 Ruby Gem #{OAuth2::Version}",
           'Content-Type' => "application/x-www-form-urlencoded"
         }
       )

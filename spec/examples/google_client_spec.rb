@@ -4,17 +4,7 @@ require 'google_client'
 describe GoogleClient do
 
   subject do
-    GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk',{
-      :token_path     => '/o/oauth2/token',
-      :authorize_path => '/o/oauth2/auth',
-      :device_path    => '/o/oauth2/device/code',
-      :connection_options => {
-        :headers => {
-          "User-Agent" => "GoOAuth2 0.1",
-          "Accept"     => "application/json"
-        }
-      }
-    })
+    GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com', 'a2nQpcUm2Dgq1chWdAvbXGTk')
   end
   #
   # https://developers.google.com/accounts/docs/OAuth2WebServer#formingtheurl
@@ -100,7 +90,7 @@ describe GoogleClient do
         },
         :headers => {
           'Accept'       => "application/json", 
-          'User-Agent'   => "GoOAuth2 0.1",
+          'User-Agent'   => "OAuth2 Ruby Gem #{OAuth2::Version}",
           'Content-Type' => "application/x-www-form-urlencoded"
         }
       )
@@ -151,7 +141,7 @@ describe GoogleClient do
         },
         :headers => {
           'Accept'       => 'application/json', 
-          'User-Agent'   => 'GoOAuth2 0.1',
+          'User-Agent'   => 'OAuth2 Ruby Gem 1.1.0',
           'Content-Type' => 'application/x-www-form-urlencoded'
         }
       )
@@ -172,7 +162,7 @@ describe GoogleClient do
         },
         :headers => {
           'Accept'       => 'application/json', 
-          'User-Agent'   => 'GoOAuth2 0.1',
+          'User-Agent'   => 'OAuth2 Ruby Gem 1.1.0',
           'Content-Type' => 'application/x-www-form-urlencoded'
         }
       )
@@ -194,7 +184,7 @@ describe GoogleClient do
         },
         :headers => {
           'Accept'       => 'application/json', 
-          'User-Agent'   => 'GoOAuth2 0.1',
+          'User-Agent'   => 'OAuth2 Ruby Gem 1.1.0',
           'Content-Type' => 'application/x-www-form-urlencoded'
         }
       )

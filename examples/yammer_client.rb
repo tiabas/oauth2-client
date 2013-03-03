@@ -1,5 +1,10 @@
 class YammerClient < OAuth2::Client
 
+  def initialize(*args)
+    super
+    @token_path     = '/oauth2/token'
+    @authorize_path = '/dialog/oauth/authorize'
+  end
   # Generates the Yammer URL that the user will be redirected to in order to
   # authorize your application
   #

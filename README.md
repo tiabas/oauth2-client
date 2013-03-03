@@ -89,7 +89,7 @@ auth_url = client.device_code.authorization_path(:scope => 'abc xyz', :state => 
 token = client.device_code.get_token(device_auth_code)
 ```
 
-### HttpConnection
+# Using a custome Http wrapper
 By default, oauth2-client uses a Net::HTTP wrapper called OAuth2::HttpConnection. However, if you wish to use a different HTTP library, you only
 need to create a wrapper around your favorite library that will respond to the `send_request` method.
 
@@ -123,7 +123,7 @@ class TyphoeusHttpConnection
     else
       raise UnhandledHTTPMethodError.new("Unsupported HTTP method, #{method}")
     end
-    response = client.send(method, base_url, params)
+    response = client.send(http_method, base_url(request_path), params)
   end
 end
 
@@ -144,21 +144,14 @@ providers.
 
 ```ruby
 
-google_client = GoogleClient.new(
-  'https://accounts.google.com',
-  '827502413694.apps.googleusercontent.com',
-  'a2nQpcUm2Dgq1chWdAvbXGTk',
-  {
-    :token_path     => '/o/oauth2/token',
-    :authorize_path => '/o/oauth2/auth',
-    :device_path    => '/o/oauth2/device/code'
-  }
-)
+google_client = GoogleClient.new('https://accounts.google.com', '827502413694.apps.googleusercontent.com','a2nQpcUm2Dgq1chWdAvbXGTk')
 
 ```
 
 ### Client-side authorization URL(Implicit grant)
 ```ruby
+
+# generate authorization url
 auth_url = google_client.webserver_authorization_url(
     :scope => 'https://www.googleapis.com/auth/userinfo.email',
     :state => '/profile',
@@ -169,6 +162,8 @@ auth_url = google_client.webserver_authorization_url(
 
 ### Server-side authorization URL(Authorization code grant)
 ```ruby
+
+# generate authorization url
 auth_url = google_client.clientside_authorization_url(
     :scope => 'https://www.googleapis.com/auth/userinfo.email',
     :state => '/profile',
@@ -194,6 +189,37 @@ response.body
   "id_token" : "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY4ZGM2ZmIxNDQ5OGJmMWRhNjNiMWYyMDA2YmRmMDA2N2Q4MzY",
   "refresh_token" : "6/Ju8uhi9xOctGEyHRzWwHhaYimfxmY0tiJ_qW3qvjWXM"
 }
+```
+
+## Github Client
+
+```ruby
+
+gihub_client = GithubClient.new('https://github.com', '82f971d013e8d637a7e1', '1a1d59e1f8b8afa5f73e9dc9f17e25f7876e64ac')
+
+```
+### Server-side authorization URL(Authorization code grant)
+
+```ruby
+
+# generate authorization url
+auth_url = gihub_client.webserver_authorization_url
+# => https://github.com/login/oauth/authorize?client_id=82f971d013e8d637a7e1&response_type=code
+
+# exchange authorization code for access token. we will get back a Net::HTTPResponse
+response = gihub_client.exchange_auth_code_for_token({
+    :code => '11a0b0b64db56c30e2ef',
+    :redirect_uri => 'https://localhost/callback',
+  })
+
+response.inspect 
+# => #<Net::HTTPOK:0x007ff8bc7c1200>
+
+response.body
+# => {
+      "access_token" : "e409f4272fe539166a77c42479de030e7660812a",
+      "token_type" : "bearer"
+    }"
 ```
 
 ## Supported Ruby Versions

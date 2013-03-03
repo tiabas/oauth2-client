@@ -1,4 +1,12 @@
 class GoogleClient < OAuth2::Client
+
+  def initialize(*args)
+    super
+    @token_path = '/o/oauth2/token'
+    @authorize_path = '/o/oauth2/auth'
+    @device_path = '/o/oauth2/device/code'
+  end
+
   # Generates the Google URL that the user will be redirected to in order to
   # authorize your application
   #
