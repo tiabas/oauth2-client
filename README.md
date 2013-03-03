@@ -2,9 +2,11 @@
 
 [![Gem Version](https://badge.fury.io/rb/oauth2-client.png)][gem]
 [![Build Status](https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/tiabas/oauth2-client.png)][gemnasium]
 
 [gem]: https://rubygems.org/gems/oauth2-client
 [travis]: http://travis-ci.org/tiabas/oauth2-client
+[gemnasium]: https://gemnasium.com/tiabas/oauth2-client
 
 A Ruby wrapper for the OAuth 2.0 specification. It is designed with the philosophy that 
 different service providers implement OAuth 2.0 differently and not exactly according to the

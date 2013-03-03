@@ -1,12 +1,20 @@
 $:.unshift File.expand_path('../../examples', __FILE__)
 
-# require 'simplecov'
-# SimpleCov.start
+require 'simplecov'
+require 'coveralls'
 
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start
+
+require 'oauth2'
 require 'rspec'
 require 'rspec/autorun'
 require 'webmock/rspec'
-require 'oauth2'
+
+WebMock.disable_net_connect!(:allow => 'coveralls.io')
 
 RSpec.configure do |config|
   config.mock_with :rspec
