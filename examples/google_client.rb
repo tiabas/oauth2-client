@@ -1,13 +1,4 @@
 class GoogleClient < OAuth2::Client
-
-  def normalize_scope(scope, sep=' ')
-    unless (scope.is_a?(String) || scope.is_a?(Array))
-      raise ArgumentError.new("Expected scope of type String or Array but was: #{scope.class.name}")
-    end
-    return scope if scope.is_a?(String)
-    scope.join(sep)
-  end
-
   # Generates the Google URL that the user will be redirected to in order to
   # authorize your application
   #

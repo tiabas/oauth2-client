@@ -32,6 +32,18 @@ module OAuth2
       @connection_options = options
     end
 
+    # Token scope definitions vary by service e.g Google uses space delimited scopes,
+    # while Github uses comma seperated scopes. This method allows us to normalize
+    # the token scopes
+    #
+    # @see http://developer.github.com/v3/oauth/#scopes, https://developers.google.com/accounts/docs/OAuth2WebServer#formingtheurl
+    def normalize_scope(scope, sep=' ')
+      unless (scope.is_a?(String) || scope.is_a?(Array))
+        raise ArgumentError.new("Expected scope of type String or Array but was: #{scope.class.name}")
+      end
+      (scope.is_a?(Array) && scope.join(sep)) || scope
+    end
+
     def implicit
       OAuth2::Grant::Implicit.new(self)
     end
