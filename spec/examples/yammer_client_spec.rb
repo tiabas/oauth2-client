@@ -30,13 +30,13 @@ describe YammerClient do
         "client_id" => "PRbTcg9qjgKsp4jjpm1pw",
         "redirect_uri" => "https://localhost/callback",
         "response_type" =>"code",
-        "state" => "12345",
+        "state" => "12345"
       }
 
       auth_url = subject.webserver_authorization_url(
         :client_id => 'PRbTcg9qjgKsp4jjpm1pw',
         :state => '12345',
-        :redirect_uri => 'https://localhost/callback',
+        :redirect_uri => 'https://localhost/callback'
       )
 
       parsed_url = Addressable::URI.parse(auth_url)
