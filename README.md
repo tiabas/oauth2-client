@@ -41,7 +41,7 @@ gem install oauth2-client
 ## Usage Examples
 
 ```ruby
-require 'oauth2-client'
+require 'oauth2'
 
 @client  = OAuth2::Client.new('https://example.com', 's6BhdRkqt3', '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE')
 
