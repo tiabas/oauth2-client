@@ -4,7 +4,7 @@ require 'oauth2/version'
 
 Gem::Specification.new do |spec|
   spec.add_dependency 'bcrypt-ruby', '~> 3.0.0'
-  spec.add_dependency 'addressable'
+  spec.add_dependency 'addressable', '~> 2.3.3'
   spec.add_development_dependency 'bundler', '~> 1.0'
 
   spec.authors          = ["Kevin Mutyaba"]

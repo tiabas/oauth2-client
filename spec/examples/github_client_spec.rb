@@ -5,8 +5,6 @@ describe GithubClient do
 
   subject do
     GithubClient.new('https://github.com', '2945e6425da3d5d17ffc', '0a8f686f2835a70a79dbcece2ec63bc5079f40a8')
-
-    # GithubClient.new('https://github.com', '82f971d013e8d637a7e1', '1a1d59e1f8b8afa5f73e9dc9f17e25f7876e64ac')
   end
 
   describe "#webserver_authorization_url" do
