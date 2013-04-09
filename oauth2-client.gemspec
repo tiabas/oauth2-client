@@ -20,6 +20,6 @@ Gem::Specification.new do |spec|
   spec.summary          = "OAuth2 client wrapper in Ruby"
   spec.version          = OAuth2::Version
 
-  spec.cert_chain       = ['certs/tiabas.pem']
-  spec.signing_key      = File.expand_path("~/.gem/certs/private_key.pem")
+  spec.cert_chain       = ['certs/tiabas_public.pem']
+  spec.signing_key      = File.expand_path("~/.gem/certs/private_key.pem") if $0 =~ /gem\z/
 end
