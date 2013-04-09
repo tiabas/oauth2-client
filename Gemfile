@@ -7,7 +7,7 @@ group :test do
   gem 'rspec', '>= 2.11'
   gem 'simplecov', :require => false
   gem 'coveralls', :require => false
-  gem 'webmock', '~> 1.10.1'
+  gem 'webmock', '>= 1.10.1'
 end
 
 gemspec

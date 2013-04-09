@@ -22,4 +22,11 @@ Gem::Specification.new do |spec|
 
   spec.cert_chain       = ['certs/tiabas_public.pem']
   spec.signing_key      = File.expand_path("~/.gem/certs/private_key.pem") if $0 =~ /gem\z/
+
+  spec.add_dependency 'addressable', '~> 2.3.3'
+
+  spec.add_development_dependency 'rake'
+  spec.add_development_dependency 'rspec'
+  spec.add_development_dependency 'simplecov', '>= 0.7.1'
+  spec.add_development_dependency 'webmock', '>= 1.9.0'
 end
