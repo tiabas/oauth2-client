@@ -7,9 +7,7 @@
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -19,7 +17,10 @@
       <header>
         <h1>OAuth2 Client</h1>
         <p>Make quick and elegant clients for many different OAuth2 implementations out there</p>
+
         <p class="view"><a href="https://github.com/tiabas/oauth2-client">View the Project on GitHub <small>tiabas/oauth2-client</small></a></p>
+
+
         <ul>
           <li><a href="https://github.com/tiabas/oauth2-client/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/tiabas/oauth2-client/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -61,9 +62,9 @@ URL paths.</p>
 <li><a href="http://tiabas.github.com/oauth2-client/">Website</a></li>
 </ul><h2>Usage Examples</h2>
 
-<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'oauth2-client'</span>
+<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'oauth2'</span>
 
-<span class="vi">@client</span>  <span class="o">=</span> <span class="no">OAuth2</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">,</span> <span class="s1">'s6BhdRkqt3'</span><span class="p">,</span> <span class="s1">'4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'</span><span class="p">)</span>
+<span class="vi">@client</span>  <span class="o">=</span> <span class="ss">OAuth2</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">,</span> <span class="s1">'s6BhdRkqt3'</span><span class="p">,</span> <span class="s1">'4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'</span><span class="p">)</span>
 
 <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
 <span class="c1"># =&gt; "/oauth/authorize?response_type=code&amp;client_id={client_id}&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"</span>
@@ -162,7 +163,7 @@ need to create a wrapper around your favorite library that will respond to the <
 
 <span class="c1"># now you can initialize the OAuth2 client with you custom client and expect that all requests</span>
 <span class="c1"># will be sent using this client</span>
-<span class="n">oauth_client</span> <span class="o">=</span> <span class="no">OAuth2</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'example.com'</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="p">{</span>
+<span class="n">oauth_client</span> <span class="o">=</span> <span class="ss">OAuth2</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'example.com'</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="p">{</span>
   <span class="ss">:connection_client</span>  <span class="o">=&gt;</span> <span class="no">TyphoeusHttpConnection</span><span class="p">,</span>
   <span class="ss">:connection_options</span> <span class="o">=&gt;</span> <span class="p">{}</span>
 <span class="p">})</span>
@@ -272,12 +273,12 @@ above.</p>
 <p>Copyright (c) 2013 Kevin Mutyaba
 See <a href="https://github.com/tiabas/oauth2-client/blob/master/LICENSE">LICENSE</a> for details.</p>
       </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/tiabas">tiabas</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-    <footer>
-      <p>Project maintained by <a href="https://github.com/tiabas">tiabas</a></p>
-      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
-    </footer>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    <script src="javascripts/scale.fix.js"></script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
