@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
 
 
   spec.authors          = ["Kevin Mutyaba"]
-  spec.date             = %q{2013-03-03}
+  spec.date             = %q{2013-12-16}
   spec.description      = "Create quick and dirty OAuth2 clients"
   spec.email            = %q{tiabasnk@gmail.com}
   spec.files            = `git ls-files`.split("\n")
