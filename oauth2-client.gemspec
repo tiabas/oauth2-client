@@ -3,9 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'oauth2/version'
 
 Gem::Specification.new do |spec|
-  spec.add_dependency 'bcrypt-ruby', '~> 3.0.0'
-  spec.add_dependency 'addressable', '~> 2.3.3'
-  spec.add_development_dependency 'bundler', '~> 1.0'
+
 
   spec.authors          = ["Kevin Mutyaba"]
   spec.date             = %q{2013-03-03}
@@ -24,7 +22,9 @@ Gem::Specification.new do |spec|
   spec.signing_key      = File.expand_path("~/.gem/certs/private_key.pem") if $0 =~ /gem\z/
 
   spec.add_dependency 'addressable', '~> 2.3'
+  spec.add_dependency 'bcrypt-ruby', '~> 3.0'
 
+  spec.add_development_dependency 'bundler', '~> 1.0'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
   spec.add_development_dependency 'simplecov', '>= 0.7'
