@@ -1,34 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>OAuth2 Client by tiabas</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <title>OAuth2 Client by tiabas</title>
   </head>
+
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>OAuth2 Client</h1>
-        <p>Make quick and elegant clients for many different OAuth2 implementations out there</p>
+    <div id="container">
+      <div class="inner">
 
-        <p class="view"><a href="https://github.com/tiabas/oauth2-client">View the Project on GitHub <small>tiabas/oauth2-client</small></a></p>
+        <header>
+          <h1>OAuth2 Client</h1>
+          <h2>Make quick and elegant clients for many different OAuth2 implementations out there</h2>
+        </header>
 
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/tiabas/oauth2-client/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/tiabas/oauth2-client/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/tiabas/oauth2-client" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
 
-        <ul>
-          <li><a href="https://github.com/tiabas/oauth2-client/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/tiabas/oauth2-client/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/tiabas/oauth2-client">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>OAuth2 Client Ruby</h1>
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="oauth2-client-ruby" class="anchor" href="#oauth2-client-ruby"><span class="octicon octicon-link"></span></a>OAuth2 Client Ruby</h1>
 
 <p><a href="https://rubygems.org/gems/oauth2-client"><img src="https://badge.fury.io/rb/oauth2-client.png" alt="Gem Version"></a>
 <a href="http://travis-ci.org/tiabas/oauth2-client"><img src="https://secure.travis-ci.org/tiabas/oauth2-client.png?branch=master" alt="Build Status"></a>
@@ -49,29 +53,33 @@ URL paths.</p>
 
 <p>For more about the standard checkout: <a href="http://tools.ietf.org/html/rfc6749">http://tools.ietf.org/html/rfc6749</a> </p>
 
-<h2>Installation</h2>
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<div class="highlight"><pre>gem install oauth2-client
+<div class="highlight highlight-sh"><pre>gem install oauth2-client
 </pre></div>
 
-<h2>Resources</h2>
+<h2>
+<a name="resources" class="anchor" href="#resources"><span class="octicon octicon-link"></span></a>Resources</h2>
 
 <ul>
 <li><a href="https://github.com/tiabas/oauth2-client">View Source on GitHub</a></li>
 <li><a href="https://github.com/tiabas/oauth2-client/issues">Report Issues on GitHub</a></li>
 <li><a href="http://tiabas.github.com/oauth2-client/">Website</a></li>
-</ul><h2>Usage Examples</h2>
+</ul><h2>
+<a name="usage-examples" class="anchor" href="#usage-examples"><span class="octicon octicon-link"></span></a>Usage Examples</h2>
 
-<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'oauth2'</span>
+<div class="highlight highlight-ruby"><pre><span class="nb">require</span> <span class="s1">'oauth2'</span>
 
-<span class="vi">@client</span>  <span class="o">=</span> <span class="ss">OAuth2</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">,</span> <span class="s1">'s6BhdRkqt3'</span><span class="p">,</span> <span class="s1">'4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'</span><span class="p">)</span>
+<span class="vi">@client</span>  <span class="o">=</span> <span class="no">OAuth2</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://example.com'</span><span class="p">,</span> <span class="s1">'s6BhdRkqt3'</span><span class="p">,</span> <span class="s1">'4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'</span><span class="p">)</span>
 
 <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
 <span class="c1"># =&gt; "/oauth/authorize?response_type=code&amp;client_id={client_id}&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"</span>
 
 </pre></div>
 
-<h2>Authorization Grants</h2>
+<h2>
+<a name="authorization-grants" class="anchor" href="#authorization-grants"><span class="octicon octicon-link"></span></a>Authorization Grants</h2>
 
 <p>The client wraps around the creation of any given grant and passing in the parameters defined in the configuration
 file. The supported grants include Authorization Code, Implicit, Resource Owner Password Credentials, Client Credentials.
@@ -82,9 +90,10 @@ and <code>device</code> methods on a client object.</p>
 case would be to treat all responses as JSON. However, some services may respond with in XML instead of JSON. The <code>get_token</code> method
 therefore, returns with an HTTPResponse object.</p>
 
-<h3>Authorization Code</h3>
+<h3>
+<a name="authorization-code" class="anchor" href="#authorization-code"><span class="octicon octicon-link"></span></a>Authorization Code</h3>
 
-<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
+<div class="highlight highlight-ruby"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
 <span class="c1"># =&gt; "/oauth/authorize?response_type=code&amp;client_id={client_id}&amp;redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"</span>
 
 <span class="n">token_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">authorization_code</span><span class="o">.</span><span class="n">token_path</span><span class="p">(</span>
@@ -93,42 +102,48 @@ therefore, returns with an HTTPResponse object.</p>
 <span class="c1"># =&gt; "/oauth/token?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;client_secret={client_secret}&amp;grant_type=authorization_code&amp;client_id={client_id}&amp;code=aXW2c6bYz"</span>
 </pre></div>
 
-<h3>Implicit Grant</h3>
+<h3>
+<a name="implicit-grant" class="anchor" href="#implicit-grant"><span class="octicon octicon-link"></span></a>Implicit Grant</h3>
 
-<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">implicit</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
+<div class="highlight highlight-ruby"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">implicit</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:redirect_uri</span> <span class="o">=&gt;</span> <span class="s1">'http://localhost/oauth2/cb'</span><span class="p">)</span>
 <span class="c1"># =&gt; "oauth/?redirect_uri=http%3A%2F%2Flocalhost%2Foauth%2Fcb&amp;response_type=token&amp;client_id={client_id}"</span>
 </pre></div>
 
-<h3>Password Credentials</h3>
+<h3>
+<a name="password-credentials" class="anchor" href="#password-credentials"><span class="octicon octicon-link"></span></a>Password Credentials</h3>
 
-<div class="highlight"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">password</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">)</span>
+<div class="highlight highlight-ruby"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">password</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">)</span>
 </pre></div>
 
-<h3>Refresh Token</h3>
+<h3>
+<a name="refresh-token" class="anchor" href="#refresh-token"><span class="octicon octicon-link"></span></a>Refresh Token</h3>
 
-<div class="highlight"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">refresh_token</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">refresh_token_value</span><span class="p">,</span> <span class="ss">:params</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'abc xyz'</span><span class="p">,</span> <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'state'</span><span class="p">})</span>
+<div class="highlight highlight-ruby"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">refresh_token</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">refresh_token_value</span><span class="p">,</span> <span class="ss">:params</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'abc xyz'</span><span class="p">,</span> <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'state'</span><span class="p">})</span>
 </pre></div>
 
-<h3>Client Credentials</h3>
+<h3>
+<a name="client-credentials" class="anchor" href="#client-credentials"><span class="octicon octicon-link"></span></a>Client Credentials</h3>
 
-<div class="highlight"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">client_credentials</span><span class="o">.</span><span class="n">get_token</span>
+<div class="highlight highlight-ruby"><pre><span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">client_credentials</span><span class="o">.</span><span class="n">get_token</span>
 </pre></div>
 
-<h3>Device Code</h3>
+<h3>
+<a name="device-code" class="anchor" href="#device-code"><span class="octicon octicon-link"></span></a>Device Code</h3>
 
-<div class="highlight"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">device_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'abc xyz'</span><span class="p">,</span> <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'state'</span><span class="p">)</span>
+<div class="highlight highlight-ruby"><pre><span class="n">auth_url</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">device_code</span><span class="o">.</span><span class="n">authorization_path</span><span class="p">(</span><span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'abc xyz'</span><span class="p">,</span> <span class="ss">:state</span> <span class="o">=&gt;</span> <span class="s1">'state'</span><span class="p">)</span>
 <span class="c1"># =&gt; "/oauth/device/code?scope=abc+xyz&amp;state=state&amp;client_id={client_id}"</span>
 
 <span class="c1"># exchange device authorization code for access token</span>
 <span class="n">token</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">device_code</span><span class="o">.</span><span class="n">get_token</span><span class="p">(</span><span class="n">device_auth_code</span><span class="p">)</span>
 </pre></div>
 
-<h1>Using a custom Http wrapper</h1>
+<h1>
+<a name="using-a-custom-http-wrapper" class="anchor" href="#using-a-custom-http-wrapper"><span class="octicon octicon-link"></span></a>Using a custom Http wrapper</h1>
 
 <p>By default, oauth2-client uses a <code>Net::HTTP</code> wrapper called <code>OAuth2::HttpConnection</code>. However, if you wish to use a different HTTP library, you only
 need to create a wrapper around your favorite library that will respond to the <code>send_request</code> method.</p>
 
-<div class="highlight"><pre><span class="k">class</span> <span class="nc">TyphoeusHttpConnection</span>
+<div class="highlight highlight-ruby"><pre><span class="k">class</span> <span class="nc">TyphoeusHttpConnection</span>
 
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">site_url</span><span class="p">,</span> <span class="n">connection_options</span><span class="o">=</span><span class="p">{})</span>
     <span class="c1"># set url and connection options</span>
@@ -163,28 +178,31 @@ need to create a wrapper around your favorite library that will respond to the <
 
 <span class="c1"># now you can initialize the OAuth2 client with you custom client and expect that all requests</span>
 <span class="c1"># will be sent using this client</span>
-<span class="n">oauth_client</span> <span class="o">=</span> <span class="ss">OAuth2</span><span class="p">:</span><span class="ss">:Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'example.com'</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="p">{</span>
+<span class="n">oauth_client</span> <span class="o">=</span> <span class="no">OAuth2</span><span class="o">::</span><span class="no">Client</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'example.com'</span><span class="p">,</span> <span class="n">client_id</span><span class="p">,</span> <span class="n">client_secret</span><span class="p">,</span> <span class="p">{</span>
   <span class="ss">:connection_client</span>  <span class="o">=&gt;</span> <span class="no">TyphoeusHttpConnection</span><span class="p">,</span>
   <span class="ss">:connection_options</span> <span class="o">=&gt;</span> <span class="p">{}</span>
 <span class="p">})</span>
 </pre></div>
 
-<h1>Client Examples</h1>
+<h1>
+<a name="client-examples" class="anchor" href="#client-examples"><span class="octicon octicon-link"></span></a>Client Examples</h1>
 
 <p>This library comes bundled with two sample implementations of Google and Yammer OAuth clients. These clients are 
 meant to showcase the degree of flexibilty that you get when using this library to interact with other OAuth 2.0
 providers.</p>
 
-<h2>Google Client</h2>
+<h2>
+<a name="google-client" class="anchor" href="#google-client"><span class="octicon octicon-link"></span></a>Google Client</h2>
 
-<div class="highlight"><pre>
+<div class="highlight highlight-ruby"><pre>
 <span class="n">google_client</span> <span class="o">=</span> <span class="no">GoogleClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://accounts.google.com'</span><span class="p">,</span> <span class="s1">'827502413694.apps.googleusercontent.com'</span><span class="p">,</span><span class="s1">'a2nQpcUm2Dgq1chWdAvbXGTk'</span><span class="p">)</span>
 
 </pre></div>
 
-<h3>Client-side authorization URL(Implicit grant)</h3>
+<h3>
+<a name="client-side-authorization-urlimplicit-grant" class="anchor" href="#client-side-authorization-urlimplicit-grant"><span class="octicon octicon-link"></span></a>Client-side authorization URL(Implicit grant)</h3>
 
-<div class="highlight"><pre>
+<div class="highlight highlight-ruby"><pre>
 <span class="c1"># generate authorization url</span>
 <span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span><span class="p">(</span>
     <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'https://www.googleapis.com/auth/userinfo.email'</span><span class="p">,</span>
@@ -194,9 +212,10 @@ providers.</p>
 <span class="c1"># =&gt; https://accounts.google.com/o/oauth2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&amp;state=%2Fprofile&amp;redirect_uri=https%3A%2F%2Foauth2-login-demo.appspot.com%2Ftoken&amp;approval_prompt=force&amp;response_type=token&amp;client_id=812741506391.apps.googleusercontent.com</span>
 </pre></div>
 
-<h3>Server-side authorization URL(Authorization code grant)</h3>
+<h3>
+<a name="server-side-authorization-urlauthorization-code-grant" class="anchor" href="#server-side-authorization-urlauthorization-code-grant"><span class="octicon octicon-link"></span></a>Server-side authorization URL(Authorization code grant)</h3>
 
-<div class="highlight"><pre>
+<div class="highlight highlight-ruby"><pre>
 <span class="c1"># generate authorization url</span>
 <span class="n">auth_url</span> <span class="o">=</span> <span class="n">google_client</span><span class="o">.</span><span class="n">clientside_authorization_url</span><span class="p">(</span>
     <span class="ss">:scope</span> <span class="o">=&gt;</span> <span class="s1">'https://www.googleapis.com/auth/userinfo.email'</span><span class="p">,</span>
@@ -225,16 +244,18 @@ providers.</p>
 <span class="c1">#}</span>
 </pre></div>
 
-<h2>Github Client</h2>
+<h2>
+<a name="github-client" class="anchor" href="#github-client"><span class="octicon octicon-link"></span></a>Github Client</h2>
 
-<div class="highlight"><pre>
+<div class="highlight highlight-ruby"><pre>
 <span class="n">gihub_client</span> <span class="o">=</span> <span class="no">GithubClient</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'https://github.com'</span><span class="p">,</span> <span class="s1">'82f971d013e8d637a7e1'</span><span class="p">,</span> <span class="s1">'1a1d59e1f8b8afa5f73e9dc9f17e25f7876e64ac'</span><span class="p">)</span>
 
 </pre></div>
 
-<h3>Server-side authorization URL(Authorization code grant)</h3>
+<h3>
+<a name="server-side-authorization-urlauthorization-code-grant-1" class="anchor" href="#server-side-authorization-urlauthorization-code-grant-1"><span class="octicon octicon-link"></span></a>Server-side authorization URL(Authorization code grant)</h3>
 
-<div class="highlight"><pre>
+<div class="highlight highlight-ruby"><pre>
 <span class="c1"># generate authorization url</span>
 <span class="n">auth_url</span> <span class="o">=</span> <span class="n">gihub_client</span><span class="o">.</span><span class="n">webserver_authorization_url</span>
 <span class="c1"># =&gt; https://github.com/login/oauth/authorize?client_id=82f971d013e8d637a7e1&amp;response_type=code</span>
@@ -255,7 +276,8 @@ providers.</p>
 <span class="c1">#    }"</span>
 </pre></div>
 
-<h2>Supported Ruby Versions</h2>
+<h2>
+<a name="supported-ruby-versions" class="anchor" href="#supported-ruby-versions"><span class="octicon octicon-link"></span></a>Supported Ruby Versions</h2>
 
 <p>This library aims to support and is <a href="http://travis-ci.org/tiabas/oauth2-client">tested against</a> the following Ruby
 version:</p>
@@ -268,18 +290,19 @@ version:</p>
 implementations, however support will only be provided for the versions listed
 above.</p>
 
-<h2>Copyright</h2>
+<h2>
+<a name="copyright" class="anchor" href="#copyright"><span class="octicon octicon-link"></span></a>Copyright</h2>
 
 <p>Copyright (c) 2013 Kevin Mutyaba
 See <a href="https://github.com/tiabas/oauth2-client/blob/master/LICENSE">LICENSE</a> for details.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/tiabas">tiabas</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
+        </section>
+
+        <footer>
+          OAuth2 Client is maintained by <a href="https://github.com/tiabas">tiabas</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -290,5 +313,7 @@ See <a href="https://github.com/tiabas/oauth2-client/blob/master/LICENSE">LICENS
             } catch(err) {}
           </script>
 
+      </div>
+    </div>
   </body>
 </html>
