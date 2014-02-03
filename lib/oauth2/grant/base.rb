@@ -1,7 +1,7 @@
-module OAuth2
+module OAuth2Client
   module Grant
     class Base
-      include OAuth2::UrlHelper
+      include OAuth2Client::UrlHelper
 
       class InvalidAuthorizationTypeError < StandardError; end
   

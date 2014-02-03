@@ -1,4 +1,4 @@
-class YammerClient < OAuth2::Client
+class YammerClient < OAuth2Client::Client
 
   def initialize(*args)
     super

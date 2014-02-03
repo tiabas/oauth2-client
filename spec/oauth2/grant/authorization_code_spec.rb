@@ -1,17 +1,17 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-describe OAuth2::Grant::AuthorizationCode do
+describe OAuth2Client::Grant::AuthorizationCode do
 
   before :all do
     @host           = 'https://example.com'
     @client_id      = 's6BhdRkqt3'
     @client_secret  = 'SplxlOBeZQQYbYS6WxSbIA'
-    @client = OAuth2::Client.new(@host, @client_id, @client_secret)
-    OAuth2::Grant::AuthorizationCode.stub(:make_request)
+    @client = OAuth2Client::Client.new(@host, @client_id, @client_secret)
+    OAuth2Client::Grant::AuthorizationCode.stub(:make_request)
   end
 
   subject do
-    OAuth2::Grant::AuthorizationCode.new(@client)
+    OAuth2Client::Grant::AuthorizationCode.new(@client)
   end
 
   describe "#authorization_params" do

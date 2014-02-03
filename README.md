@@ -43,7 +43,7 @@ gem install oauth2-client
 ```ruby
 require 'oauth2'
 
-@client  = OAuth2::Client.new('https://example.com', 's6BhdRkqt3', '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE')
+@client  = OAuth2Client::Client.new('https://example.com', 's6BhdRkqt3', '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE')
 
 client.authorization_code.authorization_path(:redirect_uri => 'http://localhost/oauth2/cb')
 # => "/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri=http%3A%2F%2Flocalhost%2Foauth2%2Fcb"
@@ -102,7 +102,7 @@ token = client.device_code.get_token(device_auth_code)
 ```
 
 # Using a custom Http wrapper
-By default, oauth2-client uses a `Net::HTTP` wrapper called `OAuth2::HttpConnection`. However, if you wish to use a different HTTP library, you only
+By default, oauth2-client uses a `Net::HTTP` wrapper called `OAuth2Client::HttpConnection`. However, if you wish to use a different HTTP library, you only
 need to create a wrapper around your favorite library that will respond to the `send_request` method.
 
 ```ruby
@@ -141,7 +141,7 @@ end
 
 # now you can initialize the OAuth2 client with you custom client and expect that all requests
 # will be sent using this client
-oauth_client = OAuth2::Client.new('example.com', client_id, client_secret, {
+oauth_client = OAuth2Client::Client.new('example.com', client_id, client_secret, {
   :connection_client  => TyphoeusHttpConnection,
   :connection_options => {}
 })

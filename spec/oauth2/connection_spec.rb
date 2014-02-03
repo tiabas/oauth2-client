@@ -1,10 +1,10 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'ostruct'
 
-describe OAuth2::HttpConnection do
+describe OAuth2Client::HttpConnection do
 
   subject do
-    @conn = OAuth2::HttpConnection.new('https://example.com')
+    @conn = OAuth2Client::HttpConnection.new('https://example.com')
   end
 
   context "with user specified options" do
@@ -17,12 +17,12 @@ describe OAuth2::HttpConnection do
         :ssl => {:verify => false},
         :max_redirects => 2
       }
-      @conn = OAuth2::HttpConnection.new('https://example.com', @conn_opts)
+      @conn = OAuth2Client::HttpConnection.new('https://example.com', @conn_opts)
     end
 
     describe "connection options" do
       it "sets user options" do
-        OAuth2::HttpConnection.default_options.keys.each do |key|
+        OAuth2Client::HttpConnection.default_options.keys.each do |key|
           expect(@conn.instance_variable_get(:"@#{key}")).to eq @conn_opts[key]
         end
       end
@@ -33,7 +33,7 @@ describe OAuth2::HttpConnection do
     it "returns user_agent and response format" do
       expect(subject.default_headers).to eq ({
         "Accept"     => "application/json", 
-        "User-Agent" => "OAuth2 Ruby Gem #{OAuth2::Version}"
+        "User-Agent" => "OAuth2 Ruby Gem #{OAuth2Client::Version}"
       })
     end
   end
@@ -47,7 +47,7 @@ describe OAuth2::HttpConnection do
   describe "#scheme" do
     context "scheme is unsupported" do
       it "raises an error" do
-        expect { subject.scheme = 'ftp'}.to raise_error(OAuth2::HttpConnection::UnsupportedSchemeError)
+        expect { subject.scheme = 'ftp'}.to raise_error(OAuth2Client::HttpConnection::UnsupportedSchemeError)
       end
     end
 
@@ -158,7 +158,7 @@ describe OAuth2::HttpConnection do
 
     context "when method is not supported" do
       it "raises an error" do
-        expect {subject.send_request(:patch, '/')}.to raise_error(OAuth2::HttpConnection::UnhandledHTTPMethodError)
+        expect {subject.send_request(:patch, '/')}.to raise_error(OAuth2Client::HttpConnection::UnhandledHTTPMethodError)
       end
     end
 
@@ -170,7 +170,7 @@ describe OAuth2::HttpConnection do
           :query =>  params,
           :header => { 
             'Accept'          => 'application/json',
-            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2Client::Version}",
             'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3'
           }
         )
@@ -184,7 +184,7 @@ describe OAuth2::HttpConnection do
         stub_delete('/users/1').with(
           :header => { 
             'Accept'          => 'application/json',
-            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2Client::Version}",
             'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3'
           }
         )
@@ -200,7 +200,7 @@ describe OAuth2::HttpConnection do
           :body   => params,
           :header => { 
             'Accept'          => 'application/json',
-            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2Client::Version}",
             'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
             'Content-Type'    => 'application/x-www-form-urlencoded'
           }
@@ -218,7 +218,7 @@ describe OAuth2::HttpConnection do
           :body   => params,
           :header => { 
             'Accept'          => 'application/json',
-            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2::Version}",
+            'User-Agent'      => "OAuth2 Ruby Gem #{OAuth2Client::Version}",
             'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
             'Content-Type'    => 'application/x-www-form-urlencoded'
           }

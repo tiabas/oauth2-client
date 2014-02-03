@@ -7,7 +7,7 @@ end
 require 'zlib'
 require 'addressable/uri'
 
-module OAuth2
+module OAuth2Client
   class HttpConnection
 
     class UnhandledHTTPMethodError < StandardError; end
@@ -33,7 +33,7 @@ module OAuth2
       {
         :headers => {
           'Accept'     => 'application/json',
-          'User-Agent' => "OAuth2 Ruby Gem #{OAuth2::Version}"
+          'User-Agent' => "OAuth2 Ruby Gem #{OAuth2Client::Version}"
         },
         :ssl => {:verify => true},
         :max_redirects => 5

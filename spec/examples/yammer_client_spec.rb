@@ -60,7 +60,7 @@ describe YammerClient do
         },
         :headers => {
           'Accept'       => "application/json", 
-          'User-Agent'   => "OAuth2 Ruby Gem #{OAuth2::Version}",
+          'User-Agent'   => "OAuth2 Ruby Gem #{OAuth2Client::Version}",
           'Content-Type' => "application/x-www-form-urlencoded"
         }
       )

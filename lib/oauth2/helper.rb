@@ -1,7 +1,7 @@
 require 'openssl'
 require 'base64'
 require 'addressable/uri'
-module OAuth2
+module OAuth2Client
   module UrlHelper
     # convenience method to build response URI  
     def build_url(uri, opts={})

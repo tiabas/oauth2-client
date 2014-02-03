@@ -1,4 +1,4 @@
-module OAuth2
+module OAuth2Client
   module Grant
     # Implicit Grant
     # @see http://tools.ietf.org/html/draft-ietf-oauth-v2-31#section-4.2

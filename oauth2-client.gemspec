@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.0'
 
   spec.authors          = ["Kevin Mutyaba"]
-  spec.date             = %q{2013-03-03}
+  spec.date             = Date.today.to_s
   spec.description      = "Create quick and dirty OAuth2 clients"
   spec.email            = %q{tiabasnk@gmail.com}
   spec.files            = `git ls-files`.split("\n")
@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths    = ['lib']
   spec.required_rubygems_version = '>= 1.3.6'
   spec.summary          = "OAuth2 client wrapper in Ruby"
-  spec.version          = OAuth2::Version
+  spec.version          = OAuth2Client::Version
 
   spec.cert_chain       = ['certs/tiabas-public.pem']
   spec.signing_key      = File.expand_path("~/.gem/certs/private_key.pem")

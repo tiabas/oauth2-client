@@ -1,4 +1,4 @@
-module OAuth2
+module OAuth2Client
   module Grant
     # Device Grant
     # @see https://developers.google.com/accounts/docs/OAuth2ForDevices

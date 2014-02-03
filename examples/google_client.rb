@@ -1,4 +1,4 @@
-class GoogleClient < OAuth2::Client
+class GoogleClient < OAuth2Client::Client
 
   def initialize(*args)
     super

@@ -1,4 +1,4 @@
-module OAuth2
+module OAuth2Client
   class Client
     
     attr_reader   :host, :connection_options
@@ -16,7 +16,7 @@ module OAuth2
       @client_id          = client_id
       @client_secret      = client_secret
       @connection_options = options.fetch(:connection_options, {})
-      @connection_client  = options.fetch(:connection_client, OAuth2::HttpConnection)
+      @connection_client  = options.fetch(:connection_client, OAuth2Client::HttpConnection)
       DEFAULTS_PATHS.keys.each do |key|
         instance_variable_set(:"@#{key}", options.fetch(key, DEFAULTS_PATHS[key]))
       end
@@ -45,27 +45,27 @@ module OAuth2
     end
 
     def implicit
-      OAuth2::Grant::Implicit.new(self)
+      OAuth2Client::Grant::Implicit.new(self)
     end
 
     def authorization_code
-      OAuth2::Grant::AuthorizationCode.new(self)
+      OAuth2Client::Grant::AuthorizationCode.new(self)
     end
 
     def refresh_token
-      OAuth2::Grant::RefreshToken.new(self)
+      OAuth2Client::Grant::RefreshToken.new(self)
     end
 
     def client_credentials
-      OAuth2::Grant::ClientCredentials.new(self)
+      OAuth2Client::Grant::ClientCredentials.new(self)
     end
 
     def password
-      OAuth2::Grant::Password.new(self)
+      OAuth2Client::Grant::Password.new(self)
     end
 
     def device_code
-      OAuth2::Grant::DeviceCode.new(self)
+      OAuth2Client::Grant::DeviceCode.new(self)
     end
 
     def connection

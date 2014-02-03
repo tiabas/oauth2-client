@@ -1,13 +1,13 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'ostruct'
 
-describe OAuth2::Client do
+describe OAuth2Client::Client do
 
   before :all do
     @client_id= 's6BhdRkqt3'
     @client_secret = '4hJZY88TCBB9q8IpkeualA2lZsUhOSclkkSKw3RXuE'
     @host = 'example.com' 
-    @client = OAuth2::Client.new(@host, @client_id, @client_secret)
+    @client = OAuth2Client::Client.new(@host, @client_id, @client_secret)
   end
 
   subject { @client }
@@ -34,7 +34,7 @@ describe OAuth2::Client do
 
   context "with custom options" do
     subject do
-      OAuth2::Client.new(@host, @client_id, @client_secret, {
+      OAuth2Client::Client.new(@host, @client_id, @client_secret, {
         :token_path => '/o/v2/token',
         :authorize_path => '/o/v2/authorize',
         :device_path => '/o/v2/device/code'
@@ -97,51 +97,51 @@ describe OAuth2::Client do
 
   describe "#implicit" do
     it "returns implicit grant object" do
-    expect(@client.implicit).to be_instance_of(OAuth2::Grant::Implicit)
+    expect(@client.implicit).to be_instance_of(OAuth2Client::Grant::Implicit)
     end
   end
 
   describe "#authorization_code" do
     it "returns authorization code grant" do
-    expect(@client.authorization_code).to be_instance_of(OAuth2::Grant::AuthorizationCode)
+    expect(@client.authorization_code).to be_instance_of(OAuth2Client::Grant::AuthorizationCode)
     end
   end
 
   describe "#refresh_token" do
     it "returns refresh token grant" do
-    expect(@client.refresh_token).to be_instance_of(OAuth2::Grant::RefreshToken)
+    expect(@client.refresh_token).to be_instance_of(OAuth2Client::Grant::RefreshToken)
     end
   end
 
   describe "#client_credentials" do
     it "returns client credentials grant" do
-    expect(@client.client_credentials).to be_instance_of(OAuth2::Grant::ClientCredentials)
+    expect(@client.client_credentials).to be_instance_of(OAuth2Client::Grant::ClientCredentials)
     end
   end
 
   describe "#password" do
     it "returns password grant" do
-      expect(@client.password).to be_instance_of(OAuth2::Grant::Password)
+      expect(@client.password).to be_instance_of(OAuth2Client::Grant::Password)
     end
   end
 
   describe "" do
     it "returns device code grant" do
-      expect(@client.device_code).to be_instance_of(OAuth2::Grant::DeviceCode)
+      expect(@client.device_code).to be_instance_of(OAuth2Client::Grant::DeviceCode)
     end
   end
 
 
   describe "#implicit" do
     it "returns implicit grant object" do
-      expect(subject.implicit).to be_instance_of(OAuth2::Grant::Implicit)
+      expect(subject.implicit).to be_instance_of(OAuth2Client::Grant::Implicit)
     end
   end
 
   describe "#connection" do
     context "with default connection options" do
       it "returns HttpConnection" do
-        expect(subject.send(:connection)).to be_instance_of(OAuth2::HttpConnection)
+        expect(subject.send(:connection)).to be_instance_of(OAuth2Client::HttpConnection)
       end
     end
 
@@ -149,7 +149,7 @@ describe OAuth2::Client do
       it "returns custom connection" do
         custom_http  = Struct.new('CustomHttpClient', :url, :connection_options)
         conn_options = { :connection_client => custom_http }
-        oauth_client = OAuth2::Client.new('example.com', @client_id, @client_secret, conn_options)
+        oauth_client = OAuth2Client::Client.new('example.com', @client_id, @client_secret, conn_options)
         expect(oauth_client.send(:connection)).to be_instance_of custom_http
       end
     end

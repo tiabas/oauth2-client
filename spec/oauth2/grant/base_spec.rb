@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 require 'oauth2/helper'
 
-describe OAuth2::Grant::Base do
+describe OAuth2Client::Grant::Base do
 
   before :all do
     @client = OpenStruct.new(
@@ -16,7 +16,7 @@ describe OAuth2::Grant::Base do
   end
 
   subject do
-    OAuth2::Grant::Base.new(@client)
+    OAuth2Client::Grant::Base.new(@client)
   end
 
   describe "#make_request" do
@@ -31,7 +31,7 @@ describe OAuth2::Grant::Base do
       context "option is headers" do
         it "authorization credentials in headers" do
           opts = {
-            :headers => {'Authorization' => OAuth2::UrlHelper::http_basic_encode(@client.client_id, @client.client_secret)},
+            :headers => {'Authorization' => OAuth2Client::UrlHelper::http_basic_encode(@client.client_id, @client.client_secret)},
             :params  => {:client_id => @client.client_id}
           }
           @client.connection.should_receive(:send_request).with(:get, '/oauth2', opts)

@@ -1,16 +1,16 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
-describe OAuth2::Grant::Implicit do
+describe OAuth2Client::Grant::Implicit do
 
   before :all do
     @host           = 'example.com'
     @client_id      = 's6BhdRkqt3'
     @client_secret  = 'SplxlOBeZQQYbYS6WxSbIA'
-    @client = OAuth2::Client.new(@host, @client_id, @client_secret)
+    @client = OAuth2Client::Client.new(@host, @client_id, @client_secret)
   end
 
   subject do
-    OAuth2::Grant::Implicit.new(@client)
+    OAuth2Client::Grant::Implicit.new(@client)
   end
 
   describe "#response_type" do

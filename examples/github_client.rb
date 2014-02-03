@@ -1,4 +1,4 @@
-class GithubClient < OAuth2::Client
+class GithubClient < OAuth2Client::Client
   
   def initialize(*args)
     super
