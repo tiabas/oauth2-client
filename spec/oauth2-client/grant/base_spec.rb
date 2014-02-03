@@ -1,5 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-require 'oauth2/helper'
+require 'oauth2-client/helper'
 
 describe OAuth2Client::Grant::Base do
 

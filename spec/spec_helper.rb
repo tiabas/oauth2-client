@@ -9,7 +9,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 ]
 SimpleCov.start
 
-require 'oauth2'
+require 'oauth2-client'
 require 'rspec'
 require 'rspec/autorun'
 require 'webmock/rspec'

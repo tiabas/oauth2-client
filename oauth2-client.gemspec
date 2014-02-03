@@ -1,6 +1,6 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'oauth2/version'
+require 'oauth2-client/version'
 
 Gem::Specification.new do |spec|
   spec.add_dependency 'bcrypt-ruby', '~> 3.0.0'
