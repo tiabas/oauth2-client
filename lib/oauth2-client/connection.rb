@@ -85,11 +85,13 @@ module OAuth2Client
     end
 
     def http_connection(opts={})
-      _host   = opts[:host]   || host
-      _port   = opts[:port]   || port
-      _scheme = opts[:scheme] || scheme
+      _host    = opts[:host]   || host
+      _port    = opts[:port]   || port
+      _scheme  = opts[:scheme] || scheme
+      _timeout = opts[:timeout]
 
       @http_client = Net::HTTP.new(_host, _port)
+      @http_client.read_timeout = _timeout if _timeout
 
       configure_ssl(@http_client) if _scheme == 'https'
 
